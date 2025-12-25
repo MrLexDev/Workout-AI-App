@@ -1,0 +1,89 @@
+[
+    {
+        "id": "push-hypertrophy",
+        "name": "Push Day (Hypertrophy)",
+        "description": "Focus on chest and triceps volume with moderate weights.",
+        "exercises": [
+            {
+                "id": "bench-press",
+                "name": "Barbell Bench Press",
+                "targetSets": 4,
+                "restTimeSec": 120
+            },
+            {
+                "id": "incline-db-press",
+                "name": "Incline Dumbbell Press",
+                "targetSets": 3,
+                "restTimeSec": 90
+            },
+            {
+                "id": "lateral-raise",
+                "name": "Dumbbell Lateral Raise",
+                "targetSets": 4,
+                "restTimeSec": 60
+            },
+            {
+                "id": "tricep-pushdown",
+                "name": "Cable Tricep Pushdown",
+                "targetSets": 3,
+                "restTimeSec": 60
+            }
+        ]
+    },
+    {
+        "id": "pull-strength",
+        "name": "Pull Day (Strength)",
+        "description": "Heavy compounds focusing on back and biceps strength.",
+        "exercises": [
+            {
+                "id": "deadlift",
+                "name": "Deadlift",
+                "targetSets": 3,
+                "restTimeSec": 300
+            },
+            {
+                "id": "pull-up",
+                "name": "Weighted Pull-Up",
+                "targetSets": 4,
+                "restTimeSec": 180
+            },
+            {
+                "id": "barbell-row",
+                "name": "Bent Over Barbell Row",
+                "targetSets": 3,
+                "restTimeSec": 120
+            },
+            {
+                "id": "bicep-curl",
+                "name": "Barbell Bicep Curl",
+                "targetSets": 3,
+                "restTimeSec": 90
+            }
+        ]
+    },
+    {
+        "id": "legs-power",
+        "name": "Leg Day (Power)",
+        "description": "Explosive leg movements and heavy squats.",
+        "exercises": [
+            {
+                "id": "squat",
+                "name": "Barbell Squat",
+                "targetSets": 4,
+                "restTimeSec": 240
+            },
+            {
+                "id": "leg-press",
+                "name": "Leg Press",
+                "targetSets": 3,
+                "restTimeSec": 180
+            },
+            {
+                "id": "shrugs",
+                "name": "Dumbbell Shrugs",
+                "targetSets": 4,
+                "restTimeSec": 60
+            }
+        ]
+    }
+]
