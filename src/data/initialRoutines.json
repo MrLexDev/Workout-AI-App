@@ -1,89 +1,156 @@
 [
     {
-        "id": "push-hypertrophy",
+        "version": "1.1.0",
+        "id": "push-hypertrophy-v1.1",
         "name": "Push Day (Hypertrophy)",
-        "description": "Focus on chest and triceps volume with moderate weights.",
+        "category": "Hypertrophy",
+        "difficulty": "Intermediate",
+        "estimatedDurationMinutes": 75,
+        "description": "Focus on chest, shoulders and triceps volume with moderate weights.",
         "exercises": [
             {
-                "id": "bench-press",
+                "exerciseId": "barbell-bench-press",
                 "name": "Barbell Bench Press",
+                "primaryMuscles": [
+                    "Chest"
+                ],
+                "secondaryMuscles": [
+                    "Triceps",
+                    "Front Delts"
+                ],
+                "equipment": "Barbell, Bench",
                 "targetSets": 4,
-                "restTimeSec": 120
+                "minimumRepetitions": 8,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 120,
+                "targetRpe": 8,
+                "notes": "Keep shoulders retracted. Controlled eccentric phase."
             },
             {
-                "id": "incline-db-press",
+                "exerciseId": "overhead-press",
+                "name": "Overhead Press",
+                "primaryMuscles": [
+                    "Shoulders"
+                ],
+                "secondaryMuscles": [
+                    "Triceps",
+                    "Upper Traps"
+                ],
+                "equipment": "Barbell",
+                "targetSets": 3,
+                "minimumRepetitions": 6,
+                "maximumRepetitions": 10,
+                "restTimeSeconds": 150,
+                "targetRpe": 8,
+                "notes": "Strict press, no leg drive. Squeeze glutes."
+            },
+            {
+                "exerciseId": "incline-db-press",
                 "name": "Incline Dumbbell Press",
+                "primaryMuscles": [
+                    "Upper Chest"
+                ],
+                "secondaryMuscles": [
+                    "Front Delts",
+                    "Triceps"
+                ],
+                "equipment": "Dumbbells, Incline Bench",
                 "targetSets": 3,
-                "restTimeSec": 90
+                "minimumRepetitions": 10,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 90,
+                "targetRpe": 8,
+                "notes": "30-45 degree incline."
             },
             {
-                "id": "lateral-raise",
+                "exerciseId": "lateral-raise",
                 "name": "Dumbbell Lateral Raise",
+                "primaryMuscles": [
+                    "Side Delts"
+                ],
+                "secondaryMuscles": [],
+                "equipment": "Dumbbells",
                 "targetSets": 4,
-                "restTimeSec": 60
-            },
-            {
-                "id": "tricep-pushdown",
-                "name": "Cable Tricep Pushdown",
-                "targetSets": 3,
-                "restTimeSec": 60
+                "minimumRepetitions": 12,
+                "maximumRepetitions": 15,
+                "restTimeSeconds": 60,
+                "targetRpe": 9,
+                "notes": "Focus on leading with the elbows."
             }
+        ],
+        "tags": [
+            "Push",
+            "Upper Body"
         ]
     },
     {
-        "id": "pull-strength",
+        "version": "1.1.0",
+        "id": "pull-strength-v1.1",
         "name": "Pull Day (Strength)",
+        "category": "Strength",
+        "difficulty": "Advanced",
+        "estimatedDurationMinutes": 90,
         "description": "Heavy compounds focusing on back and biceps strength.",
         "exercises": [
             {
-                "id": "deadlift",
+                "exerciseId": "deadlift",
                 "name": "Deadlift",
+                "primaryMuscles": [
+                    "Back",
+                    "Hamstrings"
+                ],
+                "secondaryMuscles": [
+                    "Glutes",
+                    "Forearms"
+                ],
+                "equipment": "Barbell",
                 "targetSets": 3,
-                "restTimeSec": 300
+                "minimumRepetitions": 3,
+                "maximumRepetitions": 5,
+                "restTimeSeconds": 300,
+                "targetRpe": 9,
+                "notes": "Reset after every rep. Neutral spine is critical."
             },
             {
-                "id": "pull-up",
+                "exerciseId": "weighted-pull-up",
                 "name": "Weighted Pull-Up",
+                "primaryMuscles": [
+                    "Lats"
+                ],
+                "secondaryMuscles": [
+                    "Biceps",
+                    "Upper Back"
+                ],
+                "equipment": "Pull-up Bar, Weight Belt",
                 "targetSets": 4,
-                "restTimeSec": 180
+                "minimumRepetitions": 5,
+                "maximumRepetitions": 8,
+                "restTimeSeconds": 180,
+                "targetRpe": 8,
+                "notes": "Full range of motion. Chest to bar."
             },
             {
-                "id": "barbell-row",
+                "exerciseId": "barbell-row",
                 "name": "Bent Over Barbell Row",
+                "primaryMuscles": [
+                    "Middle Back"
+                ],
+                "secondaryMuscles": [
+                    "Lats",
+                    "Biceps"
+                ],
+                "equipment": "Barbell",
                 "targetSets": 3,
-                "restTimeSec": 120
-            },
-            {
-                "id": "bicep-curl",
-                "name": "Barbell Bicep Curl",
-                "targetSets": 3,
-                "restTimeSec": 90
+                "minimumRepetitions": 8,
+                "maximumRepetitions": 10,
+                "restTimeSeconds": 120,
+                "targetRpe": 8,
+                "notes": "Torso nearly parallel to floor. Pull towards hips."
             }
-        ]
-    },
-    {
-        "id": "legs-power",
-        "name": "Leg Day (Power)",
-        "description": "Explosive leg movements and heavy squats.",
-        "exercises": [
-            {
-                "id": "squat",
-                "name": "Barbell Squat",
-                "targetSets": 4,
-                "restTimeSec": 240
-            },
-            {
-                "id": "leg-press",
-                "name": "Leg Press",
-                "targetSets": 3,
-                "restTimeSec": 180
-            },
-            {
-                "id": "shrugs",
-                "name": "Dumbbell Shrugs",
-                "targetSets": 4,
-                "restTimeSec": 60
-            }
+        ],
+        "tags": [
+            "Pull",
+            "Upper Body"
         ]
     }
 ]

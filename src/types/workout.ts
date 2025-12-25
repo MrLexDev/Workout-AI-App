@@ -5,17 +5,29 @@
 }
 
 export interface Exercise {
-    id: string;
+    exerciseId: string; // Internal identifier for the exercise type
     name: string;
+    primaryMuscles: string[];
+    secondaryMuscles: string[];
+    equipment: string;
     targetSets: number;
-    restTimeSec: number;
+    minimumRepetitions: number;
+    maximumRepetitions: number;
+    restTimeSeconds: number; // Renamed from restTimeSec
+    targetRpe: number;
+    notes: string;
     lastSessionWeight?: number;
 }
 
 export interface Routine {
+    version: string; // e.g., "1.1.0"
     id: string;
     name: string;
-    description?: string;
+    category: string;
+    difficulty: string;
+    estimatedDurationMinutes: number;
+    description: string;
     exercises: Exercise[];
+    tags: string[];
     lastPerformed?: number; // Timestamp
 }

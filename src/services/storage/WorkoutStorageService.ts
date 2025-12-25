@@ -5,7 +5,7 @@ const STORAGE_KEY = 'workout-tracker-v1';
 export class WorkoutStorageService {
     private static instance: WorkoutStorageService;
 
-    private constructor() {}
+    private constructor() { }
 
     public static getInstance(): WorkoutStorageService {
         if (!WorkoutStorageService.instance) {
@@ -44,7 +44,6 @@ export class WorkoutStorageService {
                 return [];
             }
 
-            // Optional: We could validate each routine here as well
             return parsed.map((item: any) => {
                 try {
                     return this.validateAndParseRoutine(JSON.stringify(item));
@@ -60,7 +59,7 @@ export class WorkoutStorageService {
     }
 
     /**
-     * Parses a JSON string and validates it matches the Routine interface.
+     * Parses a JSON string and validates it matches the Routine interface v1.1.0.
      * Throws a descriptive error if invalid.
      */
     public validateAndParseRoutine(jsonString: string): Routine {
@@ -75,49 +74,86 @@ export class WorkoutStorageService {
             throw new Error('Invalid routine: data is not an object.');
         }
 
-        // Required fields for Routine
-        if (typeof obj.id !== 'string' || obj.id.trim() === '') {
-            throw new Error('Invalid routine: missing or invalid "id".');
-        }
-        if (typeof obj.name !== 'string' || obj.name.trim() === '') {
-            throw new Error('Invalid routine: missing or invalid "name".');
-        }
-        if (!Array.isArray(obj.exercises)) {
-            throw new Error('Invalid routine: "exercises" must be an array.');
-        }
+        // Required fields for Routine v1.1.0
+        if (typeof obj.version !== 'string') throw new Error('Invalid routine: missing or invalid "version".');
+        if (typeof obj.id !== 'string' || obj.id.trim() === '') throw new Error('Invalid routine: missing or invalid "id".');
+        if (typeof obj.name !== 'string' || obj.name.trim() === '') throw new Error('Invalid routine: missing or invalid "name".');
+        if (typeof obj.category !== 'string') throw new Error('Invalid routine: missing or invalid "category".');
+        if (typeof obj.difficulty !== 'string') throw new Error('Invalid routine: missing or invalid "difficulty".');
+        if (typeof obj.estimatedDurationMinutes !== 'number') throw new Error('Invalid routine: missing or invalid "estimatedDurationMinutes".');
+        if (typeof obj.description !== 'string') throw new Error('Invalid routine: missing or invalid "description".');
+        if (!Array.isArray(obj.exercises)) throw new Error('Invalid routine: "exercises" must be an array.');
+        if (!Array.isArray(obj.tags)) throw new Error('Invalid routine: "tags" must be an array.');
 
         // Validate each exercise in the routine
         const exercises: Exercise[] = obj.exercises.map((ex: any, index: number) => {
             if (!ex || typeof ex !== 'object') {
                 throw new Error(`Invalid exercise at index ${index}: not an object.`);
             }
-            if (typeof ex.id !== 'string' || ex.id.trim() === '') {
-                throw new Error(`Invalid exercise at index ${index}: missing or invalid "id".`);
+            if (typeof ex.exerciseId !== 'string' || ex.exerciseId.trim() === '') {
+                throw new Error(`Invalid exercise at index ${index}: missing or invalid "exerciseId".`);
             }
             if (typeof ex.name !== 'string' || ex.name.trim() === '') {
                 throw new Error(`Invalid exercise at index ${index}: missing or invalid "name".`);
             }
+            if (!Array.isArray(ex.primaryMuscles)) {
+                throw new Error(`Invalid exercise at index ${index}: "primaryMuscles" must be an array.`);
+            }
+            if (!Array.isArray(ex.secondaryMuscles)) {
+                throw new Error(`Invalid exercise at index ${index}: "secondaryMuscles" must be an array.`);
+            }
+            if (typeof ex.equipment !== 'string') {
+                throw new Error(`Invalid exercise at index ${index}: missing or invalid "equipment".`);
+            }
             if (typeof ex.targetSets !== 'number') {
                 throw new Error(`Invalid exercise at index ${index}: "targetSets" must be a number.`);
             }
-            if (typeof ex.restTimeSec !== 'number') {
-                throw new Error(`Invalid exercise at index ${index}: "restTimeSec" must be a number.`);
+            if (typeof ex.minimumRepetitions !== 'number') {
+                throw new Error(`Invalid exercise at index ${index}: "minimumRepetitions" must be a number.`);
             }
-            
+            if (typeof ex.maximumRepetitions !== 'number') {
+                throw new Error(`Invalid exercise at index ${index}: "maximumRepetitions" must be a number.`);
+            }
+
+            // Handle rename from restTimeSec to restTimeSeconds if importing old format
+            const restTime = typeof ex.restTimeSeconds === 'number' ? ex.restTimeSeconds : ex.restTimeSec;
+            if (typeof restTime !== 'number') {
+                throw new Error(`Invalid exercise at index ${index}: missing or invalid "restTimeSeconds".`);
+            }
+
+            if (typeof ex.targetRpe !== 'number') {
+                throw new Error(`Invalid exercise at index ${index}: "targetRpe" must be a number.`);
+            }
+            if (typeof ex.notes !== 'string') {
+                throw new Error(`Invalid exercise at index ${index}: "notes" must be a string.`);
+            }
+
             return {
-                id: ex.id,
+                exerciseId: ex.exerciseId,
                 name: ex.name,
+                primaryMuscles: ex.primaryMuscles,
+                secondaryMuscles: ex.secondaryMuscles,
+                equipment: ex.equipment,
                 targetSets: ex.targetSets,
-                restTimeSec: ex.restTimeSec,
+                minimumRepetitions: ex.minimumRepetitions,
+                maximumRepetitions: ex.maximumRepetitions,
+                restTimeSeconds: restTime,
+                targetRpe: ex.targetRpe,
+                notes: ex.notes,
                 lastSessionWeight: typeof ex.lastSessionWeight === 'number' ? ex.lastSessionWeight : undefined
             };
         });
 
         const routine: Routine = {
+            version: obj.version,
             id: obj.id,
             name: obj.name,
+            category: obj.category,
+            difficulty: obj.difficulty,
+            estimatedDurationMinutes: obj.estimatedDurationMinutes,
+            description: obj.description,
             exercises,
-            description: typeof obj.description === 'string' ? obj.description : undefined,
+            tags: obj.tags,
             lastPerformed: typeof obj.lastPerformed === 'number' ? obj.lastPerformed : undefined
         };
 

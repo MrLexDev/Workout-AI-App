@@ -27,6 +27,9 @@ interface WorkoutState {
     // Session Flow Actions
     completeSet: () => void;
     startWork: () => void;
+
+    // Data Management
+    updateRoutine: (routine: Routine) => void;
 }
 
 // Initial load logic
@@ -122,5 +125,18 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
 
     startWork: () => {
         set({ sessionState: 'WORK' });
+    },
+
+    updateRoutine: (updatedRoutine: Routine) => {
+        const state = get();
+        const newRoutines = state.routines.map(r => r.id === updatedRoutine.id ? updatedRoutine : r);
+
+        // Save to storage
+        try {
+            workoutStorageService.saveRoutines(newRoutines);
+            set({ routines: newRoutines });
+        } catch (e) {
+            console.error("Failed to save updated routine", e);
+        }
     }
 }));

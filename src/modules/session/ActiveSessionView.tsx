@@ -3,7 +3,7 @@ import { useWorkoutStore } from '../../store/workoutStore';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
-import { Pause,/* Play,*/ RotateCcw, ArrowLeft, Check/*, Timer as TimerIcon*/ } from 'lucide-react';
+import { Pause, RotateCcw, ArrowLeft, Check, Info, Target, Zap } from 'lucide-react';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -23,13 +23,10 @@ export const ActiveSessionView: React.FC = () => {
     const stopwatch = useStopwatch();
 
     // ----- TIMER (REST MODE) -----
-    // We update target time whenever the current exercise changes or we switch to REST
     const [restTarget, setRestTarget] = useState(60);
 
     const restTimer = usePrecisionTimer(restTarget, () => {
-        // Auto-switch to WORK when timer ends?
-        // Let's play a sound and then auto-start work
-        console.log('Rest finished!');
+        // Auto-switch to WORK when timer ends
         startWork();
     });
 
@@ -38,19 +35,18 @@ export const ActiveSessionView: React.FC = () => {
         if (!currentExercise) return;
 
         if (sessionState === 'WORK') {
-            // Ensure stopwatch is running, timer is reset/paused
             stopwatch.start();
             restTimer.reset();
         } else if (sessionState === 'REST') {
-            // Ensure timer is running, stopwatch is reset/paused
-            setRestTarget(currentExercise.restTimeSec);
-            stopwatch.reset(); // or pause if we want to keep track of total time? usually rest is separate.
+            // Use restTimeSeconds from v1.1.0 schema
+            setRestTarget(currentExercise.restTimeSeconds);
+            stopwatch.reset();
             restTimer.start();
         } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
             stopwatch.reset();
             restTimer.reset();
         }
-    }, [sessionState, currentExercise, stopwatch.start, stopwatch.reset, restTimer.start, restTimer.reset]);
+    }, [sessionState, currentExercise, stopwatch, restTimer]);
 
     // Handle Manual Complete Set
     const handleCompleteSet = () => {
@@ -59,11 +55,18 @@ export const ActiveSessionView: React.FC = () => {
 
     if (!activeRoutine || !currentExercise) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-slate-400">
-                <p>No active routine or finished.</p>
-                <button onClick={endSession} className="mt-4 text-blue-400 underline">
-                    Go Back
-                </button>
+            <div className="flex flex-col items-center justify-center h-full text-slate-400 bg-slate-950">
+                <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 text-center animate-in fade-in zoom-in duration-300">
+                    <Check size={48} className="mx-auto mb-4 text-green-500" />
+                    <h2 className="text-xl font-bold text-white mb-2">Workout Finished!</h2>
+                    <p className="text-sm text-slate-400 mb-6">Great session! Your progress has been saved.</p>
+                    <button
+                        onClick={endSession}
+                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98]"
+                    >
+                        Return to Dashboard
+                    </button>
+                </div>
             </div>
         );
     }
@@ -80,18 +83,24 @@ export const ActiveSessionView: React.FC = () => {
                 >
                     <ArrowLeft size={24} />
                 </button>
-                <div className="overflow-hidden">
+                <div className="overflow-hidden flex-1">
                     <h1 className="text-xl font-bold text-white leading-tight truncate">
                         {currentExercise.name}
                     </h1>
-                    <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">
-                        Set {currentExercise.targetSets - setsRemaining + 1} of {currentExercise.targetSets}
-                    </span>
+                    <div className="flex items-center gap-3">
+                        <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">
+                            Set {currentExercise.targetSets - setsRemaining + 1} of {currentExercise.targetSets}
+                        </span>
+                        <div className="w-1 h-1 rounded-full bg-slate-700" />
+                        <span className="text-[10px] text-slate-500 font-mono">
+                            {activeRoutine.name}
+                        </span>
+                    </div>
                 </div>
             </header>
 
-            {/* Main Center Display (Flexible, non-scrolling part) */}
-            <section className="flex-none flex flex-col items-center justify-center py-4 relative">
+            {/* Main Center Display */}
+            <section className="flex-none flex flex-col items-center justify-center py-6 relative">
 
                 {/* Visualizer Switch */}
                 {isResting ? (
@@ -106,13 +115,42 @@ export const ActiveSessionView: React.FC = () => {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/30 border-4 border-slate-700/30 animate-in fade-in zoom-in duration-300">
-                        <span className="text-6xl font-black font-mono tracking-wider text-white">
+                    <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
+                        {/* Pulse effect in background */}
+                        <div className="absolute inset-0 bg-green-500/5 animate-pulse" />
+
+                        <span className="text-6xl font-black font-mono tracking-wider text-white z-10 transition-transform group-hover:scale-110 duration-500">
                             {Math.floor(stopwatch.elapsedTime / 60)}:{String(stopwatch.elapsedTime % 60).padStart(2, '0')}
                         </span>
-                        <div className="mt-2 flex items-center gap-2 text-green-400 font-medium tracking-widest text-sm uppercase">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            Working
+
+                        <div className="mt-4 flex flex-col items-center gap-1 z-10">
+                            <div className="flex items-center gap-2 text-green-400 font-bold tracking-widest text-[10px] uppercase">
+                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                Working
+                            </div>
+                            <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
+                                {currentExercise.equipment}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Target Info Overlay (Only during work) */}
+                {!isResting && (
+                    <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-xs px-4">
+                        <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
+                            <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
+                                <Target size={12} className="text-blue-400" />
+                                RPE Target
+                            </div>
+                            <span className="text-xl font-black text-yellow-500">{currentExercise.targetRpe}</span>
+                        </div>
+                        <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
+                            <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
+                                <Zap size={12} className="text-blue-400" />
+                                Rep Range
+                            </div>
+                            <span className="text-xl font-black text-white">{currentExercise.minimumRepetitions}-{currentExercise.maximumRepetitions}</span>
                         </div>
                     </div>
                 )}
@@ -123,17 +161,17 @@ export const ActiveSessionView: React.FC = () => {
                     {isResting ? (
                         <button
                             onClick={startWork}
-                            className="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
+                            className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] border border-slate-700"
                         >
                             <span className="uppercase tracking-wider text-sm">Skip Rest</span>
                         </button>
                     ) : (
                         <button
                             onClick={handleCompleteSet}
-                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-900/20"
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                         >
                             <Check size={24} strokeWidth={3} />
-                            <span className="uppercase tracking-wider text-sm">Complete Set</span>
+                            <span className="uppercase tracking-widest font-black">Complete Set</span>
                         </button>
                     )}
 
@@ -141,14 +179,14 @@ export const ActiveSessionView: React.FC = () => {
                     {isResting && (
                         <div className="flex gap-4">
                             <button
-                                onClick={() => restTimer.pause()} // Or handle logic
-                                className="p-3 text-slate-500 hover:text-white bg-slate-800 rounded-lg"
+                                onClick={() => restTimer.pause()}
+                                className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
                             >
                                 <Pause size={20} />
                             </button>
                             <button
                                 onClick={() => restTimer.reset()}
-                                className="p-3 text-slate-500 hover:text-white bg-slate-800 rounded-lg"
+                                className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
                             >
                                 <RotateCcw size={20} />
                             </button>
@@ -157,54 +195,77 @@ export const ActiveSessionView: React.FC = () => {
                 </div>
             </section>
 
-            {/* Exercises List (Scrollable now!) */}
-            <section className="flex-1 overflow-y-auto min-h-0 bg-slate-900/50 backdrop-blur-sm border-t border-slate-800 mt-6">
-                <div className="p-6">
-                    <h3 className="text-sm font-semibold text-slate-400 mb-4 uppercase tracking-wider sticky top-0 bg-slate-900/95 py-2 z-10">
-                        Up Next
-                    </h3>
-                    <div className="space-y-3 pb-8">
-                        {activeRoutine.exercises.map((ex, idx) => {
-                            //const isDone = idx < currentExerciseIndex;
-                            const isCurrent = idx === currentExerciseIndex;
+            {/* Upcoming Exercises List */}
+            <section className="flex-1 overflow-y-auto min-h-0 bg-slate-950 border-t border-slate-800 shadow-2xl relative">
+                {/* Gradient fade at top */}
+                <div className="sticky top-0 h-8 bg-gradient-to-b from-slate-950 to-transparent z-10 pointer-events-none" />
 
-                            // Filter out done exercises to keep list focused? 
-                            // Or keep them for history visually? 
-                            // Let's hide done ones to keep focus on "Upcoming".
+                <div className="px-6 pb-6">
+                    <div className="flex items-center justify-between mb-4 sticky top-4 z-20 bg-slate-950 py-2">
+                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">
+                            Up Next
+                        </h3>
+                        {currentExercise.notes && (
+                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-900/50 rounded-full border border-slate-800">
+                                <Info size={12} className="text-blue-400" />
+                                <span className="text-[9px] text-slate-400 font-medium italic truncate max-w-[150px]">
+                                    {currentExercise.notes}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="space-y-2">
+                        {activeRoutine.exercises.map((ex, idx) => {
+                            const isCurrent = idx === currentExerciseIndex;
                             if (idx < currentExerciseIndex) return null;
 
                             return (
                                 <div
-                                    key={ex.id + idx}
+                                    key={ex.exerciseId + idx}
                                     className={`
-                                        flex justify-between items-center p-4 rounded-xl border transition-colors
+                                        flex justify-between items-center p-4 rounded-2xl border transition-all duration-300
                                         ${isCurrent
-                                            ? 'bg-blue-500/10 border-blue-500/50'
-                                            : 'bg-slate-800/50 border-slate-800 text-slate-400'
+                                            ? 'bg-blue-600/10 border-blue-500/30 scale-[1.02]'
+                                            : 'bg-slate-900/30 border-slate-800 text-slate-500 grayscale opacity-60'
                                         }
                                     `}
                                 >
-                                    <div>
-                                        <span className={`font-medium ${isCurrent ? 'text-blue-200' : ''}`}>
-                                            {ex.name}
-                                        </span>
-                                        {isCurrent && (
-                                            <span className="ml-2 text-[10px] bg-blue-500 text-white px-1.5 py-0.5 rounded uppercase tracking-wider">
-                                                Active
+                                    <div className="flex flex-col gap-0.5">
+                                        <div className="flex items-center gap-2">
+                                            <span className={`text-sm font-bold ${isCurrent ? 'text-white' : 'text-slate-400'}`}>
+                                                {ex.name}
                                             </span>
-                                        )}
+                                            {isCurrent && (
+                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[9px] font-mono opacity-60">
+                                                {ex.targetSets} × {ex.minimumRepetitions}-{ex.maximumRepetitions}
+                                            </span>
+                                            <div className="w-0.5 h-0.5 rounded-full bg-slate-700" />
+                                            <span className="text-[9px] font-mono opacity-60">
+                                                RPE {ex.targetRpe}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <span className="text-sm opacity-80">{ex.targetSets} Sets</span>
+
+                                    <div className="flex flex-col items-end">
+                                        <span className={`text-[10px] font-black ${isCurrent ? 'text-blue-400' : 'text-slate-600'}`}>
+                                            {isCurrent ? `SET ${currentExercise.targetSets - setsRemaining + 1}` : 'QUEUED'}
+                                        </span>
+                                        <span className="text-[9px] opacity-40 uppercase tracking-tighter">
+                                            {ex.equipment.split(',')[0]}
+                                        </span>
+                                    </div>
                                 </div>
                             );
                         })}
-                        {/* Empty spacer for easier scrolling at bottom */}
                         <div className="h-12" />
                     </div>
                 </div>
             </section>
-
-            {/* Footer Info (Removed since title is at top) */}
         </div>
     );
 };
