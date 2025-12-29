@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 interface UsePrecisionTimerReturn {
     timeLeft: number;
@@ -159,7 +159,7 @@ export const usePrecisionTimer = (
         }
     }, [isRunning, targetTimeSeconds]);
 
-    return {
+    return useMemo(() => ({
         timeLeft,
         isRunning,
         progress,
@@ -167,5 +167,5 @@ export const usePrecisionTimer = (
         pause,
         reset,
         adjustTime
-    };
+    }), [timeLeft, isRunning, progress, start, pause, reset, adjustTime]);
 };

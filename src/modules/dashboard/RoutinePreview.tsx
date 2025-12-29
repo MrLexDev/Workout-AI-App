@@ -1,9 +1,9 @@
 import React from 'react';
-import { type Routine } from '../../types/workout';
+import { type HydratedRoutine } from '../../types/workout';
 import { X, Play, Clock, Tag, Info } from 'lucide-react';
 
 interface RoutinePreviewProps {
-    routine: Routine;
+    routine: HydratedRoutine;
     onClose: () => void;
     onStart: () => void;
 }

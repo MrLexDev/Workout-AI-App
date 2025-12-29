@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 export const useStopwatch = () => {
     const [elapsedTime, setElapsedTime] = useState(0); // in seconds (can use ms for more precision if needed)
@@ -59,11 +59,13 @@ export const useStopwatch = () => {
         setElapsedTime(0);
     }, []);
 
-    return {
+    const returnValue = useMemo(() => ({
         elapsedTime,
         isRunning,
         start,
         pause,
         reset
-    };
+    }), [elapsedTime, isRunning, start, pause, reset]);
+
+    return returnValue;
 };

@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
-import { Play, MoreHorizontal, Download, Upload } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Play, MoreHorizontal, Download, Upload, Trash2, Plus } from 'lucide-react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { RoutinePreview } from './RoutinePreview';
 import { ImportRoutineModal } from './ImportRoutineModal';
+import { hydrateRoutine } from '../../utils/routineHelpers';
+import { type Routine } from '../../types/workout';
 
 export const WorkoutDashboard: React.FC = () => {
     // Connect to the store
-    const { routines, selectRoutine, startSession } = useWorkoutStore();
+    const { routines, selectRoutine, startSession, deleteRoutine, createRoutine } = useWorkoutStore();
 
     // UI State
     const [previewRoutineId, setPreviewRoutineId] = useState<string | null>(null);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [importTargetId, setImportTargetId] = useState<string | null>(null);
+
+    // Hydrate routines for display
+    const hydratedRoutines = useMemo(() => {
+        return routines.map(hydrateRoutine);
+    }, [routines]);
 
     // Handlers
     const handleCardClick = (routineId: string) => {
@@ -46,22 +53,52 @@ export const WorkoutDashboard: React.FC = () => {
         setActiveMenuId(null);
     };
 
-    // Close menu when clicking outside (simple implementation: overlay or effect)
-    // For now, let's just assume clicking another card or specific action closes it.
-    // Or add a transparent overlay if menu is open.
+    const handleDeleteClick = (e: React.MouseEvent, routineId: string) => {
+        e.stopPropagation();
+        if (window.confirm('Are you sure you want to delete this routine?')) {
+            deleteRoutine(routineId);
+        }
+        setActiveMenuId(null);
+    };
+
+    const handleCreateRoutine = () => {
+        const newRoutine: Routine = {
+            id: crypto.randomUUID(),
+            version: '1.0.0',
+            name: 'New Custom Routine',
+            category: 'Custom',
+            difficulty: 'Intermediate',
+            estimatedDurationMinutes: 45,
+            description: 'A new custom workout routine.',
+            exercises: [],
+            tags: ['Custom']
+        };
+        createRoutine(newRoutine);
+    };
+
+    // Close menu when clicking outside
     const closeMenu = () => setActiveMenuId(null);
 
-    const previewRoutine = routines.find(r => r.id === previewRoutineId);
+    const previewRoutine = hydratedRoutines.find(r => r.id === previewRoutineId);
 
     return (
-        <div className="space-y-6 relative" onClick={closeMenu}>
-            <header>
-                <h2 className="text-2xl font-bold text-white">My Routines</h2>
-                <p className="text-slate-400 text-sm">Select a routine to start training</p>
+        <div className="space-y-6 relative pb-20" onClick={closeMenu}>
+            <header className="flex justify-between items-end">
+                <div>
+                    <h2 className="text-2xl font-bold text-white">My Routines</h2>
+                    <p className="text-slate-400 text-sm">Select a routine to start training</p>
+                </div>
+                <button
+                    onClick={handleCreateRoutine}
+                    className="bg-blue-600 hover:bg-blue-500 text-white p-2 rounded-lg flex items-center gap-2 text-xs font-bold transition-colors"
+                >
+                    <Plus size={16} />
+                    NEW
+                </button>
             </header>
 
             <div className="space-y-4">
-                {routines.map((routine) => (
+                {hydratedRoutines.map((routine) => (
                     <div
                         key={routine.id}
                         className="bg-slate-800 rounded-xl p-5 border border-slate-700 hover:border-blue-500/50 transition-colors cursor-pointer group relative"
@@ -101,6 +138,13 @@ export const WorkoutDashboard: React.FC = () => {
                                             <Download size={16} />
                                             Export JSON
                                         </button>
+                                        <button
+                                            onClick={(e) => handleDeleteClick(e, routine.id)}
+                                            className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-400 hover:bg-slate-800 hover:text-red-300 transition-colors text-left border-t border-slate-800"
+                                        >
+                                            <Trash2 size={16} />
+                                            Delete
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -108,9 +152,9 @@ export const WorkoutDashboard: React.FC = () => {
 
                         {/* Exercise Preview (First 3) */}
                         <div className="flex gap-2 mb-4 overflow-hidden">
-                            {routine.exercises.slice(0, 3).map((ex) => (
+                            {routine.exercises.slice(0, 3).map((ex, i) => (
                                 <span
-                                    key={ex.exerciseId}
+                                    key={ex.exerciseId + i}
                                     className="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700 whitespace-nowrap"
                                 >
                                     {ex.name}

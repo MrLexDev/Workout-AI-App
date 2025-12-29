@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useWorkoutStore } from '../../store/workoutStore';
+import { usePerformanceStore } from '../../store/performanceStore';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
-import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus } from 'lucide-react';
+import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save } from 'lucide-react';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -16,6 +17,8 @@ export const ActiveSessionView: React.FC = () => {
         startWork
     } = useWorkoutStore();
 
+    const { addLog } = usePerformanceStore();
+
     // Derived active exercise
     const currentExercise = activeRoutine?.exercises[currentExerciseIndex];
 
@@ -24,6 +27,14 @@ export const ActiveSessionView: React.FC = () => {
 
     // ----- TIMER (REST MODE) -----
     const [restTarget, setRestTarget] = useState(60);
+
+    // ----- LOGGING STATE -----
+    const [isLogging, setIsLogging] = useState(false);
+    const [logWeight, setLogWeight] = useState('');
+    const [logReps, setLogReps] = useState('');
+
+    // Track previous session state to handle transitions only
+    const prevSessionState = useRef<string | null>(null);
 
     const restTimer = usePrecisionTimer(restTarget, () => {
         // Auto-switch to WORK when timer ends
@@ -34,23 +45,51 @@ export const ActiveSessionView: React.FC = () => {
     useEffect(() => {
         if (!currentExercise) return;
 
-        if (sessionState === 'WORK') {
-            stopwatch.start();
-            restTimer.reset();
-        } else if (sessionState === 'REST') {
-            // Use restTimeSeconds from v1.1.0 schema
-            setRestTarget(currentExercise.restTimeSeconds);
-            stopwatch.reset();
-            restTimer.start();
-        } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
-            stopwatch.reset();
-            restTimer.reset();
+        // Only execute transition logic if sessionState has changed
+        if (prevSessionState.current !== sessionState) {
+            if (sessionState === 'WORK') {
+                stopwatch.start();
+                restTimer.reset();
+                setIsLogging(false); // Reset logging state on work start
+            } else if (sessionState === 'REST') {
+                // Use restTimeSeconds from v1.1.0 schema
+                setRestTarget(currentExercise.restTimeSeconds);
+                stopwatch.reset();
+                restTimer.start();
+            } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
+                stopwatch.reset();
+                restTimer.reset();
+            }
+
+            prevSessionState.current = sessionState;
         }
     }, [sessionState, currentExercise, stopwatch, restTimer]);
 
-    // Handle Manual Complete Set
-    const handleCompleteSet = () => {
+    // Handle initial "Complete Set" click -> Go to Logging Mode
+    const handleInitiateCompleteSet = () => {
+        // Pre-fill with reasonable defaults if possible (not stored yet in this iteration, using blanks or potentially last log in future)
+        // For now, let's leave blank or use exercise target
+        setIsLogging(true);
+        if (currentExercise) {
+            setLogReps(currentExercise.maximumRepetitions.toString());
+            // Weight default could be fetched from store in the future
+        }
+    };
+
+    // Handle "Save & Rest"
+    const handleConfirmLog = () => {
+        if (currentExercise && logWeight && logReps) {
+            const w = parseFloat(logWeight);
+            const r = parseInt(logReps);
+            if (!isNaN(w) && !isNaN(r)) {
+                addLog(currentExercise.exerciseId, w, r);
+            }
+        }
+        // Proceed to actual Rest state
         completeSet();
+        setIsLogging(false);
+        setLogWeight('');
+        setLogReps('');
     };
 
     if (!activeRoutine || !currentExercise) {
@@ -117,6 +156,33 @@ export const ActiveSessionView: React.FC = () => {
                             Resting
                         </div>
                     </div>
+                ) : isLogging ? (
+                    <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-700 animate-in fade-in zoom-in duration-300 relative overflow-hidden p-6 space-y-4">
+                        <h3 className="text-slate-400 uppercase tracking-widest text-xs font-bold">Log Set</h3>
+                        <div className="w-full space-y-3">
+                            <div className="flex items-center gap-2">
+                                <span className="w-8 text-right text-slate-500 text-xs font-bold">KG</span>
+                                <input
+                                    type="number"
+                                    value={logWeight}
+                                    onChange={(e) => setLogWeight(e.target.value)}
+                                    placeholder="0"
+                                    autoFocus
+                                    className="flex-1 bg-slate-900 border-b-2 border-slate-600 focus:border-blue-500 text-center text-2xl font-bold text-white outline-none py-1"
+                                />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="w-8 text-right text-slate-500 text-xs font-bold">REPS</span>
+                                <input
+                                    type="number"
+                                    value={logReps}
+                                    onChange={(e) => setLogReps(e.target.value)}
+                                    placeholder="0"
+                                    className="flex-1 bg-slate-900 border-b-2 border-slate-600 focus:border-blue-500 text-center text-2xl font-bold text-white outline-none py-1"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 ) : (
                     <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
                         {/* Pulse effect in background */}
@@ -139,7 +205,7 @@ export const ActiveSessionView: React.FC = () => {
                 )}
 
                 {/* Target Info Overlay (Only during work) */}
-                {!isResting && (
+                {!isResting && !isLogging && (
                     <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-xs px-4">
                         <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
                             <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
@@ -168,10 +234,19 @@ export const ActiveSessionView: React.FC = () => {
                         >
                             <span className="uppercase tracking-wider text-sm">Skip Rest</span>
                         </button>
+                    ) : isLogging ? (
+                        <button
+                            onClick={handleConfirmLog}
+                            disabled={!logWeight || !logReps}
+                            className="w-full bg-green-600 hover:bg-green-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-green-500/20"
+                        >
+                            <Save size={24} strokeWidth={3} />
+                            <span className="uppercase tracking-widest font-black">Save & Rest</span>
+                        </button>
                     ) : (
                         <div className="flex gap-3 w-full">
                             <button
-                                onClick={handleCompleteSet}
+                                onClick={handleInitiateCompleteSet}
                                 className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                             >
                                 <Check size={24} strokeWidth={3} />

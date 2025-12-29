@@ -10,10 +10,6 @@
         "exercises": [
             {
                 "exerciseId": "weighted-pull-up",
-                "name": "Weighted Pull-Up",
-                "primaryMuscles": ["Lats"],
-                "secondaryMuscles": ["Biceps", "Upper Back"],
-                "equipment": "Pull-up Bar, Weight Belt",
                 "targetSets": 4,
                 "minimumRepetitions": 5,
                 "maximumRepetitions": 8,
@@ -23,10 +19,6 @@
             },
             {
                 "exerciseId": "overhead-press-barbell",
-                "name": "Barbell Overhead Press",
-                "primaryMuscles": ["Shoulders"],
-                "secondaryMuscles": ["Triceps", "Core"],
-                "equipment": "Barbell",
                 "targetSets": 3,
                 "minimumRepetitions": 5,
                 "maximumRepetitions": 8,
@@ -36,10 +28,6 @@
             },
             {
                 "exerciseId": "weighted-dips",
-                "name": "Weighted Chest Dips",
-                "primaryMuscles": ["Chest"],
-                "secondaryMuscles": ["Triceps", "Front Delts"],
-                "equipment": "Parallel Bars",
                 "targetSets": 3,
                 "minimumRepetitions": 8,
                 "maximumRepetitions": 12,
@@ -49,10 +37,6 @@
             },
             {
                 "exerciseId": "face-pulls",
-                "name": "Cable Face Pulls",
-                "primaryMuscles": ["Rear Delts"],
-                "secondaryMuscles": ["Rotator Cuff", "Upper Traps"],
-                "equipment": "Cable Machine",
                 "targetSets": 3,
                 "minimumRepetitions": 15,
                 "maximumRepetitions": 20,
@@ -61,7 +45,11 @@
                 "notes": "Health exercise. Pull towards forehead, focus on external rotation of the shoulders."
             }
         ],
-        "tags": ["Upper Body", "Strength", "Health"]
+        "tags": [
+            "Upper Body",
+            "Strength",
+            "Health"
+        ]
     },
     {
         "version": "1.0.0",
@@ -74,10 +62,6 @@
         "exercises": [
             {
                 "exerciseId": "barbell-back-squat",
-                "name": "Barbell Back Squat",
-                "primaryMuscles": ["Quads", "Glutes"],
-                "secondaryMuscles": ["Lower Back", "Core"],
-                "equipment": "Barbell, Squat Rack",
                 "targetSets": 4,
                 "minimumRepetitions": 6,
                 "maximumRepetitions": 10,
@@ -87,10 +71,6 @@
             },
             {
                 "exerciseId": "romanian-deadlift",
-                "name": "Dumbbell Romanian Deadlift",
-                "primaryMuscles": ["Hamstrings", "Glutes"],
-                "secondaryMuscles": ["Lower Back"],
-                "equipment": "Dumbbells",
                 "targetSets": 3,
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 12,
@@ -100,10 +80,6 @@
             },
             {
                 "exerciseId": "dead-bug",
-                "name": "Dead Bug",
-                "primaryMuscles": ["Core"],
-                "secondaryMuscles": ["Hip Flexors"],
-                "equipment": "Bodyweight",
                 "targetSets": 3,
                 "minimumRepetitions": 12,
                 "maximumRepetitions": 16,
@@ -113,10 +89,6 @@
             },
             {
                 "exerciseId": "liss-walking",
-                "name": "Incline Treadmill Walk",
-                "primaryMuscles": ["Cardiovascular System"],
-                "secondaryMuscles": ["Calves"],
-                "equipment": "Treadmill",
                 "targetSets": 1,
                 "minimumRepetitions": 20,
                 "maximumRepetitions": 30,
@@ -125,7 +97,11 @@
                 "notes": "Target heart rate: 120-130 bpm. Improve 'fondo físico' without heavy fatigue."
             }
         ],
-        "tags": ["Lower Body", "Core", "Cardio"]
+        "tags": [
+            "Lower Body",
+            "Core",
+            "Cardio"
+        ]
     },
     {
         "version": "1.0.0",
@@ -138,10 +114,6 @@
         "exercises": [
             {
                 "exerciseId": "incline-db-bench-press",
-                "name": "Incline Dumbbell Bench Press",
-                "primaryMuscles": ["Upper Chest"],
-                "secondaryMuscles": ["Front Delts", "Triceps"],
-                "equipment": "Dumbbells, Incline Bench",
                 "targetSets": 4,
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 12,
@@ -151,10 +123,6 @@
             },
             {
                 "exerciseId": "chest-supported-row",
-                "name": "Chest Supported Row",
-                "primaryMuscles": ["Upper Back", "Rear Delts"],
-                "secondaryMuscles": ["Biceps"],
-                "equipment": "Dumbbells, Bench",
                 "targetSets": 3,
                 "minimumRepetitions": 12,
                 "maximumRepetitions": 15,
@@ -164,10 +132,6 @@
             },
             {
                 "exerciseId": "lateral-raise",
-                "name": "Dumbbell Lateral Raise",
-                "primaryMuscles": ["Side Delts"],
-                "secondaryMuscles": [],
-                "equipment": "Dumbbells",
                 "targetSets": 4,
                 "minimumRepetitions": 15,
                 "maximumRepetitions": 20,
@@ -177,10 +141,6 @@
             },
             {
                 "exerciseId": "diamond-push-up",
-                "name": "Diamond Push-Up",
-                "primaryMuscles": ["Triceps"],
-                "secondaryMuscles": ["Chest"],
-                "equipment": "Bodyweight",
                 "targetSets": 3,
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 20,
@@ -189,6 +149,10 @@
                 "notes": "Calisthenics volume. Keep elbows tucked."
             }
         ],
-        "tags": ["Upper Body", "Hypertrophy", "Calisthenics"]
+        "tags": [
+            "Upper Body",
+            "Hypertrophy",
+            "Calisthenics"
+        ]
     }
 ]

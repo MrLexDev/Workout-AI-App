@@ -1,7 +1,8 @@
 ﻿import { create } from 'zustand';
-import { type Routine } from '../types/workout';
+import { type Routine, type HydratedRoutine } from '../types/workout';
 import { workoutStorageService } from '../services/storage/WorkoutStorageService';
 import initialRoutinesData from '../data/initialRoutines.json';
+import { hydrateRoutine } from '../utils/routineHelpers';
 
 interface WorkoutState {
     routines: Routine[];
@@ -9,7 +10,7 @@ interface WorkoutState {
 
     // Active Session State
     isSessionActive: boolean;
-    activeRoutine: Routine | null;
+    activeRoutine: HydratedRoutine | null;
     sessionState: 'IDLE' | 'WORK' | 'REST' | 'COMPLETED';
     currentExerciseIndex: number;
     setsRemaining: number;
@@ -18,7 +19,6 @@ interface WorkoutState {
     selectRoutine: (id: string) => void;
     getRoutineById: (id: string) => Routine | undefined;
 
-    // Optional: Action to reload from storage or reset
     refreshRoutines: () => void;
 
     startSession: () => void;
@@ -30,6 +30,8 @@ interface WorkoutState {
 
     // Data Management
     updateRoutine: (routine: Routine) => void;
+    createRoutine: (routine: Routine) => void;
+    deleteRoutine: (id: string) => void;
 }
 
 // Initial load logic
@@ -57,10 +59,13 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     currentExerciseIndex: 0,
     setsRemaining: 0,
 
-    selectRoutine: (id) => set((state) => ({
-        activeRoutineId: id,
-        activeRoutine: state.routines.find(r => r.id === id) || null
-    })),
+    selectRoutine: (id) => {
+        const routine = get().routines.find(r => r.id === id);
+        set({
+            activeRoutineId: id,
+            activeRoutine: routine ? hydrateRoutine(routine) : null
+        });
+    },
 
     getRoutineById: (id) => get().routines.find((r) => r.id === id),
 
@@ -73,6 +78,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
         if (!state.activeRoutine) return;
 
         // Initialize session
+        // Note: activeRoutine is already hydrated, so exercises have full info
         const firstExercise = state.activeRoutine.exercises[0];
         set({
             isSessionActive: true,
@@ -103,7 +109,6 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
             });
         } else {
             // LAST SET of the current exercise Finished
-            // We go to REST state, but keep indices same so 'REST' uses currentExercise.restTimeSeconds
             set({
                 setsRemaining: 0,
                 sessionState: 'REST'
@@ -142,12 +147,49 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
         const state = get();
         const newRoutines = state.routines.map(r => r.id === updatedRoutine.id ? updatedRoutine : r);
 
-        // Save to storage
+        try {
+            workoutStorageService.saveRoutines(newRoutines);
+            set((prev) => {
+                // If the updated routine is currently active, we need to re-hydrate it
+                const newActiveRoutine = prev.activeRoutine && prev.activeRoutine.id === updatedRoutine.id
+                    ? hydrateRoutine(updatedRoutine)
+                    : prev.activeRoutine;
+
+                return {
+                    routines: newRoutines,
+                    activeRoutine: newActiveRoutine
+                };
+            });
+        } catch (e) {
+            console.error("Failed to save updated routine", e);
+        }
+    },
+
+    createRoutine: (routine: Routine) => {
+        const state = get();
+        // Check for duplicates? For now just add.
+        const newRoutines = [...state.routines, routine];
         try {
             workoutStorageService.saveRoutines(newRoutines);
             set({ routines: newRoutines });
         } catch (e) {
-            console.error("Failed to save updated routine", e);
+            console.error("Failed to save new routine", e);
+        }
+    },
+
+    deleteRoutine: (id: string) => {
+        const state = get();
+        const newRoutines = state.routines.filter(r => r.id !== id);
+        try {
+            workoutStorageService.saveRoutines(newRoutines);
+            set((prev) => ({
+                routines: newRoutines,
+                // If deleting active routine, clear it? Maybe not strictly necessary if session is inactive.
+                activeRoutine: prev.activeRoutine?.id === id ? null : prev.activeRoutine,
+                activeRoutineId: prev.activeRoutineId === id ? null : prev.activeRoutineId
+            }));
+        } catch (e) {
+            console.error("Failed to delete routine", e);
         }
     }
 }));

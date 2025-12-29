@@ -1,4 +1,4 @@
-import { type Routine, type Exercise } from '../../types/workout';
+import { type Routine, type RoutineExercise } from '../../types/workout';
 
 const STORAGE_KEY = 'workout-tracker-v1';
 
@@ -86,25 +86,15 @@ export class WorkoutStorageService {
         if (!Array.isArray(obj.tags)) throw new Error('Invalid routine: "tags" must be an array.');
 
         // Validate each exercise in the routine
-        const exercises: Exercise[] = obj.exercises.map((ex: any, index: number) => {
+        const exercises: RoutineExercise[] = obj.exercises.map((ex: any, index: number) => {
             if (!ex || typeof ex !== 'object') {
                 throw new Error(`Invalid exercise at index ${index}: not an object.`);
             }
             if (typeof ex.exerciseId !== 'string' || ex.exerciseId.trim() === '') {
                 throw new Error(`Invalid exercise at index ${index}: missing or invalid "exerciseId".`);
             }
-            if (typeof ex.name !== 'string' || ex.name.trim() === '') {
-                throw new Error(`Invalid exercise at index ${index}: missing or invalid "name".`);
-            }
-            if (!Array.isArray(ex.primaryMuscles)) {
-                throw new Error(`Invalid exercise at index ${index}: "primaryMuscles" must be an array.`);
-            }
-            if (!Array.isArray(ex.secondaryMuscles)) {
-                throw new Error(`Invalid exercise at index ${index}: "secondaryMuscles" must be an array.`);
-            }
-            if (typeof ex.equipment !== 'string') {
-                throw new Error(`Invalid exercise at index ${index}: missing or invalid "equipment".`);
-            }
+            // Removed validation for name, muscles, equipment as they are now resolved dynamically
+
             if (typeof ex.targetSets !== 'number') {
                 throw new Error(`Invalid exercise at index ${index}: "targetSets" must be a number.`);
             }
@@ -130,10 +120,6 @@ export class WorkoutStorageService {
 
             return {
                 exerciseId: ex.exerciseId,
-                name: ex.name,
-                primaryMuscles: ex.primaryMuscles,
-                secondaryMuscles: ex.secondaryMuscles,
-                equipment: ex.equipment,
                 targetSets: ex.targetSets,
                 minimumRepetitions: ex.minimumRepetitions,
                 maximumRepetitions: ex.maximumRepetitions,

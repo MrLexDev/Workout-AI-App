@@ -5,7 +5,7 @@
 }
 
 export interface ExerciseDefinition {
-    id: string;
+    id: string; // matches exerciseId in RoutineExercise
     name: string;
     primaryMuscles: string[];
     secondaryMuscles: string[];
@@ -13,30 +13,34 @@ export interface ExerciseDefinition {
     description: string;
 }
 
-export interface Exercise {
-    exerciseId: string; // Internal identifier for the exercise type
-    name: string;
-    primaryMuscles: string[];
-    secondaryMuscles: string[];
-    equipment: string;
+// The configuration of an exercise within a specific routine
+export interface RoutineExercise {
+    exerciseId: string; // Links to ExerciseDefinition
     targetSets: number;
     minimumRepetitions: number;
     maximumRepetitions: number;
-    restTimeSeconds: number; // Renamed from restTimeSec
+    restTimeSeconds: number;
     targetRpe: number;
     notes: string;
     lastSessionWeight?: number;
 }
 
+// A fully populated exercise object for use in the UI (Runtime)
+export type HydratedExercise = RoutineExercise & ExerciseDefinition;
+
 export interface Routine {
-    version: string; // e.g., "1.1.0"
+    version: string;
     id: string;
     name: string;
     category: string;
     difficulty: string;
     estimatedDurationMinutes: number;
     description: string;
-    exercises: Exercise[];
+    exercises: RoutineExercise[];
     tags: string[];
-    lastPerformed?: number; // Timestamp
+    lastPerformed?: number;
+}
+
+export interface HydratedRoutine extends Omit<Routine, 'exercises'> {
+    exercises: HydratedExercise[];
 }
