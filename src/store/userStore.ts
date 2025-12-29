@@ -7,6 +7,7 @@ interface UserState extends UserData {
     setHeight: (height: number) => void;
     addWeightEntry: (weight: number, date: string) => void;
     deleteWeightEntry: (id: string) => void;
+    setAutoSavePreference: (value: boolean) => void;
 }
 
 // Initial load
@@ -15,6 +16,7 @@ const initialData = userStorageService.loadUserData();
 export const useUserStore = create<UserState>((set) => ({
     height: initialData.height,
     weightHistory: initialData.weightHistory,
+    autoSavePreference: initialData.autoSavePreference,
 
     setHeight: (height: number) => {
         set((state) => {
@@ -23,7 +25,8 @@ export const useUserStore = create<UserState>((set) => ({
             // but we need to construct the data object carefully or just save the relevant parts)
             userStorageService.saveUserData({
                 height: newData.height,
-                weightHistory: newData.weightHistory
+                weightHistory: newData.weightHistory,
+                autoSavePreference: state.autoSavePreference
             });
             return { height };
         });
@@ -44,7 +47,8 @@ export const useUserStore = create<UserState>((set) => ({
             const newData = { ...state, weightHistory: newHistory };
             userStorageService.saveUserData({
                 height: newData.height,
-                weightHistory: newData.weightHistory
+                weightHistory: newData.weightHistory,
+                autoSavePreference: state.autoSavePreference
             });
             return { weightHistory: newHistory };
         });
@@ -56,9 +60,22 @@ export const useUserStore = create<UserState>((set) => ({
             const newData = { ...state, weightHistory: newHistory };
             userStorageService.saveUserData({
                 height: newData.height,
-                weightHistory: newData.weightHistory
+                weightHistory: newData.weightHistory,
+                autoSavePreference: state.autoSavePreference
             });
             return { weightHistory: newHistory };
+        });
+    },
+
+    setAutoSavePreference: (value: boolean) => {
+        set((state) => {
+            const newData = { ...state, autoSavePreference: value };
+            userStorageService.saveUserData({
+                height: newData.height,
+                weightHistory: newData.weightHistory,
+                autoSavePreference: newData.autoSavePreference
+            });
+            return { autoSavePreference: value };
         });
     }
 }));

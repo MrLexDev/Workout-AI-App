@@ -7,4 +7,5 @@ export interface WeightEntry {
 export interface UserData {
     height: number | null; // in cm, null if not set
     weightHistory: WeightEntry[];
+    autoSavePreference: boolean;
 }

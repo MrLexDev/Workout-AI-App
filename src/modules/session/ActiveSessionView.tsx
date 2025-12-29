@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { usePerformanceStore } from '../../store/performanceStore';
+import { useUserStore } from '../../store/userStore';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
 import { WheelPicker } from '../../components/inputs/WheelPicker';
 import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History } from 'lucide-react';
+import { Toggle } from '../../components/inputs/Toggle';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -34,11 +36,17 @@ export const ActiveSessionView: React.FC = () => {
     const [logReps, setLogReps] = useState(0);
     const [isSetLogged, setIsSetLogged] = useState(false);
 
+    const { autoSavePreference, setAutoSavePreference } = useUserStore();
+
     // Track previous session state to handle transitions only
     const prevSessionState = useRef<string | null>(null);
 
     const restTimer = usePrecisionTimer(restTarget, () => {
         // Auto-switch to WORK when timer ends
+        // Check for Auto Save
+        if (autoSavePreference && !isSetLogged) {
+            handleConfirmLog();
+        }
         startWork();
     });
 
@@ -261,6 +269,7 @@ export const ActiveSessionView: React.FC = () => {
                             </button>
                         </div>
 
+
                         {/* Logging Interface - Integrated (BELOW Controls) */}
                         <div className="w-full max-w-sm px-4">
                             <div className={`bg-slate-900/50 border ${isSetLogged ? 'border-green-500/30' : 'border-slate-800'} rounded-2xl p-4 transition-colors`}>
@@ -269,13 +278,19 @@ export const ActiveSessionView: React.FC = () => {
                                         {isSetLogged ? <Check size={14} className="text-green-500" /> : <History size={14} />}
                                         {isSetLogged ? "Set Logged" : "Log Set"}
                                     </h3>
-                                    {isSetLogged && (
+                                    {isSetLogged ? (
                                         <button
                                             onClick={() => setIsSetLogged(false)}
                                             className="text-[10px] text-blue-400 hover:text-blue-300 underline"
                                         >
                                             Edit
                                         </button>
+                                    ) : (
+                                        <Toggle
+                                            label="Auto Save"
+                                            checked={autoSavePreference}
+                                            onChange={setAutoSavePreference}
+                                        />
                                     )}
                                 </div>
 

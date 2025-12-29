@@ -25,7 +25,8 @@ export class UserStorageService {
     public loadUserData(): UserData {
         const defaultData: UserData = {
             height: null,
-            weightHistory: []
+            weightHistory: [],
+            autoSavePreference: false
         };
 
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -36,7 +37,8 @@ export class UserStorageService {
             // Basic validation could be added here similar to WorkoutStorageService
             return {
                 height: typeof parsed.height === 'number' ? parsed.height : null,
-                weightHistory: Array.isArray(parsed.weightHistory) ? parsed.weightHistory : []
+                weightHistory: Array.isArray(parsed.weightHistory) ? parsed.weightHistory : [],
+                autoSavePreference: typeof parsed.autoSavePreference === 'boolean' ? parsed.autoSavePreference : false
             };
         } catch (error) {
             console.error('Error parsing user data from localStorage:', error);
