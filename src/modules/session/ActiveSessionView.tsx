@@ -4,7 +4,8 @@ import { usePerformanceStore } from '../../store/performanceStore';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
-import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save } from 'lucide-react';
+import { WheelPicker } from '../../components/inputs/WheelPicker';
+import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History } from 'lucide-react';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -17,7 +18,7 @@ export const ActiveSessionView: React.FC = () => {
         startWork
     } = useWorkoutStore();
 
-    const { addLog } = usePerformanceStore();
+    const { addLog, getLogsByExercise } = usePerformanceStore();
 
     // Derived active exercise
     const currentExercise = activeRoutine?.exercises[currentExerciseIndex];
@@ -29,9 +30,9 @@ export const ActiveSessionView: React.FC = () => {
     const [restTarget, setRestTarget] = useState(60);
 
     // ----- LOGGING STATE -----
-    const [isLogging, setIsLogging] = useState(false);
-    const [logWeight, setLogWeight] = useState('');
-    const [logReps, setLogReps] = useState('');
+    const [logWeight, setLogWeight] = useState(0);
+    const [logReps, setLogReps] = useState(0);
+    const [isSetLogged, setIsSetLogged] = useState(false);
 
     // Track previous session state to handle transitions only
     const prevSessionState = useRef<string | null>(null);
@@ -41,7 +42,7 @@ export const ActiveSessionView: React.FC = () => {
         startWork();
     });
 
-    // Effect: Sync state changes
+    // Effect: Sync state changes & Pre-fill logs
     useEffect(() => {
         if (!currentExercise) return;
 
@@ -50,12 +51,20 @@ export const ActiveSessionView: React.FC = () => {
             if (sessionState === 'WORK') {
                 stopwatch.start();
                 restTimer.reset();
-                setIsLogging(false); // Reset logging state on work start
             } else if (sessionState === 'REST') {
                 // Use restTimeSeconds from v1.1.0 schema
                 setRestTarget(currentExercise.restTimeSeconds);
                 stopwatch.reset();
                 restTimer.start();
+
+                // Pre-fill logs from history
+                const logs = getLogsByExercise(currentExercise.exerciseId);
+                const lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
+
+                setLogWeight(lastLog ? lastLog.weight : 0);
+                setLogReps(currentExercise.maximumRepetitions); // Default to max reps target
+                setIsSetLogged(false);
+
             } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
                 stopwatch.reset();
                 restTimer.reset();
@@ -63,36 +72,16 @@ export const ActiveSessionView: React.FC = () => {
 
             prevSessionState.current = sessionState;
         }
-    }, [sessionState, currentExercise, stopwatch, restTimer]);
+    }, [sessionState, currentExercise, stopwatch, restTimer, getLogsByExercise]);
 
-    // Handle initial "Complete Set" click -> Go to Logging Mode
-    const handleInitiateCompleteSet = () => {
-        // Pre-fill with reasonable defaults if possible (not stored yet in this iteration, using blanks or potentially last log in future)
-        // For now, let's leave blank or use exercise target
-        setIsLogging(true);
-        if (currentExercise) {
-            setLogReps(currentExercise.maximumRepetitions.toString());
-            // Weight default could be fetched from store in the future
-        }
-    };
-
-    // Handle "Save & Rest"
     const handleConfirmLog = () => {
-        if (currentExercise && logWeight && logReps) {
-            const w = parseFloat(logWeight);
-            const r = parseInt(logReps);
-            if (!isNaN(w) && !isNaN(r)) {
-                addLog(currentExercise.exerciseId, w, r);
-            }
+        if (currentExercise) {
+            addLog(currentExercise.exerciseId, logWeight, logReps);
+            setIsSetLogged(true);
         }
-        // Proceed to actual Rest state
-        completeSet();
-        setIsLogging(false);
-        setLogWeight('');
-        setLogReps('');
     };
 
-    if (!activeRoutine || !currentExercise) {
+    if (!activeRoutine || !currentExercise || sessionState === 'COMPLETED') {
         return (
             <div className="flex flex-col items-center justify-center h-full text-slate-400 bg-slate-950">
                 <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 text-center animate-in fade-in zoom-in duration-300">
@@ -142,144 +131,193 @@ export const ActiveSessionView: React.FC = () => {
             </header>
 
             {/* Main Center Display */}
-            <section className="flex-none flex flex-col items-center justify-center py-6 relative">
+            <section className="flex-none flex flex-col items-center justify-start py-6 relative">
 
-                {/* Visualizer Switch */}
-                {isResting ? (
-                    <div className="animate-in fade-in zoom-in duration-300">
-                        <CircularTimer
-                            progress={restTimer.progress}
-                            timeLeft={restTimer.timeLeft}
-                            size={280}
-                        />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-20 text-slate-400 font-medium tracking-widest text-sm uppercase">
-                            Resting
-                        </div>
-                    </div>
-                ) : isLogging ? (
-                    <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-700 animate-in fade-in zoom-in duration-300 relative overflow-hidden p-6 space-y-4">
-                        <h3 className="text-slate-400 uppercase tracking-widest text-xs font-bold">Log Set</h3>
-                        <div className="w-full space-y-3">
-                            <div className="flex items-center gap-2">
-                                <span className="w-8 text-right text-slate-500 text-xs font-bold">KG</span>
-                                <input
-                                    type="number"
-                                    value={logWeight}
-                                    onChange={(e) => setLogWeight(e.target.value)}
-                                    placeholder="0"
-                                    autoFocus
-                                    className="flex-1 bg-slate-900 border-b-2 border-slate-600 focus:border-blue-500 text-center text-2xl font-bold text-white outline-none py-1"
-                                />
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="w-8 text-right text-slate-500 text-xs font-bold">REPS</span>
-                                <input
-                                    type="number"
-                                    value={logReps}
-                                    onChange={(e) => setLogReps(e.target.value)}
-                                    placeholder="0"
-                                    className="flex-1 bg-slate-900 border-b-2 border-slate-600 focus:border-blue-500 text-center text-2xl font-bold text-white outline-none py-1"
-                                />
+                {/* WORK MODE Visualizer */}
+                {!isResting && (
+                    <div className="flex flex-col items-center gap-8">
+                        {/* Timer */}
+                        <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
+                            {/* Pulse effect in background */}
+                            {stopwatch.isRunning && <div className="absolute inset-0 bg-green-500/5 animate-pulse" />}
+
+                            <span className="text-6xl font-black font-mono tracking-wider text-white z-10 transition-transform group-hover:scale-110 duration-500">
+                                {Math.floor(stopwatch.elapsedTime / 60)}:{String(stopwatch.elapsedTime % 60).padStart(2, '0')}
+                            </span>
+
+                            <div className="mt-4 flex flex-col items-center gap-1 z-10">
+                                <div className={`flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase ${stopwatch.isRunning ? 'text-green-400' : 'text-slate-500'}`}>
+                                    {stopwatch.isRunning && <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
+                                    {stopwatch.isRunning ? 'Working' : 'Paused'}
+                                </div>
+                                <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
+                                    {currentExercise.equipment}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
-                        {/* Pulse effect in background */}
-                        {stopwatch.isRunning && <div className="absolute inset-0 bg-green-500/5 animate-pulse" />}
 
-                        <span className="text-6xl font-black font-mono tracking-wider text-white z-10 transition-transform group-hover:scale-110 duration-500">
-                            {Math.floor(stopwatch.elapsedTime / 60)}:{String(stopwatch.elapsedTime % 60).padStart(2, '0')}
-                        </span>
-
-                        <div className="mt-4 flex flex-col items-center gap-1 z-10">
-                            <div className={`flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase ${stopwatch.isRunning ? 'text-green-400' : 'text-slate-500'}`}>
-                                {stopwatch.isRunning && <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
-                                {stopwatch.isRunning ? 'Working' : 'Paused'}
+                        {/* Target Info Overlay */}
+                        <div className="grid grid-cols-2 gap-4 w-full max-w-xs px-4">
+                            <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
+                                <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
+                                    <Target size={12} className="text-blue-400" />
+                                    RPE Target
+                                </div>
+                                <span className="text-xl font-black text-yellow-500">{currentExercise.targetRpe}</span>
                             </div>
-                            <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
-                                {currentExercise.equipment}
+                            <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
+                                <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
+                                    <Zap size={12} className="text-blue-400" />
+                                    Rep Range
+                                </div>
+                                <span className="text-xl font-black text-white">{currentExercise.minimumRepetitions}-{currentExercise.maximumRepetitions}</span>
                             </div>
                         </div>
-                    </div>
-                )}
 
-                {/* Target Info Overlay (Only during work) */}
-                {!isResting && !isLogging && (
-                    <div className="mt-8 grid grid-cols-2 gap-4 w-full max-w-xs px-4">
-                        <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
-                            <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
-                                <Target size={12} className="text-blue-400" />
-                                RPE Target
-                            </div>
-                            <span className="text-xl font-black text-yellow-500">{currentExercise.targetRpe}</span>
-                        </div>
-                        <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
-                            <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
-                                <Zap size={12} className="text-blue-400" />
-                                Rep Range
-                            </div>
-                            <span className="text-xl font-black text-white">{currentExercise.minimumRepetitions}-{currentExercise.maximumRepetitions}</span>
-                        </div>
-                    </div>
-                )}
-
-                {/* Controls */}
-                <div className="mt-8 w-full max-w-xs flex flex-col items-center gap-4 px-4">
-
-                    {isResting ? (
-                        <button
-                            onClick={startWork}
-                            className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] border border-slate-700"
-                        >
-                            <span className="uppercase tracking-wider text-sm">Skip Rest</span>
-                        </button>
-                    ) : isLogging ? (
-                        <button
-                            onClick={handleConfirmLog}
-                            disabled={!logWeight || !logReps}
-                            className="w-full bg-green-600 hover:bg-green-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-green-500/20"
-                        >
-                            <Save size={24} strokeWidth={3} />
-                            <span className="uppercase tracking-widest font-black">Save & Rest</span>
-                        </button>
-                    ) : (
-                        <div className="flex gap-3 w-full">
+                        {/* WORK Controls */}
+                        <div className="w-full max-w-xs px-4">
                             <button
-                                onClick={handleInitiateCompleteSet}
+                                onClick={() => completeSet()}
                                 className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                             >
                                 <Check size={24} strokeWidth={3} />
                                 <span className="uppercase tracking-widest font-black">Complete Set</span>
                             </button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {isResting && (
-                        <div className="flex gap-4 w-full">
-                            <button
-                                onClick={() => restTimer.adjustTime(-15)}
-                                className="flex-1 p-4 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1"
+                {/* REST MODE UI */}
+                {isResting && (
+                    <div className="w-full flex flex-col items-center gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+
+                        {/* Large Timer (Same size as Work) */}
+                        <div className="relative">
+                            <CircularTimer
+                                progress={restTimer.progress}
+                                timeLeft={restTimer.timeLeft}
+                                size={280}
                             >
-                                <Minus size={20} />
-                                <span className="text-[10px] font-bold">-15s</span>
-                            </button>
+                                {/* Inner Content Matching Work Timer */}
+                                <span className="text-6xl font-black font-mono tracking-wider text-white z-10">
+                                    {Math.floor(restTimer.timeLeft / 60)}:{String(restTimer.timeLeft % 60).padStart(2, '0')}
+                                </span>
+
+                                <div className="mt-4 flex flex-col items-center gap-1 z-10">
+                                    <div className="flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase text-blue-400">
+                                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                                        Resting
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 uppercase tracking-tighter truncate max-w-[180px]">
+                                        Next: {activeRoutine.exercises[currentExerciseIndex + 1]?.name || "Finish"}
+                                    </div>
+                                </div>
+                            </CircularTimer>
+
+                            {/* "Resting" label below removed as it's now inside */}
+                        </div>
+
+                        {/* REST Controls (ABOVE Logger) */}
+                        <div className="w-full max-w-xs px-4 flex flex-col gap-4">
+                            <div className="flex gap-4 w-full">
+                                <button
+                                    onClick={() => restTimer.adjustTime(-10)}
+                                    className="flex-1 p-3 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1 active:scale-95"
+                                >
+                                    <Minus size={16} />
+                                    <span className="text-[10px] font-bold">-10s</span>
+                                </button>
+                                <button
+                                    onClick={() => restTimer.reset()}
+                                    className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors active:scale-95"
+                                >
+                                    <RotateCcw size={18} />
+                                </button>
+                                <button
+                                    onClick={() => restTimer.adjustTime(10)}
+                                    className="flex-1 p-3 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1 active:scale-95"
+                                >
+                                    <Plus size={16} />
+                                    <span className="text-[10px] font-bold">+10s</span>
+                                </button>
+                            </div>
+
                             <button
-                                onClick={() => restTimer.reset()}
-                                className="p-4 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
+                                onClick={startWork}
+                                className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] border border-slate-700"
                             >
-                                <RotateCcw size={20} />
-                            </button>
-                            <button
-                                onClick={() => restTimer.adjustTime(15)}
-                                className="flex-1 p-4 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1"
-                            >
-                                <Plus size={20} />
-                                <span className="text-[10px] font-bold">+15s</span>
+                                <span className="uppercase tracking-wider text-sm">Skip Rest & Start Set</span>
                             </button>
                         </div>
-                    )}
-                </div>
+
+                        {/* Logging Interface - Integrated (BELOW Controls) */}
+                        <div className="w-full max-w-sm px-4">
+                            <div className={`bg-slate-900/50 border ${isSetLogged ? 'border-green-500/30' : 'border-slate-800'} rounded-2xl p-4 transition-colors`}>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                        {isSetLogged ? <Check size={14} className="text-green-500" /> : <History size={14} />}
+                                        {isSetLogged ? "Set Logged" : "Log Set"}
+                                    </h3>
+                                    {isSetLogged && (
+                                        <button
+                                            onClick={() => setIsSetLogged(false)}
+                                            className="text-[10px] text-blue-400 hover:text-blue-300 underline"
+                                        >
+                                            Edit
+                                        </button>
+                                    )}
+                                </div>
+
+                                {!isSetLogged && (
+                                    <div className="flex justify-center gap-4 mb-4">
+                                        <WheelPicker
+                                            label="KG"
+                                            value={logWeight}
+                                            onChange={setLogWeight}
+                                            min={0}
+                                            max={300}
+                                            step={2.5}
+                                            height={140}
+                                        />
+                                        <div className="w-px bg-slate-800" />
+                                        <WheelPicker
+                                            label="Rep"
+                                            value={logReps}
+                                            onChange={setLogReps}
+                                            min={0}
+                                            max={99}
+                                            step={1}
+                                            height={140}
+                                        />
+                                    </div>
+                                )}
+
+                                {isSetLogged ? (
+                                    <div className="flex items-center justify-center gap-8 py-4">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-2xl font-black text-white">{logWeight}</span>
+                                            <span className="text-[10px] text-slate-500 uppercase font-bold">KG</span>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-2xl font-black text-white">{logReps}</span>
+                                            <span className="text-[10px] text-slate-500 uppercase font-bold">Reps</span>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <button
+                                        onClick={handleConfirmLog}
+                                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                                    >
+                                        <Save size={18} />
+                                        <span>Save Log</span>
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                    </div>
+                )}
+
             </section>
 
             {/* Upcoming Exercises List */}

@@ -109,10 +109,21 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
             });
         } else {
             // LAST SET of the current exercise Finished
-            set({
-                setsRemaining: 0,
-                sessionState: 'REST'
-            });
+            // Check if there are more exercises
+            const nextIndex = state.currentExerciseIndex + 1;
+            const hasNextExercise = state.activeRoutine && nextIndex < state.activeRoutine.exercises.length;
+
+            if (hasNextExercise) {
+                set({
+                    setsRemaining: 0,
+                    sessionState: 'REST'
+                });
+            } else {
+                // No more exercises and last set finished -> Session COMPLETED
+                set({
+                    sessionState: 'COMPLETED'
+                });
+            }
         }
     },
 
