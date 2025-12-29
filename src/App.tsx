@@ -2,6 +2,7 @@ import { AppShell } from './components/layout/AppShell';
 import { WorkoutDashboard } from './modules/dashboard/WorkoutDashboard';
 import { ActiveSessionView } from './modules/session/ActiveSessionView';
 import { ExerciseLibrary } from './modules/exercises/ExerciseLibrary';
+import { HistoryView } from './modules/history/HistoryView';
 import { useWorkoutStore } from './store/workoutStore';
 import { useState } from 'react';
 
@@ -24,11 +25,7 @@ function App() {
                 <>
                     {activeTab === 'dashboard' && <WorkoutDashboard />}
                     {activeTab === 'workout' && <ExerciseLibrary />}
-                    {activeTab === 'history' && (
-                        <div className="flex flex-col items-center justify-center h-64 text-slate-500">
-                            <p>History feature coming soon!</p>
-                        </div>
-                    )}
+                    {activeTab === 'history' && <HistoryView />}
                 </>
             )}
         </AppShell>
