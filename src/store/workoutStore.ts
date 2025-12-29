@@ -26,6 +26,7 @@ interface WorkoutState {
 
     // Session Flow Actions
     completeSet: () => void;
+    skipSet: () => void;
     startWork: () => void;
 
     // Data Management
@@ -120,6 +121,38 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
                 });
             } else {
                 // No more exercises and last set finished -> Session COMPLETED
+                set({
+                    sessionState: 'COMPLETED'
+                });
+            }
+        }
+    },
+
+    skipSet: () => {
+        const state = get();
+        if (!state.isSessionActive || !state.activeRoutine) return;
+
+        const currentSets = state.setsRemaining - 1;
+
+        if (currentSets > 0) {
+            // More sets -> STAY in WORK mode (Skip rest)
+            set({
+                setsRemaining: currentSets,
+                sessionState: 'WORK'
+            });
+        } else {
+            // Last set skipped -> Move to next exercise immediately (Skip rest)
+            const nextIndex = state.currentExerciseIndex + 1;
+            const nextExercise = state.activeRoutine.exercises[nextIndex];
+
+            if (nextExercise) {
+                set({
+                    currentExerciseIndex: nextIndex,
+                    setsRemaining: nextExercise.targetSets,
+                    sessionState: 'WORK'
+                });
+            } else {
+                // No more exercises -> Session COMPLETED
                 set({
                     sessionState: 'COMPLETED'
                 });

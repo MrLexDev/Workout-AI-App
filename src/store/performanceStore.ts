@@ -6,7 +6,8 @@ interface PerformanceState {
     logs: ExerciseLog[];
 
     // Actions
-    addLog: (exerciseId: string, weight: number, reps: number) => void;
+    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number) => void;
+    deleteLogs: (ids: string[]) => void;
     getLogsByExercise: (exerciseId: string) => ExerciseLog[];
     getPersonalRecord: (exerciseId: string) => number; // Max weight lifted
 }
@@ -17,19 +18,20 @@ const initialData = performanceStorageService.loadLogs();
 export const usePerformanceStore = create<PerformanceState>((set, get) => ({
     logs: initialData.logs,
 
-    addLog: (exerciseId, weight, reps) => {
+    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number) => {
         set((state) => {
             // Epley Formula for 1RM
             // 1RM = Weight * (1 + Reps/30)
             const oneRepMax = weight * (1 + reps / 30);
 
             const newLog: ExerciseLog = {
-                id: crypto.randomUUID(),
+                id: id || crypto.randomUUID(),
                 exerciseId,
                 timestamp: Date.now(),
                 weight,
                 reps,
-                oneRepMax
+                oneRepMax,
+                duration
             };
 
             const newLogs = [...state.logs, newLog];
@@ -37,6 +39,14 @@ export const usePerformanceStore = create<PerformanceState>((set, get) => ({
             // Persist
             performanceStorageService.saveLogs({ logs: newLogs });
 
+            return { logs: newLogs };
+        });
+    },
+
+    deleteLogs: (ids: string[]) => {
+        set((state) => {
+            const newLogs = state.logs.filter(log => !ids.includes(log.id));
+            performanceStorageService.saveLogs({ logs: newLogs });
             return { logs: newLogs };
         });
     },

@@ -4,6 +4,19 @@ import { usePerformanceStore } from '../../store/performanceStore';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
 import exerciseData from '../../data/exercises.json';
 import { type ExerciseDefinition } from '../../types/workout';
+import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
+import {
+    Calendar,
+    Trash2,
+    Dumbbell,
+    Activity,
+    User,
+    ChevronDown,
+    Clock,
+    BarChart,
+    Ruler,
+    Weight
+} from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -16,7 +29,6 @@ import {
     Legend,
     type ChartOptions
 } from 'chart.js';
-import { Ruler, Weight, Calendar, Trash2, Dumbbell, Activity, User, ChevronDown } from 'lucide-react';
 
 // Register ChartJS components
 ChartJS.register(
@@ -31,7 +43,10 @@ ChartJS.register(
 
 export const HistoryView = () => {
     // ----- TAB STATE -----
-    const [historyTab, setHistoryTab] = useState<'body' | 'exercises'>('body');
+    const [historyTab, setHistoryTab] = useState<'body' | 'exercises' | 'workouts'>('body');
+
+    // ----- WORKOUT HISTORY STATE -----
+    const { sessions, deleteSession } = useWorkoutHistoryStore();
 
     // ----- BODY STATS STATE -----
     const { height, setHeight, weightHistory, addWeightEntry, deleteWeightEntry } = useUserStore();
@@ -196,8 +211,8 @@ export const HistoryView = () => {
                 <button
                     onClick={() => setHistoryTab('body')}
                     className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'body'
-                            ? 'bg-slate-800 text-white shadow-sm'
-                            : 'text-slate-500 hover:text-slate-300'
+                        ? 'bg-slate-800 text-white shadow-sm'
+                        : 'text-slate-500 hover:text-slate-300'
                         }`}
                 >
                     <User size={16} />
@@ -206,16 +221,26 @@ export const HistoryView = () => {
                 <button
                     onClick={() => setHistoryTab('exercises')}
                     className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'exercises'
-                            ? 'bg-slate-800 text-white shadow-sm'
-                            : 'text-slate-500 hover:text-slate-300'
+                        ? 'bg-slate-800 text-white shadow-sm'
+                        : 'text-slate-500 hover:text-slate-300'
                         }`}
                 >
                     <Activity size={16} />
                     Performance
                 </button>
+                <button
+                    onClick={() => setHistoryTab('workouts')}
+                    className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'workouts'
+                        ? 'bg-slate-800 text-white shadow-sm'
+                        : 'text-slate-500 hover:text-slate-300'
+                        }`}
+                >
+                    <BarChart size={16} />
+                    Workouts
+                </button>
             </div>
 
-            {historyTab === 'body' ? (
+            {historyTab === 'body' && (
                 // BODY STATS VIEW
                 <div className="space-y-6 px-4">
                     {/* KPI Cards */}
@@ -331,7 +356,9 @@ export const HistoryView = () => {
                         </div>
                     </div>
                 </div>
-            ) : (
+            )}
+
+            {historyTab === 'exercises' && (
                 // EXERCISE STATS VIEW
                 <div className="space-y-6 px-4">
                     {/* Exercise Selector */}
@@ -430,6 +457,120 @@ export const HistoryView = () => {
                             )}
                         </div>
                     </div>
+                </div>
+            )}
+
+            {historyTab === 'workouts' && (
+                // WORKOUTS VIEW
+                <div className="space-y-4 px-4">
+                    {[...sessions].reverse().map(session => (
+                        <div key={session.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700/50 space-y-3">
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <h3 className="text-white font-bold">{session.routineSnapshot.name || "Untitled Routine"}</h3>
+                                    <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
+                                        <Calendar size={12} />
+                                        <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                        <span className="text-slate-700">•</span>
+                                        <Clock size={12} />
+                                        <span>{Math.floor(session.durationSeconds / 60)}m {session.durationSeconds % 60}s</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => deleteSession(session.id)}
+                                    className="text-slate-500 hover:text-red-400 p-2 -mr-2"
+                                >
+                                    <Trash2 size={16} />
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
+                                    <span className="text-slate-500 block mb-1">Total Volume</span>
+                                    <span className="text-white font-mono font-bold">
+                                        {session.logs.reduce((acc, log) => acc + (log.weight * log.reps), 0).toLocaleString()} kg
+                                    </span>
+                                </div>
+                                <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
+                                    <span className="text-slate-500 block mb-1">Rest Efficiency</span>
+                                    <span className="text-white font-mono font-bold">
+                                        {(() => {
+                                            const totalActual = session.restData.reduce((acc, r) => acc + r.actualSeconds, 0);
+                                            const totalTarget = session.restData.reduce((acc, r) => acc + r.targetSeconds, 0);
+                                            // Handle division by zero
+                                            if (totalTarget === 0) return 'N/A';
+                                            const diff = totalActual - totalTarget;
+                                            const color = diff > 30 ? 'text-red-400' : diff < -30 ? 'text-yellow-400' : 'text-green-400';
+                                            const sign = diff > 0 ? '+' : '';
+                                            return <span className={color}>{sign}{Math.round(diff)}s vs {Math.round(totalTarget)}s</span>;
+                                        })()}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="space-y-1 pt-2 border-t border-slate-700/50">
+                                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-2">Exercises</div>
+                                {session.routineSnapshot.exercises.map((ex, i) => {
+                                    // Calculate best set for summary
+                                    const exLogs = session.logs.filter(l => l.exerciseId === ex.exerciseId);
+                                    const bestSet = exLogs.reduce((best, curr) => curr.weight > best.weight ? curr : best, { weight: 0, reps: 0 });
+
+                                    return (
+                                        <div key={ex.exerciseId + i} className="flex justify-between items-center text-sm">
+                                            <div className="flex flex-col">
+                                                <span className="text-slate-400">{ex.name}</span>
+                                                {/* Averages */}
+                                                {exLogs.length > 0 && (
+                                                    <div className="flex gap-3 text-[10px] text-slate-500 font-mono mt-0.5">
+                                                        {/* Avg Work */}
+                                                        <span>
+                                                            Work: {Math.round(exLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / exLogs.length)}s
+                                                        </span>
+                                                        {/* Avg Rest */}
+                                                        {(() => {
+                                                            const rests = session.restData.filter(r => r.exerciseId === ex.exerciseId);
+                                                            if (rests.length === 0) return null;
+                                                            const avgRest = rests.reduce((acc, r) => acc + r.actualSeconds, 0) / rests.length;
+                                                            const avgTarget = rests.reduce((acc, r) => acc + r.targetSeconds, 0) / rests.length;
+
+                                                            // Green if under target (good), Red if over (bad)
+                                                            const isGood = avgRest <= avgTarget;
+                                                            const color = isGood ? 'text-green-500' : 'text-red-400';
+
+                                                            return (
+                                                                <span className={color}>
+                                                                    Rest: {Math.round(avgRest)}s
+                                                                </span>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {exLogs.length > 0 ? (
+                                                <div className="text-right">
+                                                    <div className="text-slate-200 font-mono text-xs">{exLogs.length} sets</div>
+                                                    <div className="text-slate-500 text-[10px]">Best: {bestSet.weight}kg</div>
+                                                </div>
+                                            ) : (
+                                                <span className="text-slate-600 text-xs italic">Skipped</span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+
+                    {sessions.length === 0 && (
+                        <div className="text-center py-12">
+                            <div className="bg-slate-900/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Activity className="text-slate-700" size={32} />
+                            </div>
+                            <h3 className="text-slate-400 font-bold mb-2">No Workouts Yet</h3>
+                            <p className="text-sm text-slate-600">Complete a workout to see it here.</p>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

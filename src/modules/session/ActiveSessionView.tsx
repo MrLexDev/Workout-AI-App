@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { usePerformanceStore } from '../../store/performanceStore';
 import { useUserStore } from '../../store/userStore';
+import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
+import type { SessionRestData, WorkoutSession } from '../../types/history';
+import type { HydratedRoutine } from '../../types/workout';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
 import { WheelPicker } from '../../components/inputs/WheelPicker';
-import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History } from 'lucide-react';
+import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History, AlertTriangle } from 'lucide-react';
 import { Toggle } from '../../components/inputs/Toggle';
 
 export const ActiveSessionView: React.FC = () => {
@@ -17,10 +20,12 @@ export const ActiveSessionView: React.FC = () => {
         currentExerciseIndex,
         setsRemaining,
         completeSet,
+        skipSet,
         startWork
     } = useWorkoutStore();
 
-    const { addLog, getLogsByExercise } = usePerformanceStore();
+    const { addLog, getLogsByExercise, deleteLogs, logs: allLogs } = usePerformanceStore();
+    const { saveSession } = useWorkoutHistoryStore();
 
     // Derived active exercise
     const currentExercise = activeRoutine?.exercises[currentExerciseIndex];
@@ -41,14 +46,71 @@ export const ActiveSessionView: React.FC = () => {
     // Track previous session state to handle transitions only
     const prevSessionState = useRef<string | null>(null);
 
-    const restTimer = usePrecisionTimer(restTarget, () => {
-        // Auto-switch to WORK when timer ends
-        // Check for Auto Save
+    // Track logs created in this session for potential discard
+    const sessionLogIds = useRef<string[]>([]);
+    const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+
+    // ----- SESSION HISTORY TRACKING -----
+    const startTimeRef = useRef<number>(Date.now());
+    const restDataRef = useRef<SessionRestData[]>([]);
+    const routineSnapshotRef = useRef<HydratedRoutine | null>(null);
+    const lastSetDurationRef = useRef<number>(0);
+    const restStartTimeRef = useRef<number | null>(null);
+
+    // Capture routine snapshot on mount/start
+    useEffect(() => {
+        if (activeRoutine && !routineSnapshotRef.current) {
+            // Create a deep copy of the routine to store as snapshot
+            routineSnapshotRef.current = JSON.parse(JSON.stringify(activeRoutine));
+        }
+    }, [activeRoutine]);
+
+    // Timer logic with rest tracking
+
+    // Refactor to break circular dep:
+    // Define handleTimerComplete separate from manual skip.
+
+    // Actually, I can use a Ref to access the current remaining time from the hook if I exported it?
+    // Or I just use the state `restTimer.timeLeft` which is available in render scope.
+    // CAUTION: `restTimer` variable is result of hook call.
+
+    // Let's define the ON COMPLETE callback first for the hook.
+    // When timer completes naturally: actualRest = targetSeconds.
+
+    const handleConfirmLog = useCallback(() => {
+        if (currentExercise) {
+            const newLogId = crypto.randomUUID();
+            sessionLogIds.current.push(newLogId);
+            addLog(
+                currentExercise.exerciseId,
+                logWeight,
+                logReps,
+                newLogId,
+                lastSetDurationRef.current // Pass captured duration
+            );
+            setIsSetLogged(true);
+        }
+    }, [currentExercise, logWeight, logReps, addLog]);
+
+    // Timer logic with rest tracking
+    const onTimerComplete = useCallback(() => {
         if (autoSavePreference && !isSetLogged) {
             handleConfirmLog();
         }
+        // Rest tracking is handled in useEffect now
         startWork();
-    });
+    }, [autoSavePreference, isSetLogged, startWork, handleConfirmLog]);
+
+    const restTimer = usePrecisionTimer(restTarget, onTimerComplete);
+
+    // Now handle MANUAL SKIP
+    const handleSkipRest = () => {
+        if (autoSavePreference && !isSetLogged) {
+            handleConfirmLog();
+        }
+        // Rest tracking is handled in useEffect now
+        startWork();
+    };
 
     // Effect: Sync rest target ahead of time to prevent race condition in usePrecisionTimer
     useEffect(() => {
@@ -57,6 +119,29 @@ export const ActiveSessionView: React.FC = () => {
         }
     }, [currentExercise?.exerciseId, currentExercise?.restTimeSeconds]);
 
+    // Helper to package and save the session
+    const handleEndAndSave = () => {
+        if (routineSnapshotRef.current && activeRoutine) {
+            const endTime = Date.now();
+            // Filter logs to only include those created in this session
+            const sessionLogs = allLogs.filter(log => sessionLogIds.current.includes(log.id));
+
+            const workoutSession: WorkoutSession = {
+                id: crypto.randomUUID(),
+                routineId: activeRoutine.id,
+                routineSnapshot: routineSnapshotRef.current,
+                startTime: startTimeRef.current,
+                endTime: endTime,
+                durationSeconds: Math.floor((endTime - startTimeRef.current) / 1000),
+                logs: sessionLogs,
+                restData: restDataRef.current
+            };
+
+            saveSession(workoutSession);
+        }
+        endSession();
+    };
+
     // Effect: Sync state changes & Pre-fill logs
     useEffect(() => {
         if (!currentExercise) return;
@@ -64,9 +149,31 @@ export const ActiveSessionView: React.FC = () => {
         // Only execute transition logic if sessionState has changed
         if (prevSessionState.current !== sessionState) {
             if (sessionState === 'WORK') {
+                // Leaving REST -> WORK (or Idle -> Work)
+                if (prevSessionState.current === 'REST') {
+                    // Calculate ACTUAL REST time based on timestamps
+                    if (restStartTimeRef.current) {
+                        const actualRestSeconds = (Date.now() - restStartTimeRef.current) / 1000;
+                        restDataRef.current.push({
+                            exerciseId: currentExercise.exerciseId,
+                            targetSeconds: restTarget,
+                            actualSeconds: actualRestSeconds,
+                            timestamp: Date.now()
+                        });
+                        restStartTimeRef.current = null;
+                    }
+                }
+
                 stopwatch.start();
                 restTimer.reset();
             } else if (sessionState === 'REST') {
+                // Leaving WORK -> REST
+                // Capture work duration
+                lastSetDurationRef.current = stopwatch.elapsedTime;
+
+                // Start Rest Tracking
+                restStartTimeRef.current = Date.now();
+
                 // Use restTimeSeconds from v1.1.0 schema
                 setRestTarget(currentExercise.restTimeSeconds);
                 stopwatch.reset();
@@ -87,13 +194,15 @@ export const ActiveSessionView: React.FC = () => {
 
             prevSessionState.current = sessionState;
         }
-    }, [sessionState, currentExercise, stopwatch, restTimer, getLogsByExercise]);
+    }, [sessionState, currentExercise, stopwatch, restTimer, getLogsByExercise, restTarget]);
 
-    const handleConfirmLog = () => {
-        if (currentExercise) {
-            addLog(currentExercise.exerciseId, logWeight, logReps);
-            setIsSetLogged(true);
+
+
+    const handleDiscardSession = () => {
+        if (sessionLogIds.current.length > 0) {
+            deleteLogs(sessionLogIds.current);
         }
+        endSession();
     };
 
     if (!activeRoutine || !currentExercise || sessionState === 'COMPLETED') {
@@ -104,7 +213,7 @@ export const ActiveSessionView: React.FC = () => {
                     <h2 className="text-xl font-bold text-white mb-2">Workout Finished!</h2>
                     <p className="text-sm text-slate-400 mb-6">Great session! Your progress has been saved.</p>
                     <button
-                        onClick={endSession}
+                        onClick={handleEndAndSave}
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98]"
                     >
                         Return to Dashboard
@@ -121,7 +230,7 @@ export const ActiveSessionView: React.FC = () => {
             {/* Header (Fixed) */}
             <header className="flex-none flex items-center gap-4 mb-4 px-4 pt-4">
                 <button
-                    onClick={endSession}
+                    onClick={() => setShowExitConfirmation(true)}
                     className="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
                 >
                     <ArrowLeft size={24} />
@@ -195,13 +304,22 @@ export const ActiveSessionView: React.FC = () => {
 
                         {/* WORK Controls */}
                         <div className="w-full max-w-xs px-4">
-                            <button
-                                onClick={() => completeSet()}
-                                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
-                            >
-                                <Check size={24} strokeWidth={3} />
-                                <span className="uppercase tracking-widest font-black">Complete Set</span>
-                            </button>
+                            <div className="grid grid-cols-4 gap-3">
+                                <button
+                                    onClick={skipSet}
+                                    className="col-span-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white font-bold py-6 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all active:scale-[0.98] border border-slate-700"
+                                >
+                                    <span className="text-[10px] uppercase tracking-wider">Skip</span>
+                                </button>
+
+                                <button
+                                    onClick={() => completeSet()}
+                                    className="col-span-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-6 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
+                                >
+                                    <Check size={24} strokeWidth={3} />
+                                    <span className="uppercase tracking-widest font-black">Complete Set</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -262,7 +380,7 @@ export const ActiveSessionView: React.FC = () => {
                             </div>
 
                             <button
-                                onClick={startWork}
+                                onClick={handleSkipRest}
                                 className="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] border border-slate-700"
                             >
                                 <span className="uppercase tracking-wider text-sm">Skip Rest & Start Set</span>
@@ -417,6 +535,49 @@ export const ActiveSessionView: React.FC = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Exit Confirmation Modal */}
+            {showExitConfirmation && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
+                        <div className="flex flex-col items-center gap-4 text-center">
+                            <div className="w-12 h-12 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mb-2">
+                                <AlertTriangle size={24} />
+                            </div>
+
+                            <div className="space-y-1">
+                                <h3 className="text-lg font-bold text-white">End Workout?</h3>
+                                <p className="text-sm text-slate-400">
+                                    Are you sure you want to end this workout?
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-3 w-full mt-4">
+                                <button
+                                    onClick={handleEndAndSave}
+                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all"
+                                >
+                                    End & Save
+                                </button>
+
+                                <button
+                                    onClick={handleDiscardSession}
+                                    className="w-full bg-slate-800 hover:bg-red-900/30 text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-500/30 font-bold py-3 px-4 rounded-xl transition-all"
+                                >
+                                    Discard Workout
+                                </button>
+
+                                <button
+                                    onClick={() => setShowExitConfirmation(false)}
+                                    className="w-full text-slate-500 hover:text-white font-medium py-2 text-sm transition-colors mt-2"
+                                >
+                                    Resume
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
