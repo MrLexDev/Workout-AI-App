@@ -110,7 +110,7 @@ export const WorkoutDashboard: React.FC = () => {
                         <div className="flex gap-2 mb-4 overflow-hidden">
                             {routine.exercises.slice(0, 3).map((ex) => (
                                 <span
-                                    key={ex.id}
+                                    key={ex.exerciseId}
                                     className="px-2 py-1 bg-slate-900 rounded text-xs text-slate-300 border border-slate-700 whitespace-nowrap"
                                 >
                                     {ex.name}

@@ -1,156 +1,194 @@
 [
     {
-        "version": "1.1.0",
-        "id": "push-hypertrophy-v1.1",
-        "name": "Push Day (Hypertrophy)",
-        "category": "Hypertrophy",
+        "version": "1.0.0",
+        "id": "hybrid-strength-calisthenics-v1",
+        "name": "Day 1: Upper Body Strength & Skill",
+        "category": "Strength / Calisthenics",
         "difficulty": "Intermediate",
-        "estimatedDurationMinutes": 75,
-        "description": "Focus on chest, shoulders and triceps volume with moderate weights.",
+        "estimatedDurationMinutes": 80,
+        "description": "Focus on heavy compound movements and calisthenics foundations for upper body.",
         "exercises": [
-            {
-                "exerciseId": "barbell-bench-press",
-                "name": "Barbell Bench Press",
-                "primaryMuscles": [
-                    "Chest"
-                ],
-                "secondaryMuscles": [
-                    "Triceps",
-                    "Front Delts"
-                ],
-                "equipment": "Barbell, Bench",
-                "targetSets": 4,
-                "minimumRepetitions": 8,
-                "maximumRepetitions": 12,
-                "restTimeSeconds": 120,
-                "targetRpe": 8,
-                "notes": "Keep shoulders retracted. Controlled eccentric phase."
-            },
-            {
-                "exerciseId": "overhead-press",
-                "name": "Overhead Press",
-                "primaryMuscles": [
-                    "Shoulders"
-                ],
-                "secondaryMuscles": [
-                    "Triceps",
-                    "Upper Traps"
-                ],
-                "equipment": "Barbell",
-                "targetSets": 3,
-                "minimumRepetitions": 6,
-                "maximumRepetitions": 10,
-                "restTimeSeconds": 150,
-                "targetRpe": 8,
-                "notes": "Strict press, no leg drive. Squeeze glutes."
-            },
-            {
-                "exerciseId": "incline-db-press",
-                "name": "Incline Dumbbell Press",
-                "primaryMuscles": [
-                    "Upper Chest"
-                ],
-                "secondaryMuscles": [
-                    "Front Delts",
-                    "Triceps"
-                ],
-                "equipment": "Dumbbells, Incline Bench",
-                "targetSets": 3,
-                "minimumRepetitions": 10,
-                "maximumRepetitions": 12,
-                "restTimeSeconds": 90,
-                "targetRpe": 8,
-                "notes": "30-45 degree incline."
-            },
-            {
-                "exerciseId": "lateral-raise",
-                "name": "Dumbbell Lateral Raise",
-                "primaryMuscles": [
-                    "Side Delts"
-                ],
-                "secondaryMuscles": [],
-                "equipment": "Dumbbells",
-                "targetSets": 4,
-                "minimumRepetitions": 12,
-                "maximumRepetitions": 15,
-                "restTimeSeconds": 60,
-                "targetRpe": 9,
-                "notes": "Focus on leading with the elbows."
-            }
-        ],
-        "tags": [
-            "Push",
-            "Upper Body"
-        ]
-    },
-    {
-        "version": "1.1.0",
-        "id": "pull-strength-v1.1",
-        "name": "Pull Day (Strength)",
-        "category": "Strength",
-        "difficulty": "Advanced",
-        "estimatedDurationMinutes": 90,
-        "description": "Heavy compounds focusing on back and biceps strength.",
-        "exercises": [
-            {
-                "exerciseId": "deadlift",
-                "name": "Deadlift",
-                "primaryMuscles": [
-                    "Back",
-                    "Hamstrings"
-                ],
-                "secondaryMuscles": [
-                    "Glutes",
-                    "Forearms"
-                ],
-                "equipment": "Barbell",
-                "targetSets": 3,
-                "minimumRepetitions": 3,
-                "maximumRepetitions": 5,
-                "restTimeSeconds": 300,
-                "targetRpe": 9,
-                "notes": "Reset after every rep. Neutral spine is critical."
-            },
             {
                 "exerciseId": "weighted-pull-up",
                 "name": "Weighted Pull-Up",
-                "primaryMuscles": [
-                    "Lats"
-                ],
-                "secondaryMuscles": [
-                    "Biceps",
-                    "Upper Back"
-                ],
+                "primaryMuscles": ["Lats"],
+                "secondaryMuscles": ["Biceps", "Upper Back"],
                 "equipment": "Pull-up Bar, Weight Belt",
                 "targetSets": 4,
                 "minimumRepetitions": 5,
                 "maximumRepetitions": 8,
                 "restTimeSeconds": 180,
                 "targetRpe": 8,
-                "notes": "Full range of motion. Chest to bar."
+                "notes": "Full extension at the bottom. Chin over the bar. Add weight if bodyweight is too easy."
             },
             {
-                "exerciseId": "barbell-row",
-                "name": "Bent Over Barbell Row",
-                "primaryMuscles": [
-                    "Middle Back"
-                ],
-                "secondaryMuscles": [
-                    "Lats",
-                    "Biceps"
-                ],
+                "exerciseId": "overhead-press-barbell",
+                "name": "Barbell Overhead Press",
+                "primaryMuscles": ["Shoulders"],
+                "secondaryMuscles": ["Triceps", "Core"],
                 "equipment": "Barbell",
                 "targetSets": 3,
+                "minimumRepetitions": 5,
+                "maximumRepetitions": 8,
+                "restTimeSeconds": 150,
+                "targetRpe": 8,
+                "notes": "Keep glutes squeezed to protect lower back. Do not use leg drive."
+            },
+            {
+                "exerciseId": "weighted-dips",
+                "name": "Weighted Chest Dips",
+                "primaryMuscles": ["Chest"],
+                "secondaryMuscles": ["Triceps", "Front Delts"],
+                "equipment": "Parallel Bars",
+                "targetSets": 3,
                 "minimumRepetitions": 8,
-                "maximumRepetitions": 10,
+                "maximumRepetitions": 12,
                 "restTimeSeconds": 120,
                 "targetRpe": 8,
-                "notes": "Torso nearly parallel to floor. Pull towards hips."
+                "notes": "Lean forward slightly to emphasize chest engagement."
+            },
+            {
+                "exerciseId": "face-pulls",
+                "name": "Cable Face Pulls",
+                "primaryMuscles": ["Rear Delts"],
+                "secondaryMuscles": ["Rotator Cuff", "Upper Traps"],
+                "equipment": "Cable Machine",
+                "targetSets": 3,
+                "minimumRepetitions": 15,
+                "maximumRepetitions": 20,
+                "restTimeSeconds": 60,
+                "targetRpe": 7,
+                "notes": "Health exercise. Pull towards forehead, focus on external rotation of the shoulders."
             }
         ],
-        "tags": [
-            "Pull",
-            "Upper Body"
-        ]
+        "tags": ["Upper Body", "Strength", "Health"]
+    },
+    {
+        "version": "1.0.0",
+        "id": "lower-body-health-v1",
+        "name": "Day 2: Lower Body & Core Stability",
+        "category": "Hypertrophy / Health",
+        "difficulty": "Intermediate",
+        "estimatedDurationMinutes": 70,
+        "description": "Build leg mass while improving spine health and knee stability.",
+        "exercises": [
+            {
+                "exerciseId": "barbell-back-squat",
+                "name": "Barbell Back Squat",
+                "primaryMuscles": ["Quads", "Glutes"],
+                "secondaryMuscles": ["Lower Back", "Core"],
+                "equipment": "Barbell, Squat Rack",
+                "targetSets": 4,
+                "minimumRepetitions": 6,
+                "maximumRepetitions": 10,
+                "restTimeSeconds": 180,
+                "targetRpe": 8,
+                "notes": "Focus on depth. Keep heels firmly on the ground."
+            },
+            {
+                "exerciseId": "romanian-deadlift",
+                "name": "Dumbbell Romanian Deadlift",
+                "primaryMuscles": ["Hamstrings", "Glutes"],
+                "secondaryMuscles": ["Lower Back"],
+                "equipment": "Dumbbells",
+                "targetSets": 3,
+                "minimumRepetitions": 10,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 90,
+                "targetRpe": 8,
+                "notes": "Hinge at the hips. Feel the stretch in the hamstrings. Maintain neutral spine."
+            },
+            {
+                "exerciseId": "dead-bug",
+                "name": "Dead Bug",
+                "primaryMuscles": ["Core"],
+                "secondaryMuscles": ["Hip Flexors"],
+                "equipment": "Bodyweight",
+                "targetSets": 3,
+                "minimumRepetitions": 12,
+                "maximumRepetitions": 16,
+                "restTimeSeconds": 45,
+                "targetRpe": 6,
+                "notes": "Health/Anti-extension exercise. Keep lower back pressed against the floor at all times."
+            },
+            {
+                "exerciseId": "liss-walking",
+                "name": "Incline Treadmill Walk",
+                "primaryMuscles": ["Cardiovascular System"],
+                "secondaryMuscles": ["Calves"],
+                "equipment": "Treadmill",
+                "targetSets": 1,
+                "minimumRepetitions": 20,
+                "maximumRepetitions": 30,
+                "restTimeSeconds": 0,
+                "targetRpe": 5,
+                "notes": "Target heart rate: 120-130 bpm. Improve 'fondo físico' without heavy fatigue."
+            }
+        ],
+        "tags": ["Lower Body", "Core", "Cardio"]
+    },
+    {
+        "version": "1.0.0",
+        "id": "upper-body-hypertrophy-v1",
+        "name": "Day 3: Upper Body Volume & Aesthetics",
+        "category": "Hypertrophy",
+        "difficulty": "Intermediate",
+        "estimatedDurationMinutes": 75,
+        "description": "High volume day to stimulate muscle growth and upper body shape.",
+        "exercises": [
+            {
+                "exerciseId": "incline-db-bench-press",
+                "name": "Incline Dumbbell Bench Press",
+                "primaryMuscles": ["Upper Chest"],
+                "secondaryMuscles": ["Front Delts", "Triceps"],
+                "equipment": "Dumbbells, Incline Bench",
+                "targetSets": 4,
+                "minimumRepetitions": 10,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 90,
+                "targetRpe": 8,
+                "notes": "30-degree incline. Slow eccentric phase."
+            },
+            {
+                "exerciseId": "chest-supported-row",
+                "name": "Chest Supported Row",
+                "primaryMuscles": ["Upper Back", "Rear Delts"],
+                "secondaryMuscles": ["Biceps"],
+                "equipment": "Dumbbells, Bench",
+                "targetSets": 3,
+                "minimumRepetitions": 12,
+                "maximumRepetitions": 15,
+                "restTimeSeconds": 90,
+                "targetRpe": 8,
+                "notes": "Prevents lower back fatigue. Focus on squeezing scapulae."
+            },
+            {
+                "exerciseId": "lateral-raise",
+                "name": "Dumbbell Lateral Raise",
+                "primaryMuscles": ["Side Delts"],
+                "secondaryMuscles": [],
+                "equipment": "Dumbbells",
+                "targetSets": 4,
+                "minimumRepetitions": 15,
+                "maximumRepetitions": 20,
+                "restTimeSeconds": 60,
+                "targetRpe": 9,
+                "notes": "Strict form. Do not swing the weights."
+            },
+            {
+                "exerciseId": "diamond-push-up",
+                "name": "Diamond Push-Up",
+                "primaryMuscles": ["Triceps"],
+                "secondaryMuscles": ["Chest"],
+                "equipment": "Bodyweight",
+                "targetSets": 3,
+                "minimumRepetitions": 10,
+                "maximumRepetitions": 20,
+                "restTimeSeconds": 60,
+                "targetRpe": 9,
+                "notes": "Calisthenics volume. Keep elbows tucked."
+            }
+        ],
+        "tags": ["Upper Body", "Hypertrophy", "Calisthenics"]
     }
 ]

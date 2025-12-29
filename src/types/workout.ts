@@ -4,6 +4,15 @@
     rpe?: number; // Rate of Perceived Exertion (optional)
 }
 
+export interface ExerciseDefinition {
+    id: string;
+    name: string;
+    primaryMuscles: string[];
+    secondaryMuscles: string[];
+    equipment: string;
+    description: string;
+}
+
 export interface Exercise {
     exerciseId: string; // Internal identifier for the exercise type
     name: string;

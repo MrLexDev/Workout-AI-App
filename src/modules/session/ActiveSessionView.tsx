@@ -3,7 +3,7 @@ import { useWorkoutStore } from '../../store/workoutStore';
 import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
 import { CircularTimer } from '../../components/timer/CircularTimer';
-import { Pause, RotateCcw, ArrowLeft, Check, Info, Target, Zap } from 'lucide-react';
+import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus } from 'lucide-react';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -85,11 +85,14 @@ export const ActiveSessionView: React.FC = () => {
                 </button>
                 <div className="overflow-hidden flex-1">
                     <h1 className="text-xl font-bold text-white leading-tight truncate">
-                        {currentExercise.name}
+                        {setsRemaining === 0 ? "Resting" : currentExercise.name}
                     </h1>
                     <div className="flex items-center gap-3">
                         <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">
-                            Set {currentExercise.targetSets - setsRemaining + 1} of {currentExercise.targetSets}
+                            {setsRemaining === 0
+                                ? "Next: " + (activeRoutine.exercises[currentExerciseIndex + 1]?.name || "Finish")
+                                : `Set ${currentExercise.targetSets - setsRemaining + 1} of ${currentExercise.targetSets}`
+                            }
                         </span>
                         <div className="w-1 h-1 rounded-full bg-slate-700" />
                         <span className="text-[10px] text-slate-500 font-mono">
@@ -117,16 +120,16 @@ export const ActiveSessionView: React.FC = () => {
                 ) : (
                     <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
                         {/* Pulse effect in background */}
-                        <div className="absolute inset-0 bg-green-500/5 animate-pulse" />
+                        {stopwatch.isRunning && <div className="absolute inset-0 bg-green-500/5 animate-pulse" />}
 
                         <span className="text-6xl font-black font-mono tracking-wider text-white z-10 transition-transform group-hover:scale-110 duration-500">
                             {Math.floor(stopwatch.elapsedTime / 60)}:{String(stopwatch.elapsedTime % 60).padStart(2, '0')}
                         </span>
 
                         <div className="mt-4 flex flex-col items-center gap-1 z-10">
-                            <div className="flex items-center gap-2 text-green-400 font-bold tracking-widest text-[10px] uppercase">
-                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                Working
+                            <div className={`flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase ${stopwatch.isRunning ? 'text-green-400' : 'text-slate-500'}`}>
+                                {stopwatch.isRunning && <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
+                                {stopwatch.isRunning ? 'Working' : 'Paused'}
                             </div>
                             <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
                                 {currentExercise.equipment}
@@ -166,29 +169,38 @@ export const ActiveSessionView: React.FC = () => {
                             <span className="uppercase tracking-wider text-sm">Skip Rest</span>
                         </button>
                     ) : (
-                        <button
-                            onClick={handleCompleteSet}
-                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
-                        >
-                            <Check size={24} strokeWidth={3} />
-                            <span className="uppercase tracking-widest font-black">Complete Set</span>
-                        </button>
+                        <div className="flex gap-3 w-full">
+                            <button
+                                onClick={handleCompleteSet}
+                                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
+                            >
+                                <Check size={24} strokeWidth={3} />
+                                <span className="uppercase tracking-widest font-black">Complete Set</span>
+                            </button>
+                        </div>
                     )}
 
-                    {/* Timer Adjustments (Only during Rest) */}
                     {isResting && (
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 w-full">
                             <button
-                                onClick={() => restTimer.pause()}
-                                className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
+                                onClick={() => restTimer.adjustTime(-15)}
+                                className="flex-1 p-4 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1"
                             >
-                                <Pause size={20} />
+                                <Minus size={20} />
+                                <span className="text-[10px] font-bold">-15s</span>
                             </button>
                             <button
                                 onClick={() => restTimer.reset()}
-                                className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
+                                className="p-4 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors"
                             >
                                 <RotateCcw size={20} />
+                            </button>
+                            <button
+                                onClick={() => restTimer.adjustTime(15)}
+                                className="flex-1 p-4 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors flex flex-col items-center gap-1"
+                            >
+                                <Plus size={20} />
+                                <span className="text-[10px] font-bold">+15s</span>
                             </button>
                         </div>
                     )}

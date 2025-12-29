@@ -1,0 +1,166 @@
+[
+    {
+        "id": "weighted-pull-up",
+        "name": "Weighted Pull-Up",
+        "primaryMuscles": [
+            "Lats"
+        ],
+        "secondaryMuscles": [
+            "Biceps",
+            "Upper Back"
+        ],
+        "equipment": "Pull-up Bar, Weight Belt",
+        "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
+    },
+    {
+    "id": "weighted-pull-up2",
+    "name": "Weighted Pull-Up -2",
+    "primaryMuscles": [
+        "Lats"
+    ],
+    "secondaryMuscles": [
+        "Biceps",
+        "Upper Back"
+    ],
+    "equipment": "Pull-up Bar, Weight Belt",
+    "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
+},
+    {
+        "id": "overhead-press-barbell",
+        "name": "Barbell Overhead Press",
+        "primaryMuscles": [
+            "Shoulders"
+        ],
+        "secondaryMuscles": [
+            "Triceps",
+            "Core"
+        ],
+        "equipment": "Barbell",
+        "description": "A fundamental strength exercise for the shoulders and upper body stability."
+    },
+    {
+        "id": "weighted-dips",
+        "name": "Weighted Chest Dips",
+        "primaryMuscles": [
+            "Chest"
+        ],
+        "secondaryMuscles": [
+            "Triceps",
+            "Front Delts"
+        ],
+        "equipment": "Parallel Bars",
+        "description": "Effective for building chest and triceps. Lean forward to emphasize the chest."
+    },
+    {
+        "id": "face-pulls",
+        "name": "Cable Face Pulls",
+        "primaryMuscles": [
+            "Rear Delts"
+        ],
+        "secondaryMuscles": [
+            "Rotator Cuff",
+            "Upper Traps"
+        ],
+        "equipment": "Cable Machine",
+        "description": "Excellent for shoulder health and posture. Pull towards the forehead."
+    },
+    {
+        "id": "barbell-back-squat",
+        "name": "Barbell Back Squat",
+        "primaryMuscles": [
+            "Quads",
+            "Glutes"
+        ],
+        "secondaryMuscles": [
+            "Lower Back",
+            "Core"
+        ],
+        "equipment": "Barbell, Squat Rack",
+        "description": "The king of lower body exercises. Targets quads, glutes, and overall strength."
+    },
+    {
+        "id": "romanian-deadlift",
+        "name": "Dumbbell Romanian Deadlift",
+        "primaryMuscles": [
+            "Hamstrings",
+            "Glutes"
+        ],
+        "secondaryMuscles": [
+            "Lower Back"
+        ],
+        "equipment": "Dumbbells",
+        "description": "Focuses on the posterior chain. Hinge at the hips and feel the stretch."
+    },
+    {
+        "id": "dead-bug",
+        "name": "Dead Bug",
+        "primaryMuscles": [
+            "Core"
+        ],
+        "secondaryMuscles": [
+            "Hip Flexors"
+        ],
+        "equipment": "Bodyweight",
+        "description": "A core stability exercise that teaches you to move your limbs while maintaining a neutral spine."
+    },
+    {
+        "id": "liss-walking",
+        "name": "Incline Treadmill Walk",
+        "primaryMuscles": [
+            "Cardiovascular System"
+        ],
+        "secondaryMuscles": [
+            "Calves"
+        ],
+        "equipment": "Treadmill",
+        "description": "Low-intensity steady-state cardio. Great for recovery and heart health."
+    },
+    {
+        "id": "incline-db-bench-press",
+        "name": "Incline Dumbbell Bench Press",
+        "primaryMuscles": [
+            "Upper Chest"
+        ],
+        "secondaryMuscles": [
+            "Front Delts",
+            "Triceps"
+        ],
+        "equipment": "Dumbbells, Incline Bench",
+        "description": "Targets the upper pectoral muscles using dumbbells for a greater range of motion."
+    },
+    {
+        "id": "chest-supported-row",
+        "name": "Chest Supported Row",
+        "primaryMuscles": [
+            "Upper Back",
+            "Rear Delts"
+        ],
+        "secondaryMuscles": [
+            "Biceps"
+        ],
+        "equipment": "Dumbbells, Bench",
+        "description": "A rowing variation that isolates the back by removing the need for lower body stability."
+    },
+    {
+        "id": "lateral-raise",
+        "name": "Dumbbell Lateral Raise",
+        "primaryMuscles": [
+            "Side Delts"
+        ],
+        "secondaryMuscles": [],
+        "equipment": "Dumbbells",
+        "description": "The primary exercise for isolating the lateral head of the deltoids for shoulder width."
+    },
+    {
+        "id": "diamond-push-up",
+        "name": "Diamond Push-Up",
+        "primaryMuscles": [
+            "Triceps"
+        ],
+        "secondaryMuscles": [
+            "Chest"
+        ],
+        "equipment": "Bodyweight",
+        "description": "A push-up variation with hands close together to heavily emphasize the triceps."
+    }
+]

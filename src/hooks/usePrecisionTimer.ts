@@ -7,6 +7,7 @@ interface UsePrecisionTimerReturn {
     start: () => void;
     pause: () => void;
     reset: () => void;
+    adjustTime: (seconds: number) => void;
 }
 
 /**
@@ -140,12 +141,31 @@ export const usePrecisionTimer = (
         setProgress(0);
     }, [targetTimeSeconds]);
 
+    const adjustTime = useCallback((seconds: number) => {
+        const adjustmentMs = seconds * 1000;
+        const newRemainingMs = Math.max(0, remainingTimeRef.current + adjustmentMs);
+        remainingTimeRef.current = newRemainingMs;
+
+        // If not running, we need to update the UI manually
+        if (!isRunning) {
+            const displaySeconds = Math.ceil(newRemainingMs / 1000);
+            const totalDurationMs = targetTimeSeconds * 1000;
+            const currentProgress = totalDurationMs > 0
+                ? Math.min(1, Math.max(0, 1 - (newRemainingMs / totalDurationMs)))
+                : 1;
+
+            setTimeLeft(displaySeconds);
+            setProgress(currentProgress);
+        }
+    }, [isRunning, targetTimeSeconds]);
+
     return {
         timeLeft,
         isRunning,
         progress,
         start,
         pause,
-        reset
+        reset,
+        adjustTime
     };
 };

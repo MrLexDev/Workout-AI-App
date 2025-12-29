@@ -1,8 +1,12 @@
 import React, { type ReactNode } from 'react';
 
+import { LayoutDashboard, Dumbbell, History } from 'lucide-react';
+
 interface AppShellProps {
     children: ReactNode;
     title?: string;
+    activeTab?: 'dashboard' | 'workout' | 'history';
+    onTabChange?: (tab: 'dashboard' | 'workout' | 'history') => void;
 }
 
 /**
@@ -10,7 +14,7 @@ interface AppShellProps {
  * Main layout wrapper. It limits the width to simulate a mobile app experience
  * on desktop screens and handles the main background structure.
  */
-export const AppShell: React.FC<AppShellProps> = ({ children, title }) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, title, activeTab = 'dashboard', onTabChange }) => {
     return (
         <div className="min-h-screen w-full bg-slate-950 flex justify-center">
             {/* Mobile container limit */}
@@ -30,9 +34,27 @@ export const AppShell: React.FC<AppShellProps> = ({ children, title }) => {
 
                 {/* Bottom Navigation Placeholder (Visual Reference) */}
                 <nav className="fixed bottom-0 w-full max-w-md bg-slate-800 border-t border-slate-700 h-16 flex items-center justify-around z-20">
-                    <span className="text-xs text-slate-400">Dashboard</span>
-                    <span className="text-xs text-slate-400">Workout</span>
-                    <span className="text-xs text-slate-400">History</span>
+                    <button
+                        onClick={() => onTabChange?.('dashboard')}
+                        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'dashboard' ? 'text-blue-500' : 'text-slate-400 hover:text-slate-300'}`}
+                    >
+                        <LayoutDashboard size={20} />
+                        <span className="text-[10px] font-medium">Dashboard</span>
+                    </button>
+                    <button
+                        onClick={() => onTabChange?.('workout')}
+                        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'workout' ? 'text-blue-500' : 'text-slate-400 hover:text-slate-300'}`}
+                    >
+                        <Dumbbell size={20} />
+                        <span className="text-[10px] font-medium">Workout</span>
+                    </button>
+                    <button
+                        onClick={() => onTabChange?.('history')}
+                        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'history' ? 'text-blue-500' : 'text-slate-400 hover:text-slate-300'}`}
+                    >
+                        <History size={20} />
+                        <span className="text-[10px] font-medium">History</span>
+                    </button>
                 </nav>
             </main>
         </div>

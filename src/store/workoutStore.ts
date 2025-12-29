@@ -102,29 +102,40 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
                 sessionState: 'REST'
             });
         } else {
-            // Exercise Done -> Move to next exercise
-            const nextIndex = state.currentExerciseIndex + 1;
-            const nextExercise = state.activeRoutine.exercises[nextIndex];
-
-            if (nextExercise) {
-                // Next Exercise Setup
-                set({
-                    currentExerciseIndex: nextIndex,
-                    setsRemaining: nextExercise.targetSets,
-                    sessionState: 'WORK' // Automatically start working on next exercise? Or maybe setup? Let's do WORK for fluidity.
-                });
-            } else {
-                // Workout Completed
-                set({
-                    setsRemaining: 0,
-                    sessionState: 'COMPLETED'
-                });
-            }
+            // LAST SET of the current exercise Finished
+            // We go to REST state, but keep indices same so 'REST' uses currentExercise.restTimeSeconds
+            set({
+                setsRemaining: 0,
+                sessionState: 'REST'
+            });
         }
     },
 
     startWork: () => {
-        set({ sessionState: 'WORK' });
+        const state = get();
+        if (!state.isSessionActive || !state.activeRoutine) return;
+
+        // If we were resting AFTER the last set (setsRemaining === 0)
+        // we need to ADVANCE to the next exercise
+        if (state.setsRemaining === 0) {
+            const nextIndex = state.currentExerciseIndex + 1;
+            const nextExercise = state.activeRoutine.exercises[nextIndex];
+
+            if (nextExercise) {
+                set({
+                    currentExerciseIndex: nextIndex,
+                    setsRemaining: nextExercise.targetSets,
+                    sessionState: 'WORK'
+                });
+            } else {
+                set({
+                    sessionState: 'COMPLETED'
+                });
+            }
+        } else {
+            // Normal transition from rest to work within same exercise
+            set({ sessionState: 'WORK' });
+        }
     },
 
     updateRoutine: (updatedRoutine: Routine) => {

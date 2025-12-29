@@ -1,6 +1,6 @@
 import React from 'react';
 import { type Routine } from '../../types/workout';
-import { X, Play, Clock, Dumbbell, Tag, Info } from 'lucide-react';
+import { X, Play, Clock, Tag, Info } from 'lucide-react';
 
 interface RoutinePreviewProps {
     routine: Routine;
@@ -27,8 +27,8 @@ export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose
                                 {routine.category}
                             </span>
                             <span className={`text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded border ${routine.difficulty === 'Beginner' ? 'text-green-400 border-green-400/20 bg-green-400/10' :
-                                    routine.difficulty === 'Intermediate' ? 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10' :
-                                        'text-red-400 border-red-400/20 bg-red-400/10'
+                                routine.difficulty === 'Intermediate' ? 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10' :
+                                    'text-red-400 border-red-400/20 bg-red-400/10'
                                 }`}>
                                 {routine.difficulty}
                             </span>
