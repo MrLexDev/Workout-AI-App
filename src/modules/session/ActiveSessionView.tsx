@@ -42,6 +42,13 @@ export const ActiveSessionView: React.FC = () => {
         startWork();
     });
 
+    // Effect: Sync rest target ahead of time to prevent race condition in usePrecisionTimer
+    useEffect(() => {
+        if (currentExercise) {
+            setRestTarget(currentExercise.restTimeSeconds);
+        }
+    }, [currentExercise?.exerciseId, currentExercise?.restTimeSeconds]);
+
     // Effect: Sync state changes & Pre-fill logs
     useEffect(() => {
         if (!currentExercise) return;
@@ -137,10 +144,14 @@ export const ActiveSessionView: React.FC = () => {
                 {!isResting && (
                     <div className="flex flex-col items-center gap-8">
                         {/* Timer */}
-                        <div className="flex flex-col items-center justify-center h-[280px] w-[280px] rounded-full bg-slate-800/20 border-8 border-slate-800 animate-in fade-in zoom-in duration-300 relative overflow-hidden group">
-                            {/* Pulse effect in background */}
-                            {stopwatch.isRunning && <div className="absolute inset-0 bg-green-500/5 animate-pulse" />}
-
+                        <CircularTimer
+                            progress={stopwatch.progress}
+                            offset={stopwatch.offset}
+                            timeLeft={stopwatch.elapsedTime}
+                            variant="green"
+                            size={280}
+                        >
+                            {/* Inner Content Matching Work Timer Style */}
                             <span className="text-6xl font-black font-mono tracking-wider text-white z-10 transition-transform group-hover:scale-110 duration-500">
                                 {Math.floor(stopwatch.elapsedTime / 60)}:{String(stopwatch.elapsedTime % 60).padStart(2, '0')}
                             </span>
@@ -154,7 +165,7 @@ export const ActiveSessionView: React.FC = () => {
                                     {currentExercise.equipment}
                                 </div>
                             </div>
-                        </div>
+                        </CircularTimer>
 
                         {/* Target Info Overlay */}
                         <div className="grid grid-cols-2 gap-4 w-full max-w-xs px-4">
@@ -194,7 +205,7 @@ export const ActiveSessionView: React.FC = () => {
                         {/* Large Timer (Same size as Work) */}
                         <div className="relative">
                             <CircularTimer
-                                progress={restTimer.progress}
+                                progress={1 - restTimer.progress}
                                 timeLeft={restTimer.timeLeft}
                                 size={280}
                             >
