@@ -52,7 +52,7 @@ export const ExerciseLibrary: React.FC = () => {
         return allExercises.filter(ex =>
             ex.name.toLowerCase().includes(lowerQuery) ||
             ex.primaryMuscles.some(m => m.toLowerCase().includes(lowerQuery)) ||
-            ex.secondaryMuscles.some(m => m.toLowerCase().includes(lowerQuery)) ||
+            ex.secondaryMuscles.some(m => m.muscle.toLowerCase().includes(lowerQuery)) ||
             ex.equipment.toLowerCase().includes(lowerQuery)
         );
     }, [allExercises, searchQuery]);
@@ -163,9 +163,16 @@ export const ExerciseLibrary: React.FC = () => {
                                             <div>
                                                 <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Targets</span>
                                                 <div className="flex flex-wrap gap-1">
-                                                    {ex.primaryMuscles.concat(ex.secondaryMuscles).map((m, i) => (
-                                                        <span key={i} className="text-xs text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+                                                    {/* Primary Muscles - Always Bold */}
+                                                    {ex.primaryMuscles.map((m, i) => (
+                                                        <span key={`p-${i}`} className="text-xs font-bold text-blue-300 bg-blue-900/20 px-1.5 py-0.5 rounded border border-blue-500/20">
                                                             {m}
+                                                        </span>
+                                                    ))}
+                                                    {/* Secondary Muscles - Bold if Impact is High */}
+                                                    {ex.secondaryMuscles.map((sm, i) => (
+                                                        <span key={`s-${i}`} className={`text-xs px-1.5 py-0.5 rounded border border-slate-700 ${sm.impact === 'High' ? 'font-bold text-slate-100 bg-slate-700' : 'text-slate-300 bg-slate-800'}`}>
+                                                            {sm.muscle}
                                                         </span>
                                                     ))}
                                                 </div>

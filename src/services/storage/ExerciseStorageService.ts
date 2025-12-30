@@ -69,7 +69,14 @@ export class ExerciseStorageService {
         if (typeof obj.id !== 'string' || obj.id.trim() === '') throw new Error('Invalid exercise: missing or invalid "id".');
         if (typeof obj.name !== 'string' || obj.name.trim() === '') throw new Error('Invalid exercise: missing or invalid "name".');
         if (!Array.isArray(obj.primaryMuscles)) throw new Error('Invalid exercise: "primaryMuscles" must be an array.');
-        if (!Array.isArray(obj.secondaryMuscles)) throw new Error('Invalid exercise: "secondaryMuscles" must be an array.');
+
+        let secondaryMuscles = obj.secondaryMuscles;
+        if (!Array.isArray(secondaryMuscles)) throw new Error('Invalid exercise: "secondaryMuscles" must be an array.');
+
+        // Migration: Convert string[] to SecondaryMuscle[]
+        if (secondaryMuscles.length > 0 && typeof secondaryMuscles[0] === 'string') {
+            secondaryMuscles = secondaryMuscles.map((m: string) => ({ muscle: m, impact: 'Low' }));
+        }
 
         // Equipment and description are technically optional in some loose definitions, but strict in our type
         // If your type strictly requires them, check them. 
@@ -81,7 +88,7 @@ export class ExerciseStorageService {
             id: obj.id,
             name: obj.name,
             primaryMuscles: obj.primaryMuscles,
-            secondaryMuscles: obj.secondaryMuscles,
+            secondaryMuscles: secondaryMuscles,
             equipment: obj.equipment,
             description: obj.description
         };

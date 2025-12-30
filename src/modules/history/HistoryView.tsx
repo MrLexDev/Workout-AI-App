@@ -29,6 +29,8 @@ import {
     Legend,
     type ChartOptions
 } from 'chart.js';
+import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
+import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
 
 // Register ChartJS components
 ChartJS.register(
@@ -58,6 +60,7 @@ export const HistoryView = () => {
     const { getLogsByExercise } = usePerformanceStore();
     const [selectedExerciseId, setSelectedExerciseId] = useState<string>('');
     const [customExercises, setCustomExercises] = useState<ExerciseDefinition[]>([]);
+    const [radarRange, setRadarRange] = useState<'7d' | '30d' | 'all'>('7d');
 
     // Load custom exercises on mount
     useEffect(() => {
@@ -84,6 +87,12 @@ export const HistoryView = () => {
         if (!selectedExerciseId) return [];
         return getLogsByExercise(selectedExerciseId);
     }, [selectedExerciseId, getLogsByExercise]);
+
+    // ----- RADAR CHART DATA -----
+    const muscleRadarData = useMemo(() => {
+        const scores = calculateMuscleVolume(sessions, allExercises, radarRange);
+        return groupMuscleScores(scores);
+    }, [sessions, allExercises, radarRange]);
 
     // ----- DERIVED DATA (BODY) -----
     const currentWeight = weightHistory.length > 0 ? weightHistory[0].weight : null;
@@ -323,6 +332,36 @@ export const HistoryView = () => {
                                 </div>
                             )}
                         </div>
+                    </div>
+
+                    {/* Muscle Distribution Radar */}
+                    <div className="bg-slate-800 p-4 rounded-xl">
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="font-semibold text-slate-400 text-sm flex items-center gap-2">
+                                <Activity size={16} />
+                                Muscle Distribution
+                            </h3>
+                            <div className="flex bg-slate-900 rounded-lg p-0.5">
+                                {(['7d', '30d', 'all'] as const).map(range => (
+                                    <button
+                                        key={range}
+                                        onClick={() => setRadarRange(range)}
+                                        className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${radarRange === range
+                                            ? 'bg-slate-700 text-white shadow-sm'
+                                            : 'text-slate-500 hover:text-slate-300'
+                                            }`}
+                                    >
+                                        {range === 'all' ? 'All' : range}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="h-64 w-full">
+                            <MuscleRadarChart data={muscleRadarData} />
+                        </div>
+                        <p className="text-[10px] text-slate-500 text-center mt-2">
+                            Effective Sets (Primary = 1.0, High Sec. = 0.5, Low Sec. = 0.25)
+                        </p>
                     </div>
 
                     {/* History List */}

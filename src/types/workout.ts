@@ -4,11 +4,16 @@
     rpe?: number; // Rate of Perceived Exertion (optional)
 }
 
+export interface SecondaryMuscle {
+    muscle: string;
+    impact: 'High' | 'Low';
+}
+
 export interface ExerciseDefinition {
     id: string; // matches exerciseId in RoutineExercise
     name: string;
     primaryMuscles: string[];
-    secondaryMuscles: string[];
+    secondaryMuscles: SecondaryMuscle[];
     equipment: string;
     description: string;
 }

@@ -6,25 +6,41 @@
             "Lats"
         ],
         "secondaryMuscles": [
-            "Biceps",
-            "Upper Back"
+            {
+                "muscle": "Biceps",
+                "impact": "High"
+            },
+            {
+                "muscle": "Upper Back",
+                "impact": "High"
+            },
+            {
+                "muscle": "Forearms",
+                "impact": "Low"
+            }
         ],
         "equipment": "Pull-up Bar, Weight Belt",
         "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
     },
     {
-    "id": "weighted-pull-up2",
-    "name": "Weighted Pull-Up -2",
-    "primaryMuscles": [
-        "Lats"
-    ],
-    "secondaryMuscles": [
-        "Biceps",
-        "Upper Back"
-    ],
-    "equipment": "Pull-up Bar, Weight Belt",
-    "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
-},
+        "id": "weighted-pull-up2",
+        "name": "Weighted Pull-Up -2",
+        "primaryMuscles": [
+            "Lats"
+        ],
+        "secondaryMuscles": [
+            {
+                "muscle": "Biceps",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Upper Back",
+                "impact": "Low"
+            }
+        ],
+        "equipment": "Pull-up Bar, Weight Belt",
+        "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
+    },
     {
         "id": "overhead-press-barbell",
         "name": "Barbell Overhead Press",
@@ -32,8 +48,14 @@
             "Shoulders"
         ],
         "secondaryMuscles": [
-            "Triceps",
-            "Core"
+            {
+                "muscle": "Triceps",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Core",
+                "impact": "Low"
+            }
         ],
         "equipment": "Barbell",
         "description": "A fundamental strength exercise for the shoulders and upper body stability."
@@ -45,8 +67,14 @@
             "Chest"
         ],
         "secondaryMuscles": [
-            "Triceps",
-            "Front Delts"
+            {
+                "muscle": "Triceps",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Front Delts",
+                "impact": "Low"
+            }
         ],
         "equipment": "Parallel Bars",
         "description": "Effective for building chest and triceps. Lean forward to emphasize the chest."
@@ -58,8 +86,14 @@
             "Rear Delts"
         ],
         "secondaryMuscles": [
-            "Rotator Cuff",
-            "Upper Traps"
+            {
+                "muscle": "Rotator Cuff",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Upper Traps",
+                "impact": "Low"
+            }
         ],
         "equipment": "Cable Machine",
         "description": "Excellent for shoulder health and posture. Pull towards the forehead."
@@ -72,8 +106,14 @@
             "Glutes"
         ],
         "secondaryMuscles": [
-            "Lower Back",
-            "Core"
+            {
+                "muscle": "Lower Back",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Core",
+                "impact": "Low"
+            }
         ],
         "equipment": "Barbell, Squat Rack",
         "description": "The king of lower body exercises. Targets quads, glutes, and overall strength."
@@ -86,7 +126,10 @@
             "Glutes"
         ],
         "secondaryMuscles": [
-            "Lower Back"
+            {
+                "muscle": "Lower Back",
+                "impact": "Low"
+            }
         ],
         "equipment": "Dumbbells",
         "description": "Focuses on the posterior chain. Hinge at the hips and feel the stretch."
@@ -98,7 +141,10 @@
             "Core"
         ],
         "secondaryMuscles": [
-            "Hip Flexors"
+            {
+                "muscle": "Hip Flexors",
+                "impact": "Low"
+            }
         ],
         "equipment": "Bodyweight",
         "description": "A core stability exercise that teaches you to move your limbs while maintaining a neutral spine."
@@ -110,7 +156,10 @@
             "Cardiovascular System"
         ],
         "secondaryMuscles": [
-            "Calves"
+            {
+                "muscle": "Calves",
+                "impact": "Low"
+            }
         ],
         "equipment": "Treadmill",
         "description": "Low-intensity steady-state cardio. Great for recovery and heart health."
@@ -122,8 +171,14 @@
             "Upper Chest"
         ],
         "secondaryMuscles": [
-            "Front Delts",
-            "Triceps"
+            {
+                "muscle": "Front Delts",
+                "impact": "Low"
+            },
+            {
+                "muscle": "Triceps",
+                "impact": "Low"
+            }
         ],
         "equipment": "Dumbbells, Incline Bench",
         "description": "Targets the upper pectoral muscles using dumbbells for a greater range of motion."
@@ -136,7 +191,10 @@
             "Rear Delts"
         ],
         "secondaryMuscles": [
-            "Biceps"
+            {
+                "muscle": "Biceps",
+                "impact": "Low"
+            }
         ],
         "equipment": "Dumbbells, Bench",
         "description": "A rowing variation that isolates the back by removing the need for lower body stability."
@@ -158,7 +216,10 @@
             "Triceps"
         ],
         "secondaryMuscles": [
-            "Chest"
+            {
+                "muscle": "Chest",
+                "impact": "Low"
+            }
         ],
         "equipment": "Bodyweight",
         "description": "A push-up variation with hands close together to heavily emphasize the triceps."

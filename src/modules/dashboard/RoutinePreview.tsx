@@ -1,6 +1,9 @@
 import React from 'react';
 import { type HydratedRoutine } from '../../types/workout';
-import { X, Play, Clock, Tag, Info } from 'lucide-react';
+import { X, Play, Clock, Tag, Info, Activity } from 'lucide-react';
+import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
+import { calculateRoutineMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
+import { useMemo } from 'react';
 
 interface RoutinePreviewProps {
     routine: HydratedRoutine;
@@ -9,6 +12,11 @@ interface RoutinePreviewProps {
 }
 
 export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose, onStart }) => {
+    const muscleRadarData = useMemo(() => {
+        const scores = calculateRoutineMuscleVolume(routine);
+        return groupMuscleScores(scores);
+    }, [routine]);
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="bg-slate-900 w-full max-w-lg max-h-[90vh] rounded-2xl border border-slate-700 shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
@@ -64,6 +72,20 @@ export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose
                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                         Workout Plan ({routine.exercises.length} Exercises)
                     </h3>
+
+                    {/* Muscle Distribution Radar */}
+                    <div className="bg-slate-800/20 p-4 rounded-xl border border-slate-800/50">
+                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">
+                            <Activity size={12} className="text-blue-500" />
+                            Muscle Distribution
+                        </div>
+                        <div className="h-48 w-full">
+                            <MuscleRadarChart data={muscleRadarData} />
+                        </div>
+                        <p className="text-[9px] text-slate-500 text-center mt-2">
+                            Effective sets distribution based on routine setup
+                        </p>
+                    </div>
 
                     {routine.exercises.map((ex, index) => (
                         <div key={ex.exerciseId + index} className="p-4 rounded-xl bg-slate-800/30 border border-slate-800 space-y-3">
