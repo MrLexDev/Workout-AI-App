@@ -526,6 +526,17 @@ export const HistoryView = () => {
                                                         <span>
                                                             Work: {Math.round(exLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / exLogs.length)}s
                                                         </span>
+                                                        {/* Avg RPE */}
+                                                        {(() => {
+                                                            const validRpeLogs = exLogs.filter(l => l.rpe !== undefined && l.rpe !== null);
+                                                            if (validRpeLogs.length === 0) return null;
+                                                            const avgRpe = (validRpeLogs.reduce((acc, l) => acc + (l.rpe || 0), 0) / validRpeLogs.length).toFixed(1);
+                                                            return (
+                                                                <span className="text-yellow-500/80">
+                                                                    RPE: {avgRpe}
+                                                                </span>
+                                                            );
+                                                        })()}
                                                         {/* Avg Rest */}
                                                         {(() => {
                                                             const rests = session.restData.filter(r => r.exerciseId === ex.exerciseId);

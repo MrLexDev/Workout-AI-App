@@ -6,7 +6,7 @@ interface PerformanceState {
     logs: ExerciseLog[];
 
     // Actions
-    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number) => void;
+    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number, rpe?: number) => void;
     deleteLogs: (ids: string[]) => void;
     getLogsByExercise: (exerciseId: string) => ExerciseLog[];
     getPersonalRecord: (exerciseId: string) => number; // Max weight lifted
@@ -18,7 +18,7 @@ const initialData = performanceStorageService.loadLogs();
 export const usePerformanceStore = create<PerformanceState>((set, get) => ({
     logs: initialData.logs,
 
-    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number) => {
+    addLog: (exerciseId: string, weight: number, reps: number, id?: string, duration?: number, rpe?: number) => {
         set((state) => {
             // Epley Formula for 1RM
             // 1RM = Weight * (1 + Reps/30)
@@ -31,7 +31,8 @@ export const usePerformanceStore = create<PerformanceState>((set, get) => ({
                 weight,
                 reps,
                 oneRepMax,
-                duration
+                duration,
+                rpe
             };
 
             const newLogs = [...state.logs, newLog];

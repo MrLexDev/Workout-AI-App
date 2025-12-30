@@ -39,6 +39,7 @@ export const ActiveSessionView: React.FC = () => {
     // ----- LOGGING STATE -----
     const [logWeight, setLogWeight] = useState(0);
     const [logReps, setLogReps] = useState(0);
+    const [logRpe, setLogRpe] = useState(8); // Default RPE
     const [isSetLogged, setIsSetLogged] = useState(false);
 
     const { autoSavePreference, setAutoSavePreference } = useUserStore();
@@ -77,6 +78,21 @@ export const ActiveSessionView: React.FC = () => {
     // Let's define the ON COMPLETE callback first for the hook.
     // When timer completes naturally: actualRest = targetSeconds.
 
+    // Let's define the ON COMPLETE callback first for the hook.
+    // When timer completes naturally: actualRest = targetSeconds.
+
+    // Disable scrolling when confirmation modal is open
+    useEffect(() => {
+        if (showExitConfirmation) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [showExitConfirmation]);
+
     const handleConfirmLog = useCallback(() => {
         if (currentExercise) {
             const newLogId = crypto.randomUUID();
@@ -86,11 +102,12 @@ export const ActiveSessionView: React.FC = () => {
                 logWeight,
                 logReps,
                 newLogId,
-                lastSetDurationRef.current // Pass captured duration
+                lastSetDurationRef.current, // Pass captured duration
+                logRpe
             );
             setIsSetLogged(true);
         }
-    }, [currentExercise, logWeight, logReps, addLog]);
+    }, [currentExercise, logWeight, logReps, addLog, logRpe]);
 
     // Timer logic with rest tracking
     const onTimerComplete = useCallback(() => {
@@ -185,6 +202,7 @@ export const ActiveSessionView: React.FC = () => {
 
                 setLogWeight(lastLog ? lastLog.weight : 0);
                 setLogReps(currentExercise.maximumRepetitions); // Default to max reps target
+                setLogRpe(lastLog && lastLog.rpe ? lastLog.rpe : 8); // Pre-fill RPE or default to 8
                 setIsSetLogged(false);
 
             } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
@@ -388,8 +406,9 @@ export const ActiveSessionView: React.FC = () => {
                         </div>
 
 
+
                         {/* Logging Interface - Integrated (BELOW Controls) */}
-                        <div className="w-full max-w-sm px-4">
+                        <div className="w-full max-w-lg px-4">
                             <div className={`bg-slate-900/50 border ${isSetLogged ? 'border-green-500/30' : 'border-slate-800'} rounded-2xl p-4 transition-colors`}>
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
@@ -425,6 +444,16 @@ export const ActiveSessionView: React.FC = () => {
                                         />
                                         <div className="w-px bg-slate-800" />
                                         <WheelPicker
+                                            label="RPE"
+                                            value={logRpe}
+                                            onChange={setLogRpe}
+                                            min={1}
+                                            max={10}
+                                            step={0.5}
+                                            height={140}
+                                        />
+                                        <div className="w-px bg-slate-800" />
+                                        <WheelPicker
                                             label="Rep"
                                             value={logReps}
                                             onChange={setLogReps}
@@ -441,6 +470,10 @@ export const ActiveSessionView: React.FC = () => {
                                         <div className="flex flex-col items-center">
                                             <span className="text-2xl font-black text-white">{logWeight}</span>
                                             <span className="text-[10px] text-slate-500 uppercase font-bold">KG</span>
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-2xl font-black text-white">{logRpe}</span>
+                                            <span className="text-[10px] text-slate-500 uppercase font-bold">RPE</span>
                                         </div>
                                         <div className="flex flex-col items-center">
                                             <span className="text-2xl font-black text-white">{logReps}</span>
@@ -538,7 +571,7 @@ export const ActiveSessionView: React.FC = () => {
 
             {/* Exit Confirmation Modal */}
             {showExitConfirmation && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
                     <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
                         <div className="flex flex-col items-center gap-4 text-center">
                             <div className="w-12 h-12 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mb-2">
