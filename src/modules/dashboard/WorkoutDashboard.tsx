@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Play, MoreHorizontal, Download, Upload, Trash2, Plus } from 'lucide-react';
+import { useNativeBack } from '../../hooks/useNativeBack';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { RoutinePreview } from './RoutinePreview';
 import { ImportRoutineModal } from './ImportRoutineModal';
@@ -14,6 +15,23 @@ export const WorkoutDashboard: React.FC = () => {
     const [previewRoutineId, setPreviewRoutineId] = useState<string | null>(null);
     const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
     const [importTargetId, setImportTargetId] = useState<string | null>(null);
+
+    // Back Handler
+    useNativeBack(() => {
+        if (previewRoutineId) {
+            setPreviewRoutineId(null);
+            return true;
+        }
+        if (importTargetId) {
+            setImportTargetId(null);
+            return true;
+        }
+        if (activeMenuId) {
+            setActiveMenuId(null);
+            return true;
+        }
+        return false;
+    }, [previewRoutineId, importTargetId, activeMenuId]);
 
     // Hydrate routines for display
     const hydratedRoutines = useMemo(() => {

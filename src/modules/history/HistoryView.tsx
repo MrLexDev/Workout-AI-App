@@ -32,6 +32,7 @@ import {
 import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
 import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
 import { VolumeStatsView } from './VolumeStatsView';
+import { useNativeBack } from '../../hooks/useNativeBack';
 
 // Register ChartJS components
 ChartJS.register(
@@ -185,6 +186,14 @@ export const HistoryView = () => {
 
     // ----- VIEW STATE -----
     const [view, setView] = useState<'overview' | 'volume'>('overview');
+
+    useNativeBack(() => {
+        if (view === 'volume') {
+            setView('overview');
+            return true;
+        }
+        return false;
+    }, [view]);
 
     // ... (existing helper functions) ...
 

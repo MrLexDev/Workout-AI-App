@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { useNativeBack } from '../../hooks/useNativeBack';
 import { type ExerciseDefinition, type Routine } from '../../types/workout';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
@@ -39,6 +40,19 @@ export const ExerciseLibrary: React.FC = () => {
     const [importJson, setImportJson] = useState('');
     const [importError, setImportError] = useState<string | null>(null);
     const [importSuccess, setImportSuccess] = useState<string | null>(null);
+
+    // Back Handler for Import Modal and Internal Tabs
+    useNativeBack(() => {
+        if (isImportModalOpen) {
+            setIsImportModalOpen(false);
+            return true;
+        }
+        if (activeTab === 'routines') {
+            setActiveTab('exercises');
+            return true;
+        }
+        return false;
+    }, [isImportModalOpen, activeTab]);
 
     const toggleExpand = (id: string) => {
         const newSet = new Set(expandedIds);

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { type Routine } from '../../types/workout';
 import { hydrateRoutine } from '../../utils/routineHelpers';
+import { useNativeBack } from '../../hooks/useNativeBack';
 import { X, Play, Plus, Clock, BarChart, Dumbbell } from 'lucide-react';
 
 interface RoutinePreviewModalProps {
@@ -20,6 +21,14 @@ export const RoutinePreviewModal: React.FC<RoutinePreviewModalProps> = ({
     onAddToDashboard,
     isAlreadyInDashboard
 }) => {
+    useNativeBack(() => {
+        if (isOpen) {
+            onClose();
+            return true;
+        }
+        return false;
+    }, [isOpen, onClose], 20); // Higher priority than App root
+
     if (!isOpen) return null;
 
     const hydratedRoutine = useMemo(() => hydrateRoutine(routine), [routine]);

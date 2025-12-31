@@ -11,6 +11,7 @@ import { CircularTimer } from '../../components/timer/CircularTimer';
 import { WheelPicker } from '../../components/inputs/WheelPicker';
 import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History, AlertTriangle } from 'lucide-react';
 import { Toggle } from '../../components/inputs/Toggle';
+import { useNativeBack } from '../../hooks/useNativeBack';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -92,6 +93,19 @@ export const ActiveSessionView: React.FC = () => {
             document.body.style.overflow = '';
         };
     }, [showExitConfirmation]);
+
+    // Back Handler
+    useNativeBack(() => {
+        if (showExitConfirmation) {
+            setShowExitConfirmation(false);
+            return true;
+        }
+        if (activeRoutine) {
+            setShowExitConfirmation(true);
+            return true;
+        }
+        return false;
+    }, [showExitConfirmation, activeRoutine], 30); // Highest Priority
 
     const handleConfirmLog = useCallback(() => {
         if (currentExercise) {
