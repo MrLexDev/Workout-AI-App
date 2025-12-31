@@ -397,7 +397,10 @@ export const ActiveSessionView: React.FC = () => {
                                     <span className="text-[10px] font-bold">-10s</span>
                                 </button>
                                 <button
-                                    onClick={() => restTimer.reset()}
+                                    onClick={() => {
+                                        restTimer.reset();
+                                        restTimer.start();
+                                    }}
                                     className="p-3 text-slate-500 hover:text-white bg-slate-900 border border-slate-800 rounded-xl transition-colors active:scale-95"
                                 >
                                     <RotateCcw size={18} />
@@ -446,7 +449,7 @@ export const ActiveSessionView: React.FC = () => {
                                 </div>
 
                                 {!isSetLogged && (
-                                    <div className="flex justify-center gap-4 mb-4">
+                                    <div className="flex justify-center gap-2 sm:gap-4 mb-4">
                                         <WheelPicker
                                             label="KG"
                                             value={logWeight}
@@ -455,6 +458,7 @@ export const ActiveSessionView: React.FC = () => {
                                             max={300}
                                             step={2.5}
                                             height={140}
+                                            width="80px"
                                         />
                                         <div className="w-px bg-slate-800" />
                                         <WheelPicker
@@ -465,6 +469,7 @@ export const ActiveSessionView: React.FC = () => {
                                             max={4}
                                             step={0.5}
                                             height={140}
+                                            width="80px"
                                         />
                                         <div className="w-px bg-slate-800" />
                                         <WheelPicker
@@ -475,6 +480,7 @@ export const ActiveSessionView: React.FC = () => {
                                             max={99}
                                             step={1}
                                             height={140}
+                                            width="80px"
                                         />
                                     </div>
                                 )}

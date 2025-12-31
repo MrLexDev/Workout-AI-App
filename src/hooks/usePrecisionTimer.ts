@@ -113,24 +113,24 @@ export const usePrecisionTimer = (
 
     const start = useCallback(() => {
         if (remainingTimeRef.current <= 0) return; // Already finished
-        if (!isRunning) {
-            setIsRunning(true);
-            // Set the start time point
+
+        setIsRunning(true);
+        // Only set start if not already "running" (capture point)
+        if (startTimeRef.current === null) {
             startTimeRef.current = Date.now();
         }
-    }, [isRunning]);
+    }, []);
 
     const pause = useCallback(() => {
-        if (isRunning && startTimeRef.current !== null) {
+        setIsRunning(false);
+        if (startTimeRef.current !== null) {
             // Commit the elapsed time to the remainingTimeRef
             const now = Date.now();
             const elapsed = now - startTimeRef.current;
             remainingTimeRef.current = Math.max(0, remainingTimeRef.current - elapsed);
-
             startTimeRef.current = null;
-            setIsRunning(false);
         }
-    }, [isRunning]);
+    }, []);
 
     const reset = useCallback(() => {
         setIsRunning(false);

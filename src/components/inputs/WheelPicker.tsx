@@ -9,6 +9,7 @@ interface WheelPickerProps {
     label?: string;
     height?: number;
     itemHeight?: number;
+    width?: string;
 }
 
 export const WheelPicker: React.FC<WheelPickerProps> = ({
@@ -19,7 +20,8 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     onChange,
     label,
     height = 200,
-    itemHeight = 40
+    itemHeight = 40,
+    width = '100px'
 }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const isScrolling = useRef(false);
@@ -88,7 +90,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
             {label && <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{label}</div>}
             <div
                 className="relative overflow-hidden bg-slate-900/50 rounded-xl border border-slate-800"
-                style={{ height: height, width: '100px' }}
+                style={{ height: height, width: width }}
             >
                 {/* Selection Highlight */}
                 <div
