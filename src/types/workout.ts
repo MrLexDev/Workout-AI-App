@@ -1,7 +1,7 @@
 ﻿export interface SetTarget {
     reps: number;
     weight: number; // in kg
-    rpe?: number; // Rate of Perceived Exertion (optional)
+    rir?: number; // Reps in Reserve (optional)
 }
 
 export interface SecondaryMuscle {
@@ -25,7 +25,7 @@ export interface RoutineExercise {
     minimumRepetitions: number;
     maximumRepetitions: number;
     restTimeSeconds: number;
-    targetRpe: number;
+    targetRir: number;
     notes: string;
     lastSessionWeight?: number;
 }

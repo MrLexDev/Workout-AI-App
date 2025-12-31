@@ -7,6 +7,16 @@ interface MuscleScore {
     [muscle: string]: number;
 }
 
+export interface VolumeDataPoint {
+    date: string; // ISO Date "YYYY-MM-DD" representing the start of the week/month
+    volume: number;
+    effectiveReps: number;
+}
+
+export interface MuscleVolumeStats {
+    [muscle: string]: VolumeDataPoint[];
+}
+
 export const calculateMuscleVolume = (
     sessions: WorkoutSession[],
     allExercises: ExerciseDefinition[],
@@ -138,4 +148,112 @@ export const groupMuscleScores = (scores: MuscleScore): Record<string, number> =
     });
 
     return grouped;
+};
+
+// --- NEW ---
+
+export const getWeekStartDate = (timestamp: number): string => {
+    const d = new Date(timestamp);
+    const day = d.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
+    d.setDate(diff);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString().split('T')[0];
+};
+
+export const getMonthStartDate = (timestamp: number): string => {
+    const d = new Date(timestamp);
+    d.setDate(1);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString().split('T')[0];
+}
+
+export const calculateVolumeStats = (
+    sessions: WorkoutSession[],
+    allExercises: ExerciseDefinition[],
+    granularity: 'weekly' | 'monthly' = 'weekly'
+): MuscleVolumeStats => {
+    const stats: MuscleVolumeStats = {};
+    const getDateKey = granularity === 'weekly' ? getWeekStartDate : getMonthStartDate;
+
+    // Sort sessions old to new
+    const sortedSessions = [...sessions].sort((a, b) => a.startTime - b.startTime);
+
+    // Initialize groupings if needed, or build dynamically
+    // We'll iterate and build.
+
+    sortedSessions.forEach(session => {
+        const dateKey = getDateKey(session.startTime);
+
+        session.logs.forEach(log => {
+            const exercise = allExercises.find(e => e.id === log.exerciseId);
+            if (!exercise) return;
+
+            const weight = log.weight || 0;
+            const reps = log.reps || 0;
+            // 1. Calculate Volume
+            const volume = weight * reps;
+
+            // 2. Calculate Effective Reps
+            // Rule: Min(Reps, 5) if RIR is low (close to failure).
+            // If RIR is high, scale down. E.g. RIR 4 -> 1 effective rep?
+            // Simple model: 
+            // If RIR <= 2: 5, 4, 3 effective reps...
+            // Or use the formula: Effective Reps = max(0, min(reps, 5 - RIR))
+            // "Effective reps are the last 5 reps before failure."
+            // If RIR is 0, reps are 10. Failure was at 10. Last 5 were effective.
+            // If RIR is 2, reps were 10. Failure would be at 12. Reps 8-12 were the "effective zone". 
+            // The set essentially stopped 2 reps short.
+            // So we got 3 effective reps (5 - RIR).
+            // Effective = 5 - RIR.
+            // Let's clamp between 0 and 5.
+            // And also clamp by actual reps performed (cant have 5 effective reps if you only did 3 reps).
+
+            let effectiveReps = 0;
+            if (log.rir !== undefined) {
+                effectiveReps = Math.max(0, Math.min(reps, 5 - log.rir));
+            } else {
+                // Assume moderate intensity if no RIR? Or 0?
+                effectiveReps = 0;
+            }
+
+            // Distribute to muscles
+            const distribute = (muscle: string, ratio: number) => {
+                // Use specific muscle name, but Title Case it just in case
+                const mName = muscle.trim();
+
+                if (!stats[mName]) stats[mName] = [];
+
+                // Find or create data point for this date
+                let dp = stats[mName].find(d => d.date === dateKey);
+                if (!dp) {
+                    dp = { date: dateKey, volume: 0, effectiveReps: 0 };
+                    stats[mName].push(dp);
+                    // Keep sorted by date
+                    stats[mName].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+                }
+
+                dp.volume += volume * ratio;
+                dp.effectiveReps += effectiveReps * ratio;
+            };
+
+            // Primary
+            exercise.primaryMuscles.forEach(m => distribute(m, 1.0));
+
+            // Secondary
+            exercise.secondaryMuscles.forEach(sm => {
+                let impact = 0.25;
+                let m = '';
+                if (typeof sm === 'string') {
+                    m = sm;
+                } else {
+                    m = sm.muscle;
+                    impact = sm.impact === 'High' ? 0.5 : 0.25;
+                }
+                distribute(m, impact);
+            });
+        });
+    });
+
+    return stats;
 };

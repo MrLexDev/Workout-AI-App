@@ -122,8 +122,8 @@ export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose
                                     <span className="text-sm font-bold text-white">{ex.minimumRepetitions}-{ex.maximumRepetitions}</span>
                                 </div>
                                 <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800 flex flex-col items-center">
-                                    <span className="text-[8px] text-slate-500 uppercase font-bold tracking-widest">RPE</span>
-                                    <span className="text-sm font-bold text-yellow-500">{ex.targetRpe}</span>
+                                    <span className="text-[8px] text-slate-500 uppercase font-bold tracking-widest">RIR</span>
+                                    <span className="text-sm font-bold text-yellow-500">{ex.targetRir}</span>
                                 </div>
                             </div>
 

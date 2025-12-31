@@ -39,7 +39,7 @@ export const ActiveSessionView: React.FC = () => {
     // ----- LOGGING STATE -----
     const [logWeight, setLogWeight] = useState(0);
     const [logReps, setLogReps] = useState(0);
-    const [logRpe, setLogRpe] = useState(8); // Default RPE
+    const [logRir, setLogRir] = useState(2); // Default RIR 2
     const [isSetLogged, setIsSetLogged] = useState(false);
 
     const { autoSavePreference, setAutoSavePreference } = useUserStore();
@@ -103,11 +103,11 @@ export const ActiveSessionView: React.FC = () => {
                 logReps,
                 newLogId,
                 lastSetDurationRef.current, // Pass captured duration
-                logRpe
+                logRir
             );
             setIsSetLogged(true);
         }
-    }, [currentExercise, logWeight, logReps, addLog, logRpe]);
+    }, [currentExercise, logWeight, logReps, addLog, logRir]);
 
     // Timer logic with rest tracking
     const onTimerComplete = useCallback(() => {
@@ -202,7 +202,7 @@ export const ActiveSessionView: React.FC = () => {
 
                 setLogWeight(lastLog ? lastLog.weight : 0);
                 setLogReps(currentExercise.maximumRepetitions); // Default to max reps target
-                setLogRpe(lastLog && lastLog.rpe ? lastLog.rpe : 8); // Pre-fill RPE or default to 8
+                setLogRir(lastLog && lastLog.rir !== undefined ? lastLog.rir : 2); // Pre-fill RIR or default to 2
                 setIsSetLogged(false);
 
             } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
@@ -307,9 +307,9 @@ export const ActiveSessionView: React.FC = () => {
                             <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
                                 <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
                                     <Target size={12} className="text-blue-400" />
-                                    RPE Target
+                                    RIR Target
                                 </div>
-                                <span className="text-xl font-black text-yellow-500">{currentExercise.targetRpe}</span>
+                                <span className="text-xl font-black text-yellow-500">{currentExercise.targetRir}</span>
                             </div>
                             <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
                                 <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
@@ -444,11 +444,11 @@ export const ActiveSessionView: React.FC = () => {
                                         />
                                         <div className="w-px bg-slate-800" />
                                         <WheelPicker
-                                            label="RPE"
-                                            value={logRpe}
-                                            onChange={setLogRpe}
-                                            min={1}
-                                            max={10}
+                                            label="RIR"
+                                            value={logRir}
+                                            onChange={setLogRir}
+                                            min={0}
+                                            max={4}
                                             step={0.5}
                                             height={140}
                                         />
@@ -472,8 +472,8 @@ export const ActiveSessionView: React.FC = () => {
                                             <span className="text-[10px] text-slate-500 uppercase font-bold">KG</span>
                                         </div>
                                         <div className="flex flex-col items-center">
-                                            <span className="text-2xl font-black text-white">{logRpe}</span>
-                                            <span className="text-[10px] text-slate-500 uppercase font-bold">RPE</span>
+                                            <span className="text-2xl font-black text-white">{logRir}</span>
+                                            <span className="text-[10px] text-slate-500 uppercase font-bold">RIR</span>
                                         </div>
                                         <div className="flex flex-col items-center">
                                             <span className="text-2xl font-black text-white">{logReps}</span>
@@ -548,7 +548,7 @@ export const ActiveSessionView: React.FC = () => {
                                             </span>
                                             <div className="w-0.5 h-0.5 rounded-full bg-slate-700" />
                                             <span className="text-[9px] font-mono opacity-60">
-                                                RPE {ex.targetRpe}
+                                                RIR {ex.targetRir}
                                             </span>
                                         </div>
                                     </div>

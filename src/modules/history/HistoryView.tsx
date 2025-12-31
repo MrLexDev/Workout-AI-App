@@ -31,6 +31,7 @@ import {
 } from 'chart.js';
 import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
 import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
+import { VolumeStatsView } from './VolumeStatsView';
 
 // Register ChartJS components
 ChartJS.register(
@@ -182,8 +183,13 @@ export const HistoryView = () => {
         }
     };
 
-    // ----- RENDER LOADING / SETUP -----
+    // ----- VIEW STATE -----
+    const [view, setView] = useState<'overview' | 'volume'>('overview');
+
+    // ... (existing helper functions) ...
+
     if (!height) {
+        // ... (existing setup view) ...
         return (
             <div className="flex flex-col items-center justify-center p-8 space-y-6 text-center animate-in fade-in duration-500">
                 <div className="bg-slate-800 p-4 rounded-full">
@@ -211,6 +217,10 @@ export const HistoryView = () => {
                 </div>
             </div>
         );
+    }
+
+    if (view === 'volume') {
+        return <VolumeStatsView onBack={() => setView('overview')} />;
     }
 
     return (
@@ -335,13 +345,19 @@ export const HistoryView = () => {
                     </div>
 
                     {/* Muscle Distribution Radar */}
-                    <div className="bg-slate-800 p-4 rounded-xl">
+                    <div
+                        className="bg-slate-800 p-4 rounded-xl cursor-pointer hover:bg-slate-800/80 transition-colors border border-transparent hover:border-slate-700 relative group"
+                        onClick={() => setView('volume')}
+                    >
+                        <div className="absolute top-4 right-4 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ChevronDown className="-rotate-90" />
+                        </div>
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="font-semibold text-slate-400 text-sm flex items-center gap-2">
                                 <Activity size={16} />
                                 Muscle Distribution
                             </h3>
-                            <div className="flex bg-slate-900 rounded-lg p-0.5">
+                            <div className="flex bg-slate-900 rounded-lg p-0.5" onClick={e => e.stopPropagation()}>
                                 {(['7d', '30d', 'all'] as const).map(range => (
                                     <button
                                         key={range}
@@ -356,11 +372,11 @@ export const HistoryView = () => {
                                 ))}
                             </div>
                         </div>
-                        <div className="h-64 w-full">
+                        <div className="h-64 w-full pointer-events-none">
                             <MuscleRadarChart data={muscleRadarData} />
                         </div>
-                        <p className="text-[10px] text-slate-500 text-center mt-2">
-                            Effective Sets (Primary = 1.0, High Sec. = 0.5, Low Sec. = 0.25)
+                        <p className="text-[10px] text-slate-500 text-center mt-2 group-hover:text-blue-400 transition-colors">
+                            Tap to view detailed volume stats & effective reps
                         </p>
                     </div>
 
@@ -565,14 +581,14 @@ export const HistoryView = () => {
                                                         <span>
                                                             Work: {Math.round(exLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / exLogs.length)}s
                                                         </span>
-                                                        {/* Avg RPE */}
+                                                        {/* Avg RIR */}
                                                         {(() => {
-                                                            const validRpeLogs = exLogs.filter(l => l.rpe !== undefined && l.rpe !== null);
-                                                            if (validRpeLogs.length === 0) return null;
-                                                            const avgRpe = (validRpeLogs.reduce((acc, l) => acc + (l.rpe || 0), 0) / validRpeLogs.length).toFixed(1);
+                                                            const validRirLogs = exLogs.filter(l => l.rir !== undefined && l.rir !== null);
+                                                            if (validRirLogs.length === 0) return null;
+                                                            const avgRir = (validRirLogs.reduce((acc, l) => acc + (l.rir || 0), 0) / validRirLogs.length).toFixed(1);
                                                             return (
                                                                 <span className="text-yellow-500/80">
-                                                                    RPE: {avgRpe}
+                                                                    RIR: {avgRir}
                                                                 </span>
                                                             );
                                                         })()}

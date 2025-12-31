@@ -111,8 +111,9 @@ export class WorkoutStorageService {
                 throw new Error(`Invalid exercise at index ${index}: missing or invalid "restTimeSeconds".`);
             }
 
-            if (typeof ex.targetRpe !== 'number') {
-                throw new Error(`Invalid exercise at index ${index}: "targetRpe" must be a number.`);
+            const targetRir = typeof ex.targetRir === 'number' ? ex.targetRir : (typeof ex.targetRpe === 'number' ? (10 - ex.targetRpe) : undefined);
+            if (typeof targetRir !== 'number') {
+                throw new Error(`Invalid exercise at index ${index}: missing or invalid "targetRir".`);
             }
             if (typeof ex.notes !== 'string') {
                 throw new Error(`Invalid exercise at index ${index}: "notes" must be a string.`);
@@ -124,7 +125,7 @@ export class WorkoutStorageService {
                 minimumRepetitions: ex.minimumRepetitions,
                 maximumRepetitions: ex.maximumRepetitions,
                 restTimeSeconds: restTime,
-                targetRpe: ex.targetRpe,
+                targetRir,
                 notes: ex.notes,
                 lastSessionWeight: typeof ex.lastSessionWeight === 'number' ? ex.lastSessionWeight : undefined
             };

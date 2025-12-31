@@ -14,7 +14,7 @@
                 "minimumRepetitions": 5,
                 "maximumRepetitions": 8,
                 "restTimeSeconds": 180,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Full extension at the bottom. Chin over the bar. Add weight if bodyweight is too easy."
             },
             {
@@ -23,7 +23,7 @@
                 "minimumRepetitions": 5,
                 "maximumRepetitions": 8,
                 "restTimeSeconds": 150,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Keep glutes squeezed to protect lower back. Do not use leg drive."
             },
             {
@@ -32,7 +32,7 @@
                 "minimumRepetitions": 8,
                 "maximumRepetitions": 12,
                 "restTimeSeconds": 120,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Lean forward slightly to emphasize chest engagement."
             },
             {
@@ -41,7 +41,7 @@
                 "minimumRepetitions": 15,
                 "maximumRepetitions": 20,
                 "restTimeSeconds": 60,
-                "targetRpe": 7,
+                "targetRir": 3,
                 "notes": "Health exercise. Pull towards forehead, focus on external rotation of the shoulders."
             }
         ],
@@ -49,6 +49,110 @@
             "Upper Body",
             "Strength",
             "Health"
+        ]
+    },
+    {
+        "version": "1.1.0",
+        "id": "push-chest-triceps-v1",
+        "name": "Chest & Triceps (Push Focus)",
+        "category": "Hypertrophy & Strength",
+        "difficulty": "Intermediate",
+        "estimatedDurationMinutes": 70,
+        "description": "Focused session for chest development and triceps strength, incorporating calisthenics and postural health.",
+        "exercises": [
+            {
+                "exerciseId": "flat-barbell-bench-press",
+                "name": "Barbell Bench Press",
+                "primaryMuscles": [
+                    "Chest"
+                ],
+                "secondaryMuscles": [
+                    "Triceps",
+                    "Front Delts"
+                ],
+                "equipment": "Barbell, Flat Bench",
+                "targetSets": 4,
+                "minimumRepetitions": 6,
+                "maximumRepetitions": 8,
+                "restTimeSeconds": 180,
+                "targetRpe": 8,
+                "notes": "Core strength movement. Keep your shoulder blades retracted and feet flat on the floor for stability."
+            },
+            {
+                "exerciseId": "weighted-dips",
+                "name": "Weighted Dips",
+                "primaryMuscles": [
+                    "Chest",
+                    "Triceps"
+                ],
+                "secondaryMuscles": [
+                    "Front Delts"
+                ],
+                "equipment": "Parallel Bars, Weight Belt",
+                "targetSets": 3,
+                "minimumRepetitions": 8,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 120,
+                "targetRpe": 8,
+                "notes": "Hybrid calisthenics movement. Lean forward to maximize chest recruitment. Control the descent."
+            },
+            {
+                "exerciseId": "incline-db-press",
+                "name": "Incline Dumbbell Press",
+                "primaryMuscles": [
+                    "Upper Chest"
+                ],
+                "secondaryMuscles": [
+                    "Front Delts",
+                    "Triceps"
+                ],
+                "equipment": "Dumbbells, Incline Bench",
+                "targetSets": 3,
+                "minimumRepetitions": 10,
+                "maximumRepetitions": 12,
+                "restTimeSeconds": 90,
+                "targetRpe": 8,
+                "notes": "30-degree incline. Focus on the stretch at the bottom and a powerful squeeze at the top."
+            },
+            {
+                "exerciseId": "overhead-cable-extension",
+                "name": "Overhead Cable Triceps Extension",
+                "primaryMuscles": [
+                    "Triceps"
+                ],
+                "secondaryMuscles": [],
+                "equipment": "Cable Machine, Rope",
+                "targetSets": 3,
+                "minimumRepetitions": 12,
+                "maximumRepetitions": 15,
+                "restTimeSeconds": 60,
+                "targetRpe": 9,
+                "notes": "Targets the long head of the triceps. Maintain a neutral spine and do not flare your elbows excessively."
+            },
+            {
+                "exerciseId": "scapular-push-up",
+                "name": "Scapular Push-Up",
+                "primaryMuscles": [
+                    "Serratus Anterior"
+                ],
+                "secondaryMuscles": [
+                    "Chest"
+                ],
+                "equipment": "Bodyweight",
+                "targetSets": 2,
+                "minimumRepetitions": 15,
+                "maximumRepetitions": 20,
+                "restTimeSeconds": 45,
+                "targetRpe": 6,
+                "notes": "Health/Postural exercise. Keep arms straight; move only your shoulder blades to improve shoulder health."
+            }
+        ],
+        "tags": [
+            "Push",
+            "Upper Body",
+            "Chest",
+            "Triceps",
+            "Calisthenics"
         ]
     },
     {
@@ -66,7 +170,7 @@
                 "minimumRepetitions": 6,
                 "maximumRepetitions": 10,
                 "restTimeSeconds": 180,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Focus on depth. Keep heels firmly on the ground."
             },
             {
@@ -75,7 +179,7 @@
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 12,
                 "restTimeSeconds": 90,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Hinge at the hips. Feel the stretch in the hamstrings. Maintain neutral spine."
             },
             {
@@ -84,7 +188,7 @@
                 "minimumRepetitions": 12,
                 "maximumRepetitions": 16,
                 "restTimeSeconds": 45,
-                "targetRpe": 6,
+                "targetRir": 4,
                 "notes": "Health/Anti-extension exercise. Keep lower back pressed against the floor at all times."
             },
             {
@@ -93,7 +197,7 @@
                 "minimumRepetitions": 20,
                 "maximumRepetitions": 30,
                 "restTimeSeconds": 0,
-                "targetRpe": 5,
+                "targetRir": 5,
                 "notes": "Target heart rate: 120-130 bpm. Improve 'fondo físico' without heavy fatigue."
             }
         ],
@@ -118,7 +222,7 @@
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 12,
                 "restTimeSeconds": 90,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "30-degree incline. Slow eccentric phase."
             },
             {
@@ -127,7 +231,7 @@
                 "minimumRepetitions": 12,
                 "maximumRepetitions": 15,
                 "restTimeSeconds": 90,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Prevents lower back fatigue. Focus on squeezing scapulae."
             },
             {
@@ -136,7 +240,7 @@
                 "minimumRepetitions": 15,
                 "maximumRepetitions": 20,
                 "restTimeSeconds": 60,
-                "targetRpe": 9,
+                "targetRir": 1,
                 "notes": "Strict form. Do not swing the weights."
             },
             {
@@ -145,7 +249,7 @@
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 20,
                 "restTimeSeconds": 60,
-                "targetRpe": 9,
+                "targetRir": 1,
                 "notes": "Calisthenics volume. Keep elbows tucked."
             }
         ],
