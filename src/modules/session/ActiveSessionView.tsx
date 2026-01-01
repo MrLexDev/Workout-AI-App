@@ -12,6 +12,7 @@ import { WheelPicker } from '../../components/inputs/WheelPicker';
 import { RotateCcw, ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History, AlertTriangle } from 'lucide-react';
 import { Toggle } from '../../components/inputs/Toggle';
 import { useNativeBack } from '../../hooks/useNativeBack';
+import { useWeight } from '../../hooks/useWeight';
 
 export const ActiveSessionView: React.FC = () => {
     const {
@@ -43,7 +44,10 @@ export const ActiveSessionView: React.FC = () => {
     const [logRir, setLogRir] = useState(2); // Default RIR 2
     const [isSetLogged, setIsSetLogged] = useState(false);
 
+
+
     const { autoSavePreference, setAutoSavePreference } = useUserStore();
+    const { displayWeight, toKg, unitLabel } = useWeight();
 
     // Track previous session state to handle transitions only
     const prevSessionState = useRef<string | null>(null);
@@ -113,7 +117,7 @@ export const ActiveSessionView: React.FC = () => {
             sessionLogIds.current.push(newLogId);
             addLog(
                 currentExercise.exerciseId,
-                logWeight,
+                toKg(logWeight), // Convert display weight (lb/kg) to store weight (kg)
                 logReps,
                 newLogId,
                 lastSetDurationRef.current, // Pass captured duration
@@ -214,7 +218,7 @@ export const ActiveSessionView: React.FC = () => {
                 const logs = getLogsByExercise(currentExercise.exerciseId);
                 const lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
 
-                setLogWeight(lastLog ? lastLog.weight : 0);
+                setLogWeight(lastLog ? displayWeight(lastLog.weight) : 0); // Pre-fill converted weight
                 setLogReps(currentExercise.maximumRepetitions); // Default to max reps target
                 setLogRir(lastLog && lastLog.rir !== undefined ? lastLog.rir : 2); // Pre-fill RIR or default to 2
                 setIsSetLogged(false);
@@ -451,12 +455,12 @@ export const ActiveSessionView: React.FC = () => {
                                 {!isSetLogged && (
                                     <div className="flex justify-center gap-2 sm:gap-4 mb-4">
                                         <WheelPicker
-                                            label="KG"
+                                            label={unitLabel.toUpperCase()}
                                             value={logWeight}
                                             onChange={setLogWeight}
                                             min={0}
-                                            max={300}
-                                            step={2.5}
+                                            max={displayWeight(300)} // Approximate max
+                                            step={unitLabel === 'kg' ? 2.5 : 5}
                                             height={140}
                                             width="80px"
                                         />
@@ -489,7 +493,7 @@ export const ActiveSessionView: React.FC = () => {
                                     <div className="flex items-center justify-center gap-8 py-4">
                                         <div className="flex flex-col items-center">
                                             <span className="text-2xl font-black text-white">{logWeight}</span>
-                                            <span className="text-[10px] text-slate-500 uppercase font-bold">KG</span>
+                                            <span className="text-[10px] text-slate-500 uppercase font-bold">{unitLabel.toUpperCase()}</span>
                                         </div>
                                         <div className="flex flex-col items-center">
                                             <span className="text-2xl font-black text-white">{logRir}</span>

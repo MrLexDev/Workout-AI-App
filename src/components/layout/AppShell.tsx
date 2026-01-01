@@ -1,12 +1,12 @@
 import React, { type ReactNode } from 'react';
 
-import { LayoutDashboard, Dumbbell, History } from 'lucide-react';
+import { LayoutDashboard, Dumbbell, History, Settings, Sparkles } from 'lucide-react';
 
 interface AppShellProps {
     children: ReactNode;
     title?: string;
-    activeTab?: 'dashboard' | 'workout' | 'history';
-    onTabChange?: (tab: 'dashboard' | 'workout' | 'history') => void;
+    activeTab?: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter';
+    onTabChange?: (tab: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter') => void;
 }
 
 /**
@@ -54,6 +54,20 @@ export const AppShell: React.FC<AppShellProps> = ({ children, title, activeTab =
                     >
                         <History size={20} />
                         <span className="text-[10px] font-medium">History</span>
+                    </button>
+                    <button
+                        onClick={() => onTabChange?.('ai_prompter')}
+                        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'ai_prompter' ? 'text-blue-500' : 'text-slate-400 hover:text-slate-300'}`}
+                    >
+                        <Sparkles size={20} />
+                        <span className="text-[10px] font-medium">AI Coach</span>
+                    </button>
+                    <button
+                        onClick={() => onTabChange?.('settings')}
+                        className={`flex flex-col items-center gap-1 transition-colors ${activeTab === 'settings' ? 'text-blue-500' : 'text-slate-400 hover:text-slate-300'}`}
+                    >
+                        <Settings size={20} />
+                        <span className="text-[10px] font-medium">Settings</span>
                     </button>
                 </nav>
             </main>

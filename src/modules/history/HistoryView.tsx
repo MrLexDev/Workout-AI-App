@@ -36,6 +36,7 @@ import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
 import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
 import { VolumeStatsView } from './VolumeStatsView';
 import { useNativeBack } from '../../hooks/useNativeBack';
+import { useWeight } from '../../hooks/useWeight';
 
 import 'chartjs-adapter-date-fns';
 
@@ -59,10 +60,17 @@ export const HistoryView = () => {
     const { sessions, deleteSession } = useWorkoutHistoryStore();
 
     // ----- BODY STATS STATE -----
-    const { height, setHeight, weightHistory, addWeightEntry, deleteWeightEntry } = useUserStore();
-    const [heightInput, setHeightInput] = useState('');
+    const { height, setHeight, weightHistory, addWeightEntry, deleteWeightEntry, gender, birthDate, availableEquipment, setGender, setBirthDate, setAvailableEquipment } = useUserStore();
+    const { displayWeight, toKg, unitLabel } = useWeight();
     const [weightInput, setWeightInput] = useState('');
     const [dateInput, setDateInput] = useState(new Date().toISOString().split('T')[0]);
+
+    // ----- PROFILE EDIT STATE -----
+    const [editHeight, setEditHeight] = useState('');
+    const [editGender, setEditGender] = useState<'male' | 'female' | 'other' | null>(null);
+    const [editBirthDate, setEditBirthDate] = useState('');
+    const [editEquipment, setEditEquipment] = useState<string[]>([]);
+    const [isEquipmentCustomOpen, setIsEquipmentCustomOpen] = useState(false);
 
     // ----- EXERCISE STATS STATE -----
     const { getLogsByExercise } = usePerformanceStore();
@@ -96,6 +104,25 @@ export const HistoryView = () => {
         return getLogsByExercise(selectedExerciseId);
     }, [selectedExerciseId, getLogsByExercise]);
 
+    // Derive Unique Equipment List
+    const allEquipment = useMemo(() => {
+        const equipment = new Set<string>();
+        allExercises.forEach(ex => {
+            ex.equipment.split(',').forEach(eq => equipment.add(eq.trim()));
+        });
+        return Array.from(equipment).sort();
+    }, [allExercises]);
+
+    // Define Equipment Presets
+    const equipmentPresets = useMemo(() => {
+        const homeKit = ['Dumbbells', 'Bodyweight', 'Mat', 'None', 'Bench', 'Pull-up Bar'];
+        const noEqKit = ['Bodyweight'];
+        return {
+            homeGym: allEquipment.filter(eq => homeKit.includes(eq)),
+            noEquipment: allEquipment.filter(eq => noEqKit.includes(eq))
+        };
+    }, [allEquipment]);
+
     // ----- RADAR CHART DATA -----
     const muscleRadarData = useMemo(() => {
         const scores = calculateMuscleVolume(sessions, allExercises, radarRange);
@@ -108,6 +135,18 @@ export const HistoryView = () => {
         ? (currentWeight / ((height / 100) * (height / 100))).toFixed(1)
         : null;
 
+    const age = useMemo(() => {
+        if (!birthDate) return null;
+        const birth = new Date(birthDate);
+        const today = new Date();
+        let a = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+            a--;
+        }
+        return a;
+    }, [birthDate]);
+
     // ----- CHART DATA (BODY) -----
     // ----- CHART DATA (BODY) -----
     const bodyChartData = useMemo(() => {
@@ -118,8 +157,8 @@ export const HistoryView = () => {
         return {
             datasets: [
                 {
-                    label: 'Weight (kg)',
-                    data: sortedHistory.map(entry => ({ x: entry.date, y: entry.weight })),
+                    label: `Weight (${unitLabel})`,
+                    data: sortedHistory.map(entry => ({ x: entry.date, y: displayWeight(entry.weight) })),
                     borderColor: 'rgb(59, 130, 246)',
                     backgroundColor: 'rgba(59, 130, 246, 0.5)',
                     tension: 0.3,
@@ -136,14 +175,14 @@ export const HistoryView = () => {
             datasets: [
                 {
                     label: '1 Rep Max (Estimated)',
-                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: log.oneRepMax })),
+                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: displayWeight(log.oneRepMax) })),
                     borderColor: 'rgb(168, 85, 247)', // Purple-500
                     backgroundColor: 'rgba(168, 85, 247, 0.5)',
                     tension: 0.3,
                 },
                 {
                     label: 'Lifted Weight',
-                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: log.weight })),
+                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: displayWeight(log.weight) })),
                     borderColor: 'rgb(94, 234, 212)', // Teal-300
                     backgroundColor: 'rgba(94, 234, 212, 0.5)',
                     borderDash: [5, 5],
@@ -182,31 +221,45 @@ export const HistoryView = () => {
         }
     };
 
-    const handleSaveHeight = () => {
-        const h = parseFloat(heightInput);
+    const handleSaveProfile = () => {
+        const h = parseFloat(editHeight);
         if (!isNaN(h) && h > 0) {
             setHeight(h);
         }
+        setGender(editGender);
+        setBirthDate(editBirthDate || null);
+        setAvailableEquipment(editEquipment);
+        setView('overview');
     };
 
     const handleAddWeight = () => {
         const w = parseFloat(weightInput);
         if (!isNaN(w) && w > 0 && dateInput) {
-            addWeightEntry(w, dateInput);
+            addWeightEntry(toKg(w), dateInput);
             setWeightInput('');
         }
     };
 
     // ----- VIEW STATE -----
-    const [view, setView] = useState<'overview' | 'volume' | 'weightHistory'>('overview');
+    const [view, setView] = useState<'overview' | 'volume' | 'weightHistory' | 'profile'>('overview');
 
     useNativeBack(() => {
-        if (view === 'volume' || view === 'weightHistory') {
+        if (view !== 'overview') {
             setView('overview');
             return true;
         }
         return false;
     }, [view]);
+
+    // Initialize profile edit state when opening profile view
+    useEffect(() => {
+        if (view === 'profile') {
+            setEditHeight(height ? height.toString() : '');
+            setEditGender(gender);
+            setEditBirthDate(birthDate || '');
+            setEditEquipment(availableEquipment || []);
+        }
+    }, [view, height, gender, birthDate, availableEquipment]);
 
     // ... (existing helper functions) ...
 
@@ -227,14 +280,167 @@ export const HistoryView = () => {
                         type="number"
                         placeholder="Height (cm)"
                         className="flex-1 bg-slate-800 border-slate-700 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500"
-                        value={heightInput}
-                        onChange={(e) => setHeightInput(e.target.value)}
+                        value={editHeight}
+                        onChange={(e) => setEditHeight(e.target.value)}
                     />
                     <button
-                        onClick={handleSaveHeight}
+                        onClick={() => {
+                            const h = parseFloat(editHeight);
+                            if (!isNaN(h) && h > 0) {
+                                setHeight(h);
+                            }
+                        }}
                         className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
                     >
                         Save
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    if (view === 'profile') {
+        return (
+            <div className="flex flex-col h-full bg-slate-950 animate-in slide-in-from-right duration-300">
+                <div className="flex items-center gap-4 p-4 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
+                    <button
+                        onClick={() => setView('overview')}
+                        className="p-2 -ml-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors"
+                    >
+                        <ChevronLeft size={24} />
+                    </button>
+                    <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                        <User className="w-5 h-5 text-blue-500" />
+                        Personal Details
+                    </h2>
+                </div>
+
+                <div className="p-4 space-y-6">
+                    {/* Height */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-400">Height (cm)</label>
+                        <input
+                            type="number"
+                            placeholder="175"
+                            className="w-full bg-slate-800 border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                            value={editHeight}
+                            onChange={(e) => setEditHeight(e.target.value)}
+                        />
+                    </div>
+
+                    {/* Gender */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-400">Gender</label>
+                        <div className="grid grid-cols-3 gap-2">
+                            {(['male', 'female', 'other'] as const).map((g) => (
+                                <button
+                                    key={g}
+                                    onClick={() => setEditGender(g)}
+                                    className={`py-3 rounded-xl border font-medium capitalize transition-all ${editGender === g
+                                        ? 'bg-blue-600 border-blue-600 text-white'
+                                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
+                                        }`}
+                                >
+                                    {g}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Equipment Selection */}
+                    <div className="space-y-3">
+                        <label className="text-sm font-medium text-slate-400">Available Equipment</label>
+
+                        {/* Presets */}
+                        <div className="grid grid-cols-3 gap-2">
+                            <button
+                                onClick={() => setEditEquipment(allEquipment)}
+                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === allEquipment.length && allEquipment.length > 0
+                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                                    }`}
+                            >
+                                Full Gym
+                            </button>
+                            <button
+                                onClick={() => setEditEquipment(equipmentPresets.homeGym)}
+                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === equipmentPresets.homeGym.length &&
+                                    equipmentPresets.homeGym.every(eq => editEquipment.includes(eq))
+                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                                    }`}
+                            >
+                                Home Gym
+                            </button>
+                            <button
+                                onClick={() => setEditEquipment(equipmentPresets.noEquipment)}
+                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === equipmentPresets.noEquipment.length &&
+                                    equipmentPresets.noEquipment.every(eq => editEquipment.includes(eq))
+                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                                    }`}
+                            >
+                                No Eq.
+                            </button>
+                        </div>
+
+                        {/* Custom Disclosure Toggle */}
+                        <button
+                            onClick={() => setIsEquipmentCustomOpen(!isEquipmentCustomOpen)}
+                            className="flex items-center justify-between w-full p-2 mt-1 rounded-lg bg-slate-900/50 border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                        >
+                            <span className="text-xs font-semibold uppercase tracking-wider">Custom Selection</span>
+                            <ChevronLeft className={`w-4 h-4 transition-transform ${isEquipmentCustomOpen ? 'rotate-90' : 'rotate-180'}`} />
+                        </button>
+
+                        {/* Custom Grid */}
+                        {isEquipmentCustomOpen && (
+                            <div className="grid grid-cols-2 gap-2 p-1 animate-in fade-in duration-200">
+                                {allEquipment.map(eq => {
+                                    const isSelected = editEquipment.includes(eq);
+                                    return (
+                                        <button
+                                            key={eq}
+                                            onClick={() => {
+                                                if (isSelected) {
+                                                    setEditEquipment(prev => prev.filter(e => e !== eq));
+                                                } else {
+                                                    setEditEquipment(prev => [...prev, eq]);
+                                                }
+                                            }}
+                                            className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border ${isSelected
+                                                ? 'bg-blue-600/20 border-blue-500 text-blue-200'
+                                                : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'
+                                                }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="truncate">{eq}</span>
+                                                {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+
+
+                    {/* Birth Date */}
+                    <div className="space-y-2">
+                        <label className="text-sm font-medium text-slate-400">Date of Birth</label>
+                        <input
+                            type="date"
+                            className="w-full bg-slate-800 border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                            value={editBirthDate}
+                            onChange={(e) => setEditBirthDate(e.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        onClick={handleSaveProfile}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/20 transition-all mt-8"
+                    >
+                        Save Details
                     </button>
                 </div>
             </div>
@@ -269,7 +475,7 @@ export const HistoryView = () => {
                                     <Weight className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="font-bold text-white text-lg">{entry.weight} kg</p>
+                                    <p className="font-bold text-white text-lg">{displayWeight(entry.weight)} {unitLabel}</p>
                                     <p className="text-xs text-slate-500 flex items-center gap-1">
                                         <Calendar className="w-3 h-3" />
                                         {new Date(entry.date).toLocaleDateString(undefined, {
@@ -347,8 +553,8 @@ export const HistoryView = () => {
                         <div className="bg-slate-800 p-4 rounded-xl space-y-1">
                             <span className="text-xs text-slate-400 font-medium uppercase">Current</span>
                             <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white">{currentWeight || '--'}</span>
-                                <span className="text-xs text-slate-500">kg</span>
+                                <span className="text-2xl font-bold text-white">{currentWeight ? displayWeight(currentWeight) : '--'}</span>
+                                <span className="text-xs text-slate-500">{unitLabel}</span>
                             </div>
                         </div>
                         <div className="bg-slate-800 p-4 rounded-xl space-y-1">
@@ -363,11 +569,27 @@ export const HistoryView = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="bg-slate-800 p-4 rounded-xl space-y-1">
-                            <span className="text-xs text-slate-400 font-medium uppercase">Height</span>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-2xl font-bold text-white">{height}</span>
-                                <span className="text-xs text-slate-500">cm</span>
+                        <div
+                            onClick={() => setView('profile')}
+                            className="bg-slate-800 p-4 rounded-xl space-y-1 cursor-pointer hover:bg-slate-700 transition-colors ring-1 ring-inset ring-transparent hover:ring-slate-600"
+                        >
+                            <span className="text-xs text-slate-400 font-medium uppercase flex items-center gap-1">
+                                Bio <ChevronLeft className="w-3 h-3 rotate-180 ml-auto" />
+                            </span>
+                            <div className="flex flex-col">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-2xl font-bold text-white">{height}</span>
+                                    <span className="text-xs text-slate-500">cm</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-[10px] font-medium text-slate-500 uppercase tracking-wide">
+                                    <span>{gender || '---'}</span>
+                                    {age !== null && (
+                                        <>
+                                            <span className="text-slate-700">•</span>
+                                            <span>{age}Y</span>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -381,7 +603,7 @@ export const HistoryView = () => {
                         <div className="flex gap-2">
                             <div className="relative flex-1">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-slate-500 text-sm">kg</span>
+                                    <span className="text-slate-500 text-sm">{unitLabel}</span>
                                 </div>
                                 <input
                                     type="number"
@@ -467,236 +689,256 @@ export const HistoryView = () => {
                         </button>
                     </div>
 
+                    <button
+                        onClick={() => setView('profile')}
+                        className="w-full bg-slate-800 p-4 rounded-xl flex items-center justify-between group hover:bg-slate-700 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="bg-slate-900 p-2 rounded-lg text-blue-500 group-hover:text-blue-400 transition-colors">
+                                <User className="w-5 h-5" />
+                            </div>
+                            <div className="text-left">
+                                <h3 className="font-semibold text-white">Personal Details</h3>
+                                <p className="text-sm text-slate-500">Edit gender, height & birth date</p>
+                            </div>
+                        </div>
+                        <ChevronLeft className="text-slate-500 rotate-180 group-hover:text-white transition-colors" />
+                    </button>
+
 
                 </div>
             )}
 
-            {historyTab === 'exercises' && (
-                // EXERCISE STATS VIEW
-                <div className="space-y-6 px-4">
-                    {/* Exercise Selector */}
-                    <div className="bg-slate-800 p-4 rounded-xl space-y-3">
-                        <div className="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider">
-                            <Dumbbell className="w-4 h-4 text-purple-500" />
-                            Select Exercise
-                        </div>
-                        <div className="relative">
-                            <select
-                                className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 appearance-none focus:ring-2 focus:ring-purple-500 outline-none"
-                                value={selectedExerciseId}
-                                onChange={(e) => setSelectedExerciseId(e.target.value)}
-                            >
-                                {allExercises.map(ex => (
-                                    <option key={ex.id} value={ex.id}>{ex.name}</option>
-                                ))}
-                            </select>
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" size={20} />
-                        </div>
-                    </div>
-
-                    {/* Chart */}
-                    <div className="bg-slate-800 p-4 rounded-xl">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex flex-col">
-                                <h3 className="font-semibold text-slate-200">performance</h3>
-                                <p className="text-xs text-slate-500">1 Rep Max (Estimated) vs Lifted Weight</p>
+            {
+                historyTab === 'exercises' && (
+                    // EXERCISE STATS VIEW
+                    <div className="space-y-6 px-4">
+                        {/* Exercise Selector */}
+                        <div className="bg-slate-800 p-4 rounded-xl space-y-3">
+                            <div className="flex items-center gap-2 text-slate-400 text-sm font-medium uppercase tracking-wider">
+                                <Dumbbell className="w-4 h-4 text-purple-500" />
+                                Select Exercise
                             </div>
-                        </div>
-                        <div className="h-64 w-full">
-                            {exerciseLogs.length > 1 ? (
-                                <Line options={chartOptions} data={exerciseChartData} />
-                            ) : (
-                                <div className="h-full flex items-center justify-center text-slate-500 text-sm text-center px-8">
-                                    Complete at least 2 sessions of this exercise to see your progress chart.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Stats Summary */}
-                    {exerciseLogs.length > 0 && (
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-slate-800 p-4 rounded-xl space-y-1 border border-slate-700">
-                                <span className="text-xs text-slate-400 font-medium uppercase">Max 1RM</span>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-2xl font-bold text-purple-400">
-                                        {Math.max(...exerciseLogs.map(l => l.oneRepMax)).toFixed(1)}
-                                    </span>
-                                    <span className="text-xs text-slate-500">kg</span>
-                                </div>
-                            </div>
-                            <div className="bg-slate-800 p-4 rounded-xl space-y-1 border border-slate-700">
-                                <span className="text-xs text-slate-400 font-medium uppercase">Heaviest Lift</span>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-2xl font-bold text-teal-400">
-                                        {Math.max(...exerciseLogs.map(l => l.weight))}
-                                    </span>
-                                    <span className="text-xs text-slate-500">kg</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Log List */}
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-white px-1">Recent Logs</h3>
-                        <div className="space-y-2">
-                            {[...exerciseLogs].reverse().map((log) => (
-                                <div key={log.id} className="bg-slate-800 p-3 rounded-lg flex justify-between items-center border border-slate-700/50">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-slate-900 p-2 rounded text-slate-500">
-                                            <Calendar className="w-4 h-4" />
-                                        </div>
-                                        <div>
-                                            <div className="flex items-baseline gap-2">
-                                                <span className="font-bold text-white text-lg">{log.weight}kg</span>
-                                                <span className="text-slate-500 text-sm">x {log.reps}</span>
-                                            </div>
-                                            <p className="text-xs text-slate-500">
-                                                {new Date(log.timestamp).toLocaleString()}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">1RM Est.</div>
-                                        <div className="text-purple-400 font-bold">{log.oneRepMax.toFixed(1)} kg</div>
-                                    </div>
-                                </div>
-                            ))}
-                            {exerciseLogs.length === 0 && (
-                                <div className="text-center text-slate-500 py-8 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
-                                    No logs found for this exercise.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {historyTab === 'workouts' && (
-                // WORKOUTS VIEW
-                <div className="space-y-4 px-4">
-                    {[...sessions].reverse().map(session => (
-                        <div key={session.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700/50 space-y-3">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <h3 className="text-white font-bold">{session.routineSnapshot.name || "Untitled Routine"}</h3>
-                                    <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
-                                        <Calendar size={12} />
-                                        <span>{new Date(session.startTime).toLocaleDateString()}</span>
-                                        <span className="text-slate-700">•</span>
-                                        <Clock size={12} />
-                                        <span>{Math.floor(session.durationSeconds / 60)}m {session.durationSeconds % 60}s</span>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => deleteSession(session.id)}
-                                    className="text-slate-500 hover:text-red-400 p-2 -mr-2"
+                            <div className="relative">
+                                <select
+                                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 appearance-none focus:ring-2 focus:ring-purple-500 outline-none"
+                                    value={selectedExerciseId}
+                                    onChange={(e) => setSelectedExerciseId(e.target.value)}
                                 >
-                                    <Trash2 size={16} />
-                                </button>
+                                    {allExercises.map(ex => (
+                                        <option key={ex.id} value={ex.id}>{ex.name}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" size={20} />
                             </div>
+                        </div>
 
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
-                                    <span className="text-slate-500 block mb-1">Total Volume</span>
-                                    <span className="text-white font-mono font-bold">
-                                        {session.logs.reduce((acc, log) => acc + (log.weight * log.reps), 0).toLocaleString()} kg
-                                    </span>
-                                </div>
-                                <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
-                                    <span className="text-slate-500 block mb-1">Rest Efficiency</span>
-                                    <span className="text-white font-mono font-bold">
-                                        {(() => {
-                                            const totalActual = session.restData.reduce((acc, r) => acc + r.actualSeconds, 0);
-                                            const totalTarget = session.restData.reduce((acc, r) => acc + r.targetSeconds, 0);
-                                            // Handle division by zero
-                                            if (totalTarget === 0) return 'N/A';
-                                            const diff = totalActual - totalTarget;
-                                            const color = diff > 30 ? 'text-red-400' : diff < -30 ? 'text-yellow-400' : 'text-green-400';
-                                            const sign = diff > 0 ? '+' : '';
-                                            return <span className={color}>{sign}{Math.round(diff)}s vs {Math.round(totalTarget)}s</span>;
-                                        })()}
-                                    </span>
+                        {/* Chart */}
+                        <div className="bg-slate-800 p-4 rounded-xl">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex flex-col">
+                                    <h3 className="font-semibold text-slate-200">performance</h3>
+                                    <p className="text-xs text-slate-500">1 Rep Max (Estimated) vs Lifted Weight</p>
                                 </div>
                             </div>
+                            <div className="h-64 w-full">
+                                {exerciseLogs.length > 1 ? (
+                                    <Line options={chartOptions} data={exerciseChartData} />
+                                ) : (
+                                    <div className="h-full flex items-center justify-center text-slate-500 text-sm text-center px-8">
+                                        Complete at least 2 sessions of this exercise to see your progress chart.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
-                            <div className="space-y-1 pt-2 border-t border-slate-700/50">
-                                <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-2">Exercises</div>
-                                {session.routineSnapshot.exercises.map((ex, i) => {
-                                    // Calculate best set for summary
-                                    const exLogs = session.logs.filter(l => l.exerciseId === ex.exerciseId);
-                                    const bestSet = exLogs.reduce((best, curr) => curr.weight > best.weight ? curr : best, { weight: 0, reps: 0 });
+                        {/* Stats Summary */}
+                        {exerciseLogs.length > 0 && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-slate-800 p-4 rounded-xl space-y-1 border border-slate-700">
+                                    <span className="text-xs text-slate-400 font-medium uppercase">Max 1RM</span>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-2xl font-bold text-purple-400">
+                                            {Math.max(...exerciseLogs.map(l => displayWeight(l.oneRepMax))).toFixed(1)}
+                                        </span>
+                                        <span className="text-xs text-slate-500">{unitLabel}</span>
+                                    </div>
+                                </div>
+                                <div className="bg-slate-800 p-4 rounded-xl space-y-1 border border-slate-700">
+                                    <span className="text-xs text-slate-400 font-medium uppercase">Heaviest Lift</span>
+                                    <div className="flex items-baseline gap-1">
+                                        <span className="text-2xl font-bold text-teal-400">
+                                            {Math.max(...exerciseLogs.map(l => displayWeight(l.weight)))}
+                                        </span>
+                                        <span className="text-xs text-slate-500">{unitLabel}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
-                                    return (
-                                        <div key={ex.exerciseId + i} className="flex justify-between items-center text-sm">
-                                            <div className="flex flex-col">
-                                                <span className="text-slate-400">{ex.name}</span>
-                                                {/* Averages */}
-                                                {exLogs.length > 0 && (
-                                                    <div className="flex gap-3 text-[10px] text-slate-500 font-mono mt-0.5">
-                                                        {/* Avg Work */}
-                                                        <span>
-                                                            Work: {Math.round(exLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / exLogs.length)}s
-                                                        </span>
-                                                        {/* Avg RIR */}
-                                                        {(() => {
-                                                            const validRirLogs = exLogs.filter(l => l.rir !== undefined && l.rir !== null);
-                                                            if (validRirLogs.length === 0) return null;
-                                                            const avgRir = (validRirLogs.reduce((acc, l) => acc + (l.rir || 0), 0) / validRirLogs.length).toFixed(1);
-                                                            return (
-                                                                <span className="text-yellow-500/80">
-                                                                    RIR: {avgRir}
-                                                                </span>
-                                                            );
-                                                        })()}
-                                                        {/* Avg Rest */}
-                                                        {(() => {
-                                                            const rests = session.restData.filter(r => r.exerciseId === ex.exerciseId);
-                                                            if (rests.length === 0) return null;
-                                                            const avgRest = rests.reduce((acc, r) => acc + r.actualSeconds, 0) / rests.length;
-                                                            const avgTarget = rests.reduce((acc, r) => acc + r.targetSeconds, 0) / rests.length;
+                        {/* Log List */}
+                        <div className="space-y-2">
+                            <h3 className="font-semibold text-white px-1">Recent Logs</h3>
+                            <div className="space-y-2">
+                                {[...exerciseLogs].reverse().map((log) => (
+                                    <div key={log.id} className="bg-slate-800 p-3 rounded-lg flex justify-between items-center border border-slate-700/50">
+                                        <div className="flex items-center gap-3">
+                                            <div className="bg-slate-900 p-2 rounded text-slate-500">
+                                                <Calendar className="w-4 h-4" />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-baseline gap-2">
+                                                    <span className="font-bold text-white text-lg">{displayWeight(log.weight)}{unitLabel}</span>
+                                                    <span className="text-slate-500 text-sm">x {log.reps}</span>
+                                                </div>
+                                                <p className="text-xs text-slate-500">
+                                                    {new Date(log.timestamp).toLocaleString()}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">1RM Est.</div>
+                                            <div className="text-purple-400 font-bold">{displayWeight(log.oneRepMax).toFixed(1)} {unitLabel}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {exerciseLogs.length === 0 && (
+                                    <div className="text-center text-slate-500 py-8 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">
+                                        No logs found for this exercise.
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
-                                                            // Green if under target (good), Red if over (bad)
-                                                            const isGood = avgRest <= avgTarget;
-                                                            const color = isGood ? 'text-green-500' : 'text-red-400';
+            {
+                historyTab === 'workouts' && (
+                    // WORKOUTS VIEW
+                    <div className="space-y-4 px-4">
+                        {[...sessions].reverse().map(session => (
+                            <div key={session.id} className="bg-slate-800 p-4 rounded-xl border border-slate-700/50 space-y-3">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <h3 className="text-white font-bold">{session.routineSnapshot.name || "Untitled Routine"}</h3>
+                                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
+                                            <Calendar size={12} />
+                                            <span>{new Date(session.startTime).toLocaleDateString()}</span>
+                                            <span className="text-slate-700">•</span>
+                                            <Clock size={12} />
+                                            <span>{Math.floor(session.durationSeconds / 60)}m {session.durationSeconds % 60}s</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => deleteSession(session.id)}
+                                        className="text-slate-500 hover:text-red-400 p-2 -mr-2"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
 
-                                                            return (
-                                                                <span className={color}>
-                                                                    Rest: {Math.round(avgRest)}s
-                                                                </span>
-                                                            );
-                                                        })()}
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
+                                        <span className="text-slate-500 block mb-1">Total Volume</span>
+                                        <span className="text-white font-mono font-bold">
+                                            {session.logs.reduce((acc, log) => acc + (displayWeight(log.weight) * log.reps), 0).toLocaleString()} {unitLabel}
+                                        </span>
+                                    </div>
+                                    <div className="bg-slate-900/50 p-2 rounded-lg border border-slate-800">
+                                        <span className="text-slate-500 block mb-1">Rest Efficiency</span>
+                                        <span className="text-white font-mono font-bold">
+                                            {(() => {
+                                                const totalActual = session.restData.reduce((acc, r) => acc + r.actualSeconds, 0);
+                                                const totalTarget = session.restData.reduce((acc, r) => acc + r.targetSeconds, 0);
+                                                // Handle division by zero
+                                                if (totalTarget === 0) return 'N/A';
+                                                const diff = totalActual - totalTarget;
+                                                const color = diff > 30 ? 'text-red-400' : diff < -30 ? 'text-yellow-400' : 'text-green-400';
+                                                const sign = diff > 0 ? '+' : '';
+                                                return <span className={color}>{sign}{Math.round(diff)}s vs {Math.round(totalTarget)}s</span>;
+                                            })()}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1 pt-2 border-t border-slate-700/50">
+                                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-2">Exercises</div>
+                                    {session.routineSnapshot.exercises.map((ex, i) => {
+                                        // Calculate best set for summary
+                                        const exLogs = session.logs.filter(l => l.exerciseId === ex.exerciseId);
+                                        const bestSet = exLogs.reduce((best, curr) => curr.weight > best.weight ? curr : best, { weight: 0, reps: 0 });
+
+                                        return (
+                                            <div key={ex.exerciseId + i} className="flex justify-between items-center text-sm">
+                                                <div className="flex flex-col">
+                                                    <span className="text-slate-400">{ex.name}</span>
+                                                    {/* Averages */}
+                                                    {exLogs.length > 0 && (
+                                                        <div className="flex gap-3 text-[10px] text-slate-500 font-mono mt-0.5">
+                                                            {/* Avg Work */}
+                                                            <span>
+                                                                Work: {Math.round(exLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / exLogs.length)}s
+                                                            </span>
+                                                            {/* Avg RIR */}
+                                                            {(() => {
+                                                                const validRirLogs = exLogs.filter(l => l.rir !== undefined && l.rir !== null);
+                                                                if (validRirLogs.length === 0) return null;
+                                                                const avgRir = (validRirLogs.reduce((acc, l) => acc + (l.rir || 0), 0) / validRirLogs.length).toFixed(1);
+                                                                return (
+                                                                    <span className="text-yellow-500/80">
+                                                                        RIR: {avgRir}
+                                                                    </span>
+                                                                );
+                                                            })()}
+                                                            {/* Avg Rest */}
+                                                            {(() => {
+                                                                const rests = session.restData.filter(r => r.exerciseId === ex.exerciseId);
+                                                                if (rests.length === 0) return null;
+                                                                const avgRest = rests.reduce((acc, r) => acc + r.actualSeconds, 0) / rests.length;
+                                                                const avgTarget = rests.reduce((acc, r) => acc + r.targetSeconds, 0) / rests.length;
+
+                                                                // Green if under target (good), Red if over (bad)
+                                                                const isGood = avgRest <= avgTarget;
+                                                                const color = isGood ? 'text-green-500' : 'text-red-400';
+
+                                                                return (
+                                                                    <span className={color}>
+                                                                        Rest: {Math.round(avgRest)}s
+                                                                    </span>
+                                                                );
+                                                            })()}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {exLogs.length > 0 ? (
+                                                    <div className="text-right">
+                                                        <div className="text-slate-200 font-mono text-xs">{exLogs.length} sets</div>
+                                                        <div className="text-slate-500 text-[10px]">Best: {displayWeight(bestSet.weight)}{unitLabel}</div>
                                                     </div>
+                                                ) : (
+                                                    <span className="text-slate-600 text-xs italic">Skipped</span>
                                                 )}
                                             </div>
-
-                                            {exLogs.length > 0 ? (
-                                                <div className="text-right">
-                                                    <div className="text-slate-200 font-mono text-xs">{exLogs.length} sets</div>
-                                                    <div className="text-slate-500 text-[10px]">Best: {bestSet.weight}kg</div>
-                                                </div>
-                                            ) : (
-                                                <span className="text-slate-600 text-xs italic">Skipped</span>
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
 
-                    {sessions.length === 0 && (
-                        <div className="text-center py-12">
-                            <div className="bg-slate-900/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Activity className="text-slate-700" size={32} />
+                        {sessions.length === 0 && (
+                            <div className="text-center py-12">
+                                <div className="bg-slate-900/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Activity className="text-slate-700" size={32} />
+                                </div>
+                                <h3 className="text-slate-400 font-bold mb-2">No Workouts Yet</h3>
+                                <p className="text-sm text-slate-600">Complete a workout to see it here.</p>
                             </div>
-                            <h3 className="text-slate-400 font-bold mb-2">No Workouts Yet</h3>
-                            <p className="text-sm text-slate-600">Complete a workout to see it here.</p>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
+                        )}
+                    </div>
+                )
+            }
+        </div >
     );
 };

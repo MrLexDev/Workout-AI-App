@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { UserData, WeightEntry } from '../types/user';
+import type { UserData, WeightEntry, WeightUnit } from '../types/user';
 import { userStorageService } from '../services/storage/UserStorageService';
 
 interface UserState extends UserData {
@@ -8,6 +8,10 @@ interface UserState extends UserData {
     addWeightEntry: (weight: number, date: string) => void;
     deleteWeightEntry: (id: string) => void;
     setAutoSavePreference: (value: boolean) => void;
+    setWeightUnit: (unit: WeightUnit) => void;
+    setGender: (gender: 'male' | 'female' | 'other' | null) => void;
+    setBirthDate: (date: string | null) => void;
+    setAvailableEquipment: (equipment: string[]) => void;
 }
 
 // Initial load
@@ -17,6 +21,10 @@ export const useUserStore = create<UserState>((set) => ({
     height: initialData.height,
     weightHistory: initialData.weightHistory,
     autoSavePreference: initialData.autoSavePreference,
+    weightUnit: initialData.weightUnit || 'kg',
+    gender: initialData.gender,
+    birthDate: initialData.birthDate,
+    availableEquipment: initialData.availableEquipment,
 
     setHeight: (height: number) => {
         set((state) => {
@@ -26,7 +34,11 @@ export const useUserStore = create<UserState>((set) => ({
             userStorageService.saveUserData({
                 height: newData.height,
                 weightHistory: newData.weightHistory,
-                autoSavePreference: state.autoSavePreference
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
             });
             return { height };
         });
@@ -48,7 +60,11 @@ export const useUserStore = create<UserState>((set) => ({
             userStorageService.saveUserData({
                 height: newData.height,
                 weightHistory: newData.weightHistory,
-                autoSavePreference: state.autoSavePreference
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
             });
             return { weightHistory: newHistory };
         });
@@ -61,7 +77,11 @@ export const useUserStore = create<UserState>((set) => ({
             userStorageService.saveUserData({
                 height: newData.height,
                 weightHistory: newData.weightHistory,
-                autoSavePreference: state.autoSavePreference
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
             });
             return { weightHistory: newHistory };
         });
@@ -73,9 +93,77 @@ export const useUserStore = create<UserState>((set) => ({
             userStorageService.saveUserData({
                 height: newData.height,
                 weightHistory: newData.weightHistory,
-                autoSavePreference: newData.autoSavePreference
+                autoSavePreference: newData.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
             });
             return { autoSavePreference: value };
+        });
+    },
+
+    setWeightUnit: (unit: WeightUnit) => {
+        set((state) => {
+            const newData = { ...state, weightUnit: unit };
+            userStorageService.saveUserData({
+                height: newData.height,
+                weightHistory: newData.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: newData.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
+            });
+            return { weightUnit: unit };
+        });
+    },
+
+    setGender: (gender) => {
+        set((state) => {
+            const newData = { ...state, gender };
+            userStorageService.saveUserData({
+                height: state.height,
+                weightHistory: state.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: newData.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment
+            });
+            return { gender };
+        });
+    },
+
+    setBirthDate: (birthDate) => {
+        set((state) => {
+            const newData = { ...state, birthDate };
+            userStorageService.saveUserData({
+                height: state.height,
+                weightHistory: state.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: newData.birthDate,
+                availableEquipment: state.availableEquipment
+            });
+            return { birthDate };
+        });
+    },
+
+    setAvailableEquipment: (equipment) => {
+        set((state) => {
+            const newData = { ...state, availableEquipment: equipment };
+            userStorageService.saveUserData({
+                height: state.height,
+                weightHistory: state.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: newData.availableEquipment
+            });
+            return { availableEquipment: equipment };
         });
     }
 }));

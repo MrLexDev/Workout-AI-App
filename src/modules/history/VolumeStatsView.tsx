@@ -14,6 +14,7 @@ import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
 import { calculateVolumeStats, MUSCLE_GROUPS } from '../../utils/muscleAnalysis';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
+import { useWeight } from '../../hooks/useWeight';
 
 ChartJS.register(
     CategoryScale,
@@ -30,6 +31,7 @@ interface VolumeStatsViewProps {
 
 export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
     const { sessions } = useWorkoutHistoryStore();
+    const { displayWeight, unitLabel } = useWeight();
     const [granularity, setGranularity] = useState<'weekly' | 'monthly'>('weekly');
     const [expandedMuscle, setExpandedMuscle] = useState<string | null>(null);
 
@@ -84,8 +86,8 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
                     : date.toLocaleDateString('default', { month: 'short' });
             }),
             datasets: [{
-                label: metric === 'volume' ? 'Volume (kg)' : 'Effective Reps',
-                data: recentData.map(d => metric === 'volume' ? d.volume : d.effectiveReps),
+                label: metric === 'volume' ? `Volume (${unitLabel})` : 'Effective Reps',
+                data: recentData.map(d => metric === 'volume' ? displayWeight(d.volume) : d.effectiveReps),
                 backgroundColor: metric === 'volume' ? 'rgba(59, 130, 246, 0.7)' : 'rgba(168, 85, 247, 0.7)',
                 borderRadius: 4,
             }]
@@ -170,7 +172,7 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
                                         <div className="text-left">
                                             <h3 className="font-bold text-white">{muscle}</h3>
                                             <div className="text-xs text-slate-500 flex gap-2">
-                                                <span>Last: {Math.round(lastPoint?.volume || 0).toLocaleString()}kg</span>
+                                                <span>Last: {Math.round(displayWeight(lastPoint?.volume || 0)).toLocaleString()}{unitLabel}</span>
                                                 <span>•</span>
                                                 <span>{Math.round(lastPoint?.effectiveReps || 0)} eff. reps</span>
                                             </div>

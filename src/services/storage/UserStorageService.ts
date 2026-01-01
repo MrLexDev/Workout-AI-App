@@ -26,7 +26,11 @@ export class UserStorageService {
         const defaultData: UserData = {
             height: null,
             weightHistory: [],
-            autoSavePreference: false
+            autoSavePreference: false,
+            weightUnit: 'kg',
+            gender: null,
+            birthDate: null,
+            availableEquipment: []
         };
 
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -38,7 +42,11 @@ export class UserStorageService {
             return {
                 height: typeof parsed.height === 'number' ? parsed.height : null,
                 weightHistory: Array.isArray(parsed.weightHistory) ? parsed.weightHistory : [],
-                autoSavePreference: typeof parsed.autoSavePreference === 'boolean' ? parsed.autoSavePreference : false
+                autoSavePreference: typeof parsed.autoSavePreference === 'boolean' ? parsed.autoSavePreference : false,
+                weightUnit: parsed.weightUnit === 'lb' ? 'lb' : 'kg',
+                gender: ['male', 'female', 'other'].includes(parsed.gender) ? parsed.gender : null,
+                birthDate: typeof parsed.birthDate === 'string' ? parsed.birthDate : null,
+                availableEquipment: Array.isArray(parsed.availableEquipment) ? parsed.availableEquipment : []
             };
         } catch (error) {
             console.error('Error parsing user data from localStorage:', error);

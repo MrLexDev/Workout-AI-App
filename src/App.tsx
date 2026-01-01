@@ -3,6 +3,8 @@ import { WorkoutDashboard } from './modules/dashboard/WorkoutDashboard';
 import { ActiveSessionView } from './modules/session/ActiveSessionView';
 import { ExerciseLibrary } from './modules/exercises/ExerciseLibrary';
 import { HistoryView } from './modules/history/HistoryView';
+import { SettingsView } from './modules/settings/SettingsView';
+import { AIPrompterView } from './modules/prompter/AIPrompterView';
 import { useWorkoutStore } from './store/workoutStore';
 import { useState, useEffect } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
@@ -10,7 +12,7 @@ import { BackHandlerProvider, useBackHandlerContext } from './contexts/BackHandl
 
 function AppContent() {
     const { isSessionActive } = useWorkoutStore();
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'workout' | 'history'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter'>('dashboard');
     const { handleBack, register } = useBackHandlerContext();
 
     // Register Root Handler (Lowest Priority)
@@ -45,7 +47,9 @@ function AppContent() {
         <AppShell
             title={isSessionActive ? "Workout In Progress" : (
                 activeTab === 'dashboard' ? 'Dashboard' :
-                    activeTab === 'workout' ? 'Exercise Library' : 'History'
+                    activeTab === 'workout' ? 'Exercise Library' :
+                        activeTab === 'history' ? 'History' :
+                            activeTab === 'settings' ? 'Settings' : 'AI Coach'
             )}
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -57,6 +61,8 @@ function AppContent() {
                     {activeTab === 'dashboard' && <WorkoutDashboard />}
                     {activeTab === 'workout' && <ExerciseLibrary />}
                     {activeTab === 'history' && <HistoryView />}
+                    {activeTab === 'settings' && <SettingsView />}
+                    {activeTab === 'ai_prompter' && <AIPrompterView />}
                 </>
             )}
         </AppShell>
