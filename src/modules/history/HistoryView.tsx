@@ -15,13 +15,16 @@ import {
     Clock,
     BarChart,
     Ruler,
-    Weight
+    Weight,
+    History,
+    ChevronLeft
 } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
+    TimeScale,
     PointElement,
     LineElement,
     Title,
@@ -34,10 +37,13 @@ import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnal
 import { VolumeStatsView } from './VolumeStatsView';
 import { useNativeBack } from '../../hooks/useNativeBack';
 
+import 'chartjs-adapter-date-fns';
+
 // Register ChartJS components
 ChartJS.register(
     CategoryScale,
     LinearScale,
+    TimeScale,
     PointElement,
     LineElement,
     Title,
@@ -103,17 +109,17 @@ export const HistoryView = () => {
         : null;
 
     // ----- CHART DATA (BODY) -----
+    // ----- CHART DATA (BODY) -----
     const bodyChartData = useMemo(() => {
         const sortedHistory = [...weightHistory].sort((a, b) =>
             new Date(a.date).getTime() - new Date(b.date).getTime()
         );
 
         return {
-            labels: sortedHistory.map(entry => new Date(entry.date).toLocaleDateString()),
             datasets: [
                 {
                     label: 'Weight (kg)',
-                    data: sortedHistory.map(entry => entry.weight),
+                    data: sortedHistory.map(entry => ({ x: entry.date, y: entry.weight })),
                     borderColor: 'rgb(59, 130, 246)',
                     backgroundColor: 'rgba(59, 130, 246, 0.5)',
                     tension: 0.3,
@@ -123,21 +129,21 @@ export const HistoryView = () => {
     }, [weightHistory]);
 
     // ----- CHART DATA (EXERCISE) -----
+    // ----- CHART DATA (EXERCISE) -----
     const exerciseChartData = useMemo(() => {
         // Logs are already sorted by timestamp in getLogsByExercise
         return {
-            labels: exerciseLogs.map(log => new Date(log.timestamp).toLocaleDateString()),
             datasets: [
                 {
                     label: '1 Rep Max (Estimated)',
-                    data: exerciseLogs.map(log => log.oneRepMax),
+                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: log.oneRepMax })),
                     borderColor: 'rgb(168, 85, 247)', // Purple-500
                     backgroundColor: 'rgba(168, 85, 247, 0.5)',
                     tension: 0.3,
                 },
                 {
                     label: 'Lifted Weight',
-                    data: exerciseLogs.map(log => log.weight),
+                    data: exerciseLogs.map(log => ({ x: log.timestamp, y: log.weight })),
                     borderColor: 'rgb(94, 234, 212)', // Teal-300
                     backgroundColor: 'rgba(94, 234, 212, 0.5)',
                     borderDash: [5, 5],
@@ -163,6 +169,13 @@ export const HistoryView = () => {
                 ticks: { color: '#94a3b8' }
             },
             x: {
+                type: 'time',
+                time: {
+                    unit: 'day',
+                    displayFormats: {
+                        day: 'MMM d'
+                    }
+                },
                 grid: { display: false },
                 ticks: { color: '#94a3b8' }
             }
@@ -185,10 +198,10 @@ export const HistoryView = () => {
     };
 
     // ----- VIEW STATE -----
-    const [view, setView] = useState<'overview' | 'volume'>('overview');
+    const [view, setView] = useState<'overview' | 'volume' | 'weightHistory'>('overview');
 
     useNativeBack(() => {
-        if (view === 'volume') {
+        if (view === 'volume' || view === 'weightHistory') {
             setView('overview');
             return true;
         }
@@ -230,6 +243,64 @@ export const HistoryView = () => {
 
     if (view === 'volume') {
         return <VolumeStatsView onBack={() => setView('overview')} />;
+    }
+
+    if (view === 'weightHistory') {
+        return (
+            <div className="flex flex-col h-full bg-slate-950 animate-in slide-in-from-right duration-300">
+                <div className="flex items-center gap-4 p-4 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
+                    <button
+                        onClick={() => setView('overview')}
+                        className="p-2 -ml-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800 transition-colors"
+                    >
+                        <ChevronLeft size={24} />
+                    </button>
+                    <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                        <History className="w-5 h-5 text-blue-500" />
+                        Weight History
+                    </h2>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {weightHistory.map((entry) => (
+                        <div key={entry.id} className="bg-slate-800 p-4 rounded-xl flex justify-between items-center border border-slate-700/50">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-slate-900 p-3 rounded-lg text-blue-500">
+                                    <Weight className="w-5 h-5" />
+                                </div>
+                                <div>
+                                    <p className="font-bold text-white text-lg">{entry.weight} kg</p>
+                                    <p className="text-xs text-slate-500 flex items-center gap-1">
+                                        <Calendar className="w-3 h-3" />
+                                        {new Date(entry.date).toLocaleDateString(undefined, {
+                                            weekday: 'short',
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => deleteWeightEntry(entry.id)}
+                                className="text-slate-500 hover:text-red-400 p-3 hover:bg-slate-700/50 rounded-lg transition-all"
+                            >
+                                <Trash2 className="w-5 h-5" />
+                            </button>
+                        </div>
+                    ))}
+
+                    {weightHistory.length === 0 && (
+                        <div className="text-center text-slate-500 py-12 flex flex-col items-center gap-3">
+                            <div className="bg-slate-900 p-4 rounded-full">
+                                <History className="w-8 h-8 text-slate-700" />
+                            </div>
+                            <p>No weight entries recorded yet.</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -342,7 +413,7 @@ export const HistoryView = () => {
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="font-semibold text-slate-400 text-sm">Weight Evolution</h3>
                         </div>
-                        <div className="h-64 w-full">
+                        <div className="h-64 w-full mb-4">
                             {weightHistory.length > 1 ? (
                                 <Line options={chartOptions} data={bodyChartData} />
                             ) : (
@@ -351,16 +422,19 @@ export const HistoryView = () => {
                                 </div>
                             )}
                         </div>
+                        <button
+                            onClick={() => setView('weightHistory')}
+                            className="w-full py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                            <History size={14} />
+                            View Full History
+                        </button>
                     </div>
 
                     {/* Muscle Distribution Radar */}
                     <div
-                        className="bg-slate-800 p-4 rounded-xl cursor-pointer hover:bg-slate-800/80 transition-colors border border-transparent hover:border-slate-700 relative group"
-                        onClick={() => setView('volume')}
+                        className="bg-slate-800 p-4 rounded-xl"
                     >
-                        <div className="absolute top-4 right-4 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <ChevronDown className="-rotate-90" />
-                        </div>
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="font-semibold text-slate-400 text-sm flex items-center gap-2">
                                 <Activity size={16} />
@@ -384,41 +458,16 @@ export const HistoryView = () => {
                         <div className="h-64 w-full pointer-events-none">
                             <MuscleRadarChart data={muscleRadarData} />
                         </div>
-                        <p className="text-[10px] text-slate-500 text-center mt-2 group-hover:text-blue-400 transition-colors">
-                            Tap to view detailed volume stats & effective reps
-                        </p>
+                        <button
+                            onClick={() => setView('volume')}
+                            className="w-full py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2 mt-4"
+                        >
+                            <Activity size={14} />
+                            View Detailed Volume
+                        </button>
                     </div>
 
-                    {/* History List */}
-                    <div className="space-y-2">
-                        <h3 className="font-semibold text-white px-1">History</h3>
-                        <div className="space-y-2">
-                            {weightHistory.map((entry) => (
-                                <div key={entry.id} className="bg-slate-800 p-3 rounded-lg flex justify-between items-center">
-                                    <div className="flex items-center gap-3">
-                                        <div className="bg-slate-900 p-2 rounded text-slate-400">
-                                            <Calendar className="w-4 h-4" />
-                                        </div>
-                                        <div>
-                                            <p className="font-medium text-white">{entry.weight} kg</p>
-                                            <p className="text-xs text-slate-500">{new Date(entry.date).toLocaleDateString()}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={() => deleteWeightEntry(entry.id)}
-                                        className="text-slate-500 hover:text-red-400 p-2 transition-colors"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            ))}
-                            {weightHistory.length === 0 && (
-                                <div className="text-center text-slate-500 py-4">
-                                    No weight entries yet.
-                                </div>
-                            )}
-                        </div>
-                    </div>
+
                 </div>
             )}
 

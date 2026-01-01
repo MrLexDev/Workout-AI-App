@@ -117,6 +117,32 @@ export class ExerciseStorageService {
             }
         });
     }
+    /**
+     * Saves the list of hidden exercise IDs.
+     */
+    public saveHiddenExercises(hiddenIds: string[]): void {
+        try {
+            const data = JSON.stringify(hiddenIds);
+            localStorage.setItem('hidden-exercises-v1', data);
+        } catch (error) {
+            console.error('Error saving hidden exercises:', error);
+        }
+    }
+
+    /**
+     * Loads the list of hidden exercise IDs.
+     */
+    public loadHiddenExercises(): string[] {
+        const data = localStorage.getItem('hidden-exercises-v1');
+        if (!data) return [];
+        try {
+            const parsed = JSON.parse(data);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.error('Error loading hidden exercises:', error);
+            return [];
+        }
+    }
 }
 
 export const exerciseStorageService = ExerciseStorageService.getInstance();

@@ -3,7 +3,7 @@ import { useNativeBack } from '../../hooks/useNativeBack';
 import { type ExerciseDefinition, type Routine } from '../../types/workout';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
-import { Dumbbell, Search, Info, ChevronDown, ChevronUp, Download, X, AlertCircle } from 'lucide-react';
+import { Dumbbell, Search, Info, ChevronDown, ChevronUp, Download, X, AlertCircle, Filter, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import initialRoutinesData from '../../data/initialRoutines.json';
 import { RoutinePreviewModal } from './RoutinePreviewModal';
@@ -35,6 +35,71 @@ export const ExerciseLibrary: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
+    // --- Hide/Delete State ---
+    const [hiddenExerciseIds, setHiddenExerciseIds] = useState<Set<string>>(new Set());
+
+    // Load hidden IDs on mount
+    useEffect(() => {
+        const loadedHidden = exerciseStorageService.loadHiddenExercises();
+        setHiddenExerciseIds(new Set(loadedHidden));
+    }, []);
+
+    const toggleHide = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        const newSet = new Set(hiddenExerciseIds);
+        if (newSet.has(id)) {
+            newSet.delete(id);
+        } else {
+            newSet.add(id);
+        }
+        setHiddenExerciseIds(newSet);
+        exerciseStorageService.saveHiddenExercises(Array.from(newSet));
+    };
+
+    const handleDelete = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (window.confirm('Are you sure you want to delete this exercise permanently?')) {
+            const newCustom = customExercises.filter(ex => ex.id !== id);
+            setCustomExercises(newCustom);
+            exerciseStorageService.saveCustomExercises(newCustom);
+        }
+    };
+
+    // --- Filters State ---
+    const [isFilterExpanded, setIsFilterExpanded] = useState(false);
+    const [selectedMuscle, setSelectedMuscle] = useState<string>('All');
+    const [selectedEquipment, setSelectedEquipment] = useState<string>('All');
+    const [selectedSource, setSelectedSource] = useState<'All' | 'Default' | 'User'>('All');
+    const [showHidden, setShowHidden] = useState(false);
+
+    // Derive detailed filter options from all exercises
+    const { allMuscles, allEquipment, defaultExerciseIds } = useMemo(() => {
+        const muscles = new Set<string>();
+        const equipment = new Set<string>();
+        const defaultIds = new Set<string>();
+
+        // Identify default IDs from the static JSON file directly
+        const staticData = exerciseData as ExerciseDefinition[];
+        staticData.forEach(ex => defaultIds.add(ex.id));
+
+        allExercises.forEach(ex => {
+            ex.primaryMuscles.forEach(m => muscles.add(m));
+            // Secondary muscles could be added if desired, but sticking to primary for now is cleaner
+            // ex.secondaryMuscles.forEach(sm => muscles.add(sm.muscle)); 
+
+            // Split equipment by comma if multiple listed? 
+            // The data usually has "Pull-up Bar, Weight Belt". 
+            // Simple split by comma and trim.
+            ex.equipment.split(',').forEach(eq => equipment.add(eq.trim()));
+        });
+
+        return {
+            allMuscles: Array.from(muscles).sort(),
+            allEquipment: Array.from(equipment).sort(),
+            defaultExerciseIds: defaultIds
+        };
+    }, [allExercises]);
+
     // Modal State
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const [importJson, setImportJson] = useState('');
@@ -64,17 +129,46 @@ export const ExerciseLibrary: React.FC = () => {
         setExpandedIds(newSet);
     };
 
-    // Filter based on search results from the MERGED list
+    // Filter based on search results AND selected filters
     const filteredExercises = useMemo(() => {
-        if (!searchQuery.trim()) return allExercises;
-        const lowerQuery = searchQuery.toLowerCase();
-        return allExercises.filter(ex =>
-            ex.name.toLowerCase().includes(lowerQuery) ||
-            ex.primaryMuscles.some(m => m.toLowerCase().includes(lowerQuery)) ||
-            ex.secondaryMuscles.some(m => m.muscle.toLowerCase().includes(lowerQuery)) ||
-            ex.equipment.toLowerCase().includes(lowerQuery)
-        );
-    }, [allExercises, searchQuery]);
+        let result = allExercises;
+
+        // 1. Search Query
+        if (searchQuery.trim()) {
+            const lowerQuery = searchQuery.toLowerCase();
+            result = result.filter(ex =>
+                ex.name.toLowerCase().includes(lowerQuery) ||
+                ex.primaryMuscles.some(m => m.toLowerCase().includes(lowerQuery)) ||
+                ex.secondaryMuscles.some(m => m.muscle.toLowerCase().includes(lowerQuery)) ||
+                ex.equipment.toLowerCase().includes(lowerQuery)
+            );
+        }
+
+        // 2. Source Filter
+        if (selectedSource === 'Default') {
+            result = result.filter(ex => defaultExerciseIds.has(ex.id));
+        } else if (selectedSource === 'User') {
+            result = result.filter(ex => !defaultExerciseIds.has(ex.id));
+        }
+
+        // 3. Muscle Filter
+        if (selectedMuscle !== 'All') {
+            result = result.filter(ex => ex.primaryMuscles.includes(selectedMuscle));
+        }
+
+        // 4. Equipment Filter
+        if (selectedEquipment !== 'All') {
+            // Check if exact match or contained in comma-separated list
+            result = result.filter(ex => ex.equipment.includes(selectedEquipment));
+        }
+
+        // 5. Hide/Show Logic
+        if (!showHidden) {
+            result = result.filter(ex => !hiddenExerciseIds.has(ex.id));
+        }
+
+        return result;
+    }, [allExercises, searchQuery, selectedSource, selectedMuscle, selectedEquipment, defaultExerciseIds, hiddenExerciseIds, showHidden]);
 
     const handleImport = () => {
         setImportError(null);
@@ -214,17 +308,100 @@ export const ExerciseLibrary: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Search Bar - Only for Exercises currently */}
+                {/* Search Bar & Filters - Only for Exercises currently */}
                 {activeTab === 'exercises' && (
-                    <div className="relative animate-in fade-in slide-in-from-top-2 duration-300">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
-                        <input
-                            type="text"
-                            placeholder={`Search ${allExercises.length} exercises...`}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
-                        />
+                    <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                            <input
+                                type="text"
+                                placeholder={`Search ${filteredExercises.length} exercises...`}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 pl-10 pr-12 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                            <button
+                                onClick={() => setIsFilterExpanded(!isFilterExpanded)}
+                                className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg transition-colors ${isFilterExpanded || selectedMuscle !== 'All' || selectedEquipment !== 'All' || selectedSource !== 'All'
+                                    ? 'text-blue-400 bg-blue-500/10'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-700'
+                                    }`}
+                            >
+                                <Filter size={18} />
+                            </button>
+                        </div>
+
+                        {/* Expandable Filter Panel */}
+                        {isFilterExpanded && (
+                            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-3 grid grid-cols-2 gap-3 animate-in fade-in zoom-in-95 duration-200">
+
+                                {/* Source Filter */}
+                                <div className="col-span-2 flex p-1 bg-slate-900/50 rounded-lg border border-slate-800">
+                                    {['All', 'Default', 'User'].map((option) => (
+                                        <button
+                                            key={option}
+                                            onClick={() => setSelectedSource(option as any)}
+                                            className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${selectedSource === option
+                                                ? 'bg-blue-600 text-white shadow-sm'
+                                                : 'text-slate-400 hover:text-white'
+                                                }`}
+                                        >
+                                            {option}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Muscle Selector */}
+                                <div className="space-y-1">
+                                    <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider ml-1">Muscle</label>
+                                    <div className="relative">
+                                        <select
+                                            value={selectedMuscle}
+                                            onChange={(e) => setSelectedMuscle(e.target.value)}
+                                            className="w-full appearance-none bg-slate-900 border border-slate-700 text-white text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-blue-500"
+                                        >
+                                            <option value="All">All Muscles</option>
+                                            {allMuscles.map(m => (
+                                                <option key={m} value={m}>{m}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Equipment Selector */}
+                                <div className="space-y-1">
+                                    <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider ml-1">Equipment</label>
+                                    <div className="relative">
+                                        <select
+                                            value={selectedEquipment}
+                                            onChange={(e) => setSelectedEquipment(e.target.value)}
+                                            className="w-full appearance-none bg-slate-900 border border-slate-700 text-white text-xs rounded-lg px-3 py-2 pr-8 focus:outline-none focus:border-blue-500"
+                                        >
+                                            <option value="All">All Equipment</option>
+                                            {allEquipment.map(eq => (
+                                                <option key={eq} value={eq}>{eq}</option>
+                                            ))}
+                                        </select>
+                                        <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                                    </div>
+                                </div>
+
+                                {/* Show Hidden Toggle */}
+                                <div className="col-span-2 flex items-center justify-between p-2 bg-slate-900/30 rounded-lg border border-slate-800">
+                                    <span className="text-xs text-slate-400 font-medium ml-1">Show Hidden Exercises</span>
+                                    <button
+                                        onClick={() => setShowHidden(!showHidden)}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${showHidden ? 'bg-blue-600' : 'bg-slate-700'}`}
+                                    >
+                                        <span
+                                            className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out"
+                                            style={{ transform: showHidden ? 'translateX(24px)' : 'translateX(4px)' }}
+                                        />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </header>
@@ -249,8 +426,13 @@ export const ExerciseLibrary: React.FC = () => {
                                             className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-700/50"
                                             onClick={() => toggleExpand(ex.id)}
                                         >
-                                            <div className="flex-1">
-                                                <h3 className="font-bold text-white text-base">{ex.name}</h3>
+                                            <div className="flex-1 opacity-100">
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className={`font-bold text-base ${hiddenExerciseIds.has(ex.id) ? 'text-slate-500 line-through' : 'text-white'}`}>{ex.name}</h3>
+                                                    {hiddenExerciseIds.has(ex.id) && (
+                                                        <span className="text-[10px] bg-slate-700 text-slate-400 px-1.5 py-0.5 rounded border border-slate-600">Hidden</span>
+                                                    )}
+                                                </div>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <span className="text-[10px] uppercase font-bold text-blue-400 bg-blue-900/20 px-2 py-0.5 rounded border border-blue-500/20">
                                                         {ex.primaryMuscles[0]}
@@ -260,9 +442,32 @@ export const ExerciseLibrary: React.FC = () => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <button className="text-slate-500 p-1">
-                                                {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                                            </button>
+
+                                            <div className="flex items-center gap-1">
+                                                {/* Hide/Unhide Button */}
+                                                <button
+                                                    onClick={(e) => toggleHide(ex.id, e)}
+                                                    className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-full transition-colors"
+                                                    title={hiddenExerciseIds.has(ex.id) ? "Unhide" : "Hide"}
+                                                >
+                                                    {hiddenExerciseIds.has(ex.id) ? <EyeOff size={18} /> : <Eye size={18} />}
+                                                </button>
+
+                                                {/* Delete Button (Only for User exercises) */}
+                                                {!defaultExerciseIds.has(ex.id) && (
+                                                    <button
+                                                        onClick={(e) => handleDelete(ex.id, e)}
+                                                        className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-full transition-colors"
+                                                        title="Delete"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                )}
+
+                                                <button className="text-slate-500 p-1 ml-1" onClick={(e) => { e.stopPropagation(); toggleExpand(ex.id); }}>
+                                                    {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                                                </button>
+                                            </div>
                                         </div>
 
                                         {/* Expanded Details */}
