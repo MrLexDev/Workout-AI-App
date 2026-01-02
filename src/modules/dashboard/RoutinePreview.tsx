@@ -26,9 +26,6 @@ export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose
                     <div className="space-y-1">
                         <div className="flex items-center gap-2">
                             <h2 className="text-xl font-bold text-white">{routine.name}</h2>
-                            <span className="text-[10px] bg-blue-500/20 text-blue-400 border border-blue-500/30 px-1.5 py-0.5 rounded font-mono">
-                                v{routine.version}
-                            </span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500 bg-slate-800 px-2 py-0.5 rounded">
@@ -104,8 +101,13 @@ export const RoutinePreview: React.FC<RoutinePreviewProps> = ({ routine, onClose
 
                             {/* Muscles */}
                             <div className="flex flex-wrap gap-1.5 ml-9">
-                                {ex.primaryMuscles.map(m => (
+                                {ex.targetMuscles.primary.map(m => (
                                     <span key={m} className="text-[9px] font-bold text-blue-400 bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20 uppercase tracking-tighter">
+                                        {m}
+                                    </span>
+                                ))}
+                                {ex.targetMuscles.secondary.map(m => (
+                                    <span key={m} className="text-[9px] text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded border border-slate-700 uppercase tracking-tighter">
                                         {m}
                                     </span>
                                 ))}

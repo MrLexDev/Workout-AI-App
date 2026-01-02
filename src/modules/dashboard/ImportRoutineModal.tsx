@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Save, AlertCircle } from 'lucide-react';
+import { X, Save, AlertCircle, CheckCircle } from 'lucide-react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { workoutStorageService } from '../../services/storage/WorkoutStorageService';
 
@@ -12,30 +12,67 @@ export const ImportRoutineModal: React.FC<ImportRoutineModalProps> = ({ targetRo
     const { updateRoutine } = useWorkoutStore();
     const [jsonText, setJsonText] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const handleSave = () => {
         setError(null);
         try {
+            let routineDataString = jsonText;
+            let conclusionMessage: string | null = null;
+
+            // Try to parse as AI Envelope
+            try {
+                const parsed = JSON.parse(jsonText);
+                if (parsed.type === 'routine' && parsed.data) {
+                    routineDataString = JSON.stringify(parsed.data);
+                    conclusionMessage = parsed.message || null;
+                }
+            } catch (e) {
+                // If it's not valid JSON here, validateAndParseRoutine will catch it
+            }
+
             // 1. Validate structure
-            const validatedRoutine = workoutStorageService.validateAndParseRoutine(jsonText);
+            const validatedRoutine = workoutStorageService.validateAndParseRoutine(routineDataString);
 
-            // 2. Ensure ID matches the target (to prevent accidental overwrites of wrong routine if ID in JSON is different)
-            // Or should we trust the JSON ID?
-            // Requirement says: "substitute the saved json of the corresponding routine".
-            // So we should probably force the ID to match the one we clicked on, OR just replace it entirely.
-            // Let's force the ID to match the target so the list integrity in Dashboard remains consistent with the clicked card.
-
+            // 2. Ensure ID matches the target
             const routineToSave = {
                 ...validatedRoutine,
                 id: targetRoutineId // Override ID with the target one
             };
 
             updateRoutine(routineToSave);
-            onClose();
+
+            if (conclusionMessage) {
+                setSuccessMessage(conclusionMessage);
+            } else {
+                onClose();
+            }
         } catch (e: any) {
             setError(e.message || 'Invalid JSON format or missing fields.');
         }
     };
+
+    if (successMessage) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                <div className="bg-slate-900 w-full max-w-md rounded-2xl border border-blue-500/30 shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 p-6 text-center">
+                    <div className="mx-auto w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 text-blue-400">
+                        <CheckCircle size={32} />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white mb-2">Routine Updated!</h2>
+                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 mb-6 text-left">
+                        <p className="text-slate-300 text-sm leading-relaxed">{successMessage}</p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors shadow-lg shadow-blue-900/20"
+                    >
+                        Awesome, let's go!
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">

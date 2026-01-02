@@ -1,6 +1,5 @@
 [
     {
-        "version": "1.0.0",
         "id": "hybrid-strength-calisthenics-v1",
         "name": "Day 1: Upper Body Strength & Skill",
         "category": "Strength / Calisthenics",
@@ -52,7 +51,6 @@
         ]
     },
     {
-        "version": "1.1.0",
         "id": "push-chest-triceps-v1",
         "name": "Chest & Triceps (Push Focus)",
         "category": "Hypertrophy & Strength",
@@ -62,88 +60,47 @@
         "exercises": [
             {
                 "exerciseId": "flat-barbell-bench-press",
-                "name": "Barbell Bench Press",
-                "primaryMuscles": [
-                    "Chest"
-                ],
-                "secondaryMuscles": [
-                    "Triceps",
-                    "Front Delts"
-                ],
-                "equipment": "Barbell, Flat Bench",
                 "targetSets": 4,
                 "minimumRepetitions": 6,
                 "maximumRepetitions": 8,
                 "restTimeSeconds": 180,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Core strength movement. Keep your shoulder blades retracted and feet flat on the floor for stability."
             },
             {
                 "exerciseId": "weighted-dips",
-                "name": "Weighted Dips",
-                "primaryMuscles": [
-                    "Chest",
-                    "Triceps"
-                ],
-                "secondaryMuscles": [
-                    "Front Delts"
-                ],
-                "equipment": "Parallel Bars, Weight Belt",
                 "targetSets": 3,
                 "minimumRepetitions": 8,
                 "maximumRepetitions": 12,
                 "restTimeSeconds": 120,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "Hybrid calisthenics movement. Lean forward to maximize chest recruitment. Control the descent."
             },
             {
                 "exerciseId": "incline-db-press",
-                "name": "Incline Dumbbell Press",
-                "primaryMuscles": [
-                    "Upper Chest"
-                ],
-                "secondaryMuscles": [
-                    "Front Delts",
-                    "Triceps"
-                ],
-                "equipment": "Dumbbells, Incline Bench",
                 "targetSets": 3,
                 "minimumRepetitions": 10,
                 "maximumRepetitions": 12,
                 "restTimeSeconds": 90,
-                "targetRpe": 8,
+                "targetRir": 2,
                 "notes": "30-degree incline. Focus on the stretch at the bottom and a powerful squeeze at the top."
             },
             {
                 "exerciseId": "overhead-cable-extension",
-                "name": "Overhead Cable Triceps Extension",
-                "primaryMuscles": [
-                    "Triceps"
-                ],
-                "secondaryMuscles": [],
-                "equipment": "Cable Machine, Rope",
                 "targetSets": 3,
                 "minimumRepetitions": 12,
                 "maximumRepetitions": 15,
                 "restTimeSeconds": 60,
-                "targetRpe": 9,
+                "targetRir": 1,
                 "notes": "Targets the long head of the triceps. Maintain a neutral spine and do not flare your elbows excessively."
             },
             {
                 "exerciseId": "scapular-push-up",
-                "name": "Scapular Push-Up",
-                "primaryMuscles": [
-                    "Serratus Anterior"
-                ],
-                "secondaryMuscles": [
-                    "Chest"
-                ],
-                "equipment": "Bodyweight",
                 "targetSets": 2,
                 "minimumRepetitions": 15,
                 "maximumRepetitions": 20,
                 "restTimeSeconds": 45,
-                "targetRpe": 6,
+                "targetRir": 4,
                 "notes": "Health/Postural exercise. Keep arms straight; move only your shoulder blades to improve shoulder health."
             }
         ],
@@ -156,7 +113,6 @@
         ]
     },
     {
-        "version": "1.0.0",
         "id": "lower-body-health-v1",
         "name": "Day 2: Lower Body & Core Stability",
         "category": "Hypertrophy / Health",
@@ -208,7 +164,6 @@
         ]
     },
     {
-        "version": "1.0.0",
         "id": "upper-body-hypertrophy-v1",
         "name": "Day 3: Upper Body Volume & Aesthetics",
         "category": "Hypertrophy",

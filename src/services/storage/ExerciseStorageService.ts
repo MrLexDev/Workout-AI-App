@@ -68,29 +68,59 @@ export class ExerciseStorageService {
 
         if (typeof obj.id !== 'string' || obj.id.trim() === '') throw new Error('Invalid exercise: missing or invalid "id".');
         if (typeof obj.name !== 'string' || obj.name.trim() === '') throw new Error('Invalid exercise: missing or invalid "name".');
-        if (!Array.isArray(obj.primaryMuscles)) throw new Error('Invalid exercise: "primaryMuscles" must be an array.');
 
-        let secondaryMuscles = obj.secondaryMuscles;
-        if (!Array.isArray(secondaryMuscles)) throw new Error('Invalid exercise: "secondaryMuscles" must be an array.');
+        // Handle targetMuscles (new) vs primaryMuscles (old)
+        let targetMuscles = obj.targetMuscles;
+        if (!targetMuscles) {
+            // Migration from old structure
+            if (Array.isArray(obj.primaryMuscles)) {
+                targetMuscles = {
+                    primary: obj.primaryMuscles,
+                    secondary: []
+                };
 
-        // Migration: Convert string[] to SecondaryMuscle[]
-        if (secondaryMuscles.length > 0 && typeof secondaryMuscles[0] === 'string') {
-            secondaryMuscles = secondaryMuscles.map((m: string) => ({ muscle: m, impact: 'Low' }));
+                if (Array.isArray(obj.secondaryMuscles)) {
+                    // Map legacy secondary objects {muscle, impact} to string[]
+                    targetMuscles.secondary = obj.secondaryMuscles.map((item: any) => {
+                        if (typeof item === 'string') return item;
+                        return item.muscle;
+                    });
+                }
+            } else {
+                throw new Error('Invalid exercise: missing "targetMuscles".');
+            }
         }
 
-        // Equipment and description are technically optional in some loose definitions, but strict in our type
-        // If your type strictly requires them, check them. 
-        // Based on types/workout.ts: all fields are required.
-        if (typeof obj.equipment !== 'string') throw new Error('Invalid exercise: missing or invalid "equipment".');
-        if (typeof obj.description !== 'string') throw new Error('Invalid exercise: missing or invalid "description".');
+        // Validate targetMuscles structure
+        if (!targetMuscles.primary || !Array.isArray(targetMuscles.primary)) {
+            // Fallback or error? Let's be strict for new data
+            if (!obj.primaryMuscles) throw new Error('Invalid exercise: missing primary muscles.');
+        }
+
+        // Handle equipmentList (new) vs equipment (old)
+        let equipmentList = obj.equipmentList;
+        if (!Array.isArray(equipmentList)) {
+            if (typeof obj.equipment === 'string') {
+                equipmentList = obj.equipment.split(',').map((s: string) => s.trim());
+            } else {
+                equipmentList = []; // Default to empty or required?
+            }
+        }
 
         return {
             id: obj.id,
             name: obj.name,
-            primaryMuscles: obj.primaryMuscles,
-            secondaryMuscles: secondaryMuscles,
-            equipment: obj.equipment,
-            description: obj.description
+            aliases: Array.isArray(obj.aliases) ? obj.aliases : [],
+            exerciseType: obj.exerciseType,
+            mechanics: obj.mechanics,
+            forceType: obj.forceType,
+            experienceLevel: obj.experienceLevel,
+            targetMuscles: targetMuscles,
+            equipmentList: equipmentList,
+            instructions: obj.instructions,
+            media: obj.media,
+            metadata: obj.metadata,
+            description: obj.description || (obj.instructions && obj.instructions.setup ? obj.instructions.setup : '')
         };
     }
 

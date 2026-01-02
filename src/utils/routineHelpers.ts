@@ -18,9 +18,11 @@ export const hydrateRoutine = (routine: Routine): HydratedRoutine => {
         const fallback: ExerciseDefinition = {
             id: rx.exerciseId,
             name: "Unknown Exercise",
-            primaryMuscles: [],
-            secondaryMuscles: [],
-            equipment: "Unknown",
+            targetMuscles: {
+                primary: [],
+                secondary: []
+            },
+            equipmentList: ["Unknown"],
             description: "Exercise definition not found."
         };
 

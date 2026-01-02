@@ -1,0 +1,46 @@
+[
+    {
+        "exerciseId": "weighted-pull-up",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Weighted+Pull-Up"
+    },
+    {
+        "exerciseId": "overhead-press-barbell",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Overhead+Press"
+    },
+    {
+        "exerciseId": "weighted-dips",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Weighted+Dips"
+    },
+    {
+        "exerciseId": "face-pulls",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Face+Pulls"
+    },
+    {
+        "exerciseId": "barbell-back-squat",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Back+Squat"
+    },
+    {
+        "exerciseId": "romanian-deadlift",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=RDL"
+    },
+    {
+        "exerciseId": "dead-bug",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Dead+Bug"
+    },
+    {
+        "exerciseId": "incline-db-bench-press",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Incline+DB+Press"
+    },
+    {
+        "exerciseId": "chest-supported-row",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Chest+Supported+Row"
+    },
+    {
+        "exerciseId": "lateral-raise",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Lateral+Raise"
+    },
+    {
+        "exerciseId": "diamond-push-up",
+        "imageUrl": "https://placehold.co/600x400/1e293b/475569?text=Diamond+Push-Up"
+    }
+]

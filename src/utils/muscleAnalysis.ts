@@ -61,28 +61,15 @@ export const calculateMuscleVolume = (
             const setValue = 1.0;
 
             // Primary Muscles
-            exercise.primaryMuscles.forEach(m => {
+            exercise.targetMuscles.primary.forEach(m => {
                 addScore(m, setValue * 1.0);
             });
 
             // Secondary Muscles
-            exercise.secondaryMuscles.forEach(sm => {
-                let impact = 0.25; // Default Low
-                if (typeof sm === 'string') {
-                    // Legacy string support (should be migrated, but safe to have)
-                    impact = 0.25;
-                } else {
-                    if (sm.impact === 'High') impact = 0.5;
-                    else impact = 0.25;
-
-                    addScore(sm.muscle, setValue * impact);
-                    return; // Continued below is for string case if I didn't return, but here I return
-                }
-
-                // Fallback for string case if sm was string
-                if (typeof sm === 'string') {
-                    addScore(sm, setValue * impact);
-                }
+            exercise.targetMuscles.secondary.forEach(sm => {
+                // We lost impact data, so assume Low (0.25) or standard
+                const impact = 0.25;
+                addScore(sm, setValue * impact);
             });
         });
     });
@@ -105,12 +92,13 @@ export const calculateRoutineMuscleVolume = (
         const sets = ex.targetSets;
 
         // Primary
-        ex.primaryMuscles.forEach((m: string) => addScore(m, sets * 1.0));
+        ex.targetMuscles.primary.forEach((m: string) => addScore(m, sets * 1.0));
 
         // Secondary
-        ex.secondaryMuscles.forEach((sm: any) => {
-            const impact = sm.impact === 'High' ? 0.5 : 0.25;
-            addScore(sm.muscle, sets * impact);
+        ex.targetMuscles.secondary.forEach((m: string) => {
+            // Assume impact low/std since we lost granularity, or check if object
+            // For now, consistent with other places:
+            addScore(m, sets * 0.25);
         });
     });
 
@@ -238,19 +226,11 @@ export const calculateVolumeStats = (
             };
 
             // Primary
-            exercise.primaryMuscles.forEach(m => distribute(m, 1.0));
+            exercise.targetMuscles.primary.forEach(m => distribute(m, 1.0));
 
             // Secondary
-            exercise.secondaryMuscles.forEach(sm => {
-                let impact = 0.25;
-                let m = '';
-                if (typeof sm === 'string') {
-                    m = sm;
-                } else {
-                    m = sm.muscle;
-                    impact = sm.impact === 'High' ? 0.5 : 0.25;
-                }
-                distribute(m, impact);
+            exercise.targetMuscles.secondary.forEach(m => {
+                distribute(m, 0.25);
             });
         });
     });

@@ -9,11 +9,27 @@ import { useWorkoutStore } from './store/workoutStore';
 import { useState, useEffect } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
 import { BackHandlerProvider, useBackHandlerContext } from './contexts/BackHandlerContext';
+import { ExerciseInstructionView } from './modules/exercises/ExerciseInstructionView';
+import type { ExerciseDefinition } from './types/workout';
 
 function AppContent() {
     const { isSessionActive } = useWorkoutStore();
     const [activeTab, setActiveTab] = useState<'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter'>('dashboard');
+    const [selectedExercise, setSelectedExercise] = useState<ExerciseDefinition | null>(null);
     const { handleBack, register } = useBackHandlerContext();
+
+    // Priority 2 - Close Instruction View
+    useEffect(() => {
+        const unregister = register(() => {
+            if (selectedExercise) {
+                setSelectedExercise(null);
+                return true;
+            }
+            return false;
+        }, 2); // Higher priority than tab navigation
+
+        return unregister;
+    }, [selectedExercise, register]);
 
     // Register Root Handler (Lowest Priority)
     useEffect(() => {
@@ -59,11 +75,23 @@ function AppContent() {
             ) : (
                 <>
                     {activeTab === 'dashboard' && <WorkoutDashboard />}
-                    {activeTab === 'workout' && <ExerciseLibrary />}
+                    {activeTab === 'workout' && (
+                        <ExerciseLibrary
+                            onViewInstructions={(exercise) => setSelectedExercise(exercise)}
+                        />
+                    )}
                     {activeTab === 'history' && <HistoryView />}
                     {activeTab === 'settings' && <SettingsView />}
                     {activeTab === 'ai_prompter' && <AIPrompterView />}
                 </>
+            )}
+
+            {/* Instruction Modal Overlay */}
+            {selectedExercise && (
+                <ExerciseInstructionView
+                    exercise={selectedExercise}
+                    onBack={() => setSelectedExercise(null)}
+                />
             )}
         </AppShell>
     );

@@ -1,6 +1,6 @@
 import type { UserData } from '../types/user';
 import type { WorkoutSession } from '../types/history';
-import type { HydratedRoutine } from '../types/workout';
+
 
 export type EnquiryType = 'routine' | 'exercises' | 'analysis';
 
@@ -16,14 +16,15 @@ export interface PromptOptions {
 interface PromptContextData {
     user: UserData;
     history: WorkoutSession[];
-    routines: HydratedRoutine[];
+    allEquipment?: string[];
 }
 
 export const generateCoachPrompt = (data: PromptContextData, options: PromptOptions): string => {
     const sections: string[] = [];
 
     // 1. Introduction & Role
-    let roleDescription = `Act as an expert Fitness Coach and Personal Trainer. You are "AI Coach".`;
+    let roleDescription = `### Role
+You are an expert Performance Data Analyst, Strength and Fitness Coach.`;
 
     if (options.enquiryType === 'routine') {
         roleDescription += ` Your goal is to create a new Workout Routine (or modify an existing one) that perfectly matches the user's needs.`;
@@ -35,15 +36,15 @@ export const generateCoachPrompt = (data: PromptContextData, options: PromptOpti
 
     sections.push(roleDescription);
 
-    // 2. User Profile
+    // 2. User Profile & Weight Evolution
     if (options.includeProfile) {
         const { gender, height, weightHistory, weightUnit } = data.user;
         const currentWeight = weightHistory.length > 0 ? weightHistory[0].weight : 'Unknown';
 
-        sections.push(`### User Profile
+        let userProfile = `### User Profile
 - Gender: ${gender || 'Not specified'}
 - Height: ${height ? height + 'cm' : 'Not specified'}
-- Current Weight: ${currentWeight} ${weightUnit}`);
+- Current Weight: ${currentWeight} ${weightUnit}`;
 
         // Calculate Age if birthdate exists
         if (data.user.birthDate) {
@@ -51,14 +52,39 @@ export const generateCoachPrompt = (data: PromptContextData, options: PromptOpti
             const ageDiffJs = Date.now() - birthDate.getTime();
             const ageDate = new Date(ageDiffJs);
             const calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970);
-            sections.push(`- Age: ${calculatedAge}`);
+            userProfile += (`\n- Age: ${calculatedAge}`);
         }
+
+        // Full Weight Evolution
+        if (weightHistory.length > 0) {
+            userProfile += `\n\n### Weight Evolution (Newest to Oldest)
+${weightHistory.map(w => `- ${new Date(w.date).toLocaleDateString()}: ${w.weight} ${weightUnit}`).join('\n')}`;
+        }
+
+        sections.push(userProfile);
     }
 
     // 3. User Stats & Equipment
     if (options.includeStats) {
+        const { availableEquipment, equipmentSelectionMode } = data.user;
+        let equipmentStr = "";
+
+        if (equipmentSelectionMode === 'full_gym' && data.allEquipment) {
+            const exceptions = data.allEquipment.filter(eq => !availableEquipment.includes(eq));
+            if (exceptions.length > 0) {
+                equipmentStr = `Full Gym EXCEPT: ${exceptions.join(', ')}`;
+            } else {
+                equipmentStr = "Full Gym (All equipment available)";
+            }
+        } else if (equipmentSelectionMode === 'home_gym') {
+            equipmentStr = `Home Gym INCLUDING: ${availableEquipment.join(', ') || 'Only bodyweight/None'}`;
+        } else {
+            // Fallback
+            equipmentStr = availableEquipment.join(', ') || 'None specified';
+        }
+
         sections.push(`### Equipment & Experience
-- Available Equipment: ${data.user.availableEquipment.join(', ') || 'None specified'}`);
+- Available Equipment: ${equipmentStr}`);
     }
 
     // 4. Objectives & Considerations
@@ -78,20 +104,53 @@ export const generateCoachPrompt = (data: PromptContextData, options: PromptOpti
         sections.push(`### Workout History (Last ${options.historyDays} days)
 Found ${recentSessions.length} total sessions.`);
 
-        // Summarize sessions briefly
+        // Detailed session summary
         const historySummary = recentSessions.map(s => {
             const date = new Date(s.startTime).toLocaleDateString();
+            const durationMin = Math.round(s.durationSeconds / 60);
 
             // s.routineSnapshot needs to be used for the name and exercises
             const routineName = s.routineSnapshot ? s.routineSnapshot.name : "Unknown Workout";
 
-            // Map exercises from the snapshot
-            const exercises = s.routineSnapshot && s.routineSnapshot.exercises
-                ? s.routineSnapshot.exercises.map(e => e.name).join(', ')
-                : "No exercises recorded";
+            let sessionDetails = `#### [${date}] ${routineName} (Duration: ${durationMin} min)`;
 
-            return `- [${date}] ${routineName}: ${exercises}`;
-        }).join('\n');
+            if (s.routineSnapshot && s.routineSnapshot.exercises) {
+                const exerciseDetails = s.routineSnapshot.exercises.map(e => {
+                    const eId = e.exerciseId || e.id; // basic fallback if structure varies
+
+                    // Filter logs and rest data for this exercise
+                    const eLogs = s.logs.filter(l => l.exerciseId === eId);
+                    const eRests = s.restData.filter(r => r.exerciseId === eId);
+
+                    const setsDone = eLogs.length;
+
+                    // Calculations
+                    const avgWeight = setsDone > 0
+                        ? (eLogs.reduce((acc, l) => acc + l.weight, 0) / setsDone).toFixed(1)
+                        : 0;
+
+                    const avgWorkTime = setsDone > 0
+                        ? (eLogs.reduce((acc, l) => acc + (l.duration || 0), 0) / setsDone).toFixed(1)
+                        : 0;
+
+                    const avgRestTime = eRests.length > 0
+                        ? (eRests.reduce((acc, r) => acc + r.actualSeconds, 0) / eRests.length).toFixed(1)
+                        : 0;
+
+                    const avgRir = setsDone > 0
+                        ? (eLogs.reduce((acc, l) => acc + (l.rir ?? 0), 0) / setsDone).toFixed(1)
+                        : 0;
+
+                    const unit = data.user.weightUnit || 'kg';
+
+                    return `- ${e.name}: ${setsDone} Sets | Avg Weight: ${avgWeight}${unit} | Avg RIR: ${avgRir} | Avg Work: ${avgWorkTime}s | Avg Rest: ${avgRestTime}s`;
+                }).join('\n');
+
+                sessionDetails += `\n${exerciseDetails}`;
+            }
+
+            return sessionDetails;
+        }).join('\n\n');
 
         if (historySummary) {
             sections.push(historySummary);
@@ -106,58 +165,76 @@ Found ${recentSessions.length} total sessions.`);
     if (options.enquiryType === 'routine') {
         responseInstructions = `
 ### RESPONSE FORMAT REQUIRED
-You MUST reply with a STRICT JSON object representing the new Routine.
-Do not include markdown formatting (like \`\`\`json) inside the response if possible.
-The JSON structure must match this:
+You MUST reply with a STRICT JSON object using the following "Envelope" structure.
+DO NOT include any text outside the JSON object.
+DO NOT use markdown formatting (like \`\`\`json).
 
-interface Routine {
-  id: string; // Generate a unique kebab-case ID
-  name: string;
-  description: string;
-  category: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
-  estimatedDurationMinutes: number;
-  exercises: {
-    exerciseId: string; // Use standard IDs like 'barbell-bench-press' where possible
-    targetSets: number;
-    minimumRepetitions: number;
-    maximumRepetitions: number;
-    restTimeSeconds: number;
-    targetRir?: number; // 1-5
-    notes?: string;
-  }[];
-}
-
-Please provide the JSON first, followed by a brief text explanation.`;
+{
+  "type": "routine",
+  "data": {
+      "id": "string (kebab-case)",
+      "name": "string",
+      "description": "string",
+      "category": "string", // e.g., "Strength", "Hypertrophy", "Cardio"
+      "difficulty": "Beginner" | "Intermediate" | "Advanced",
+      "estimatedDurationMinutes": number,
+      "tags": ["string"], // e.g., ["Full Body", "Home", "No Equipment"]
+      "exercises": [
+        {
+          "exerciseId": "string", // Crucial: Use exact ID if known, or kebab-case unique ID for new ones
+          "targetSets": number,
+          "minimumRepetitions": number,
+          "maximumRepetitions": number,
+          "restTimeSeconds": number,
+          "targetRir": number, // 0-5 (Reps In Reserve)
+          "notes": "string"
+        }
+      ]
+  },
+  "message": "Brief explanation of changes and conclusions. Ensure this is helpful for the user."
+}`;
     }
     else if (options.enquiryType === 'exercises') {
         responseInstructions = `
 ### RESPONSE FORMAT REQUIRED
-You MUST reply with a STRICT JSON array of NEW Exercises to add to the library.
-Do not include markdown formatting (like \`\`\`json) inside the response if possible.
-The JSON structure must match this:
+You MUST reply with a STRICT JSON object using the following "Envelope" structure.
+DO NOT include any text outside the JSON object.
+DO NOT use markdown formatting (like \`\`\`json).
 
-interface Exercise {
-  id: string; // Unique kebab-case ID (e.g., 'cable-fly-low-to-high')
-  name: string;
-  primaryMuscles: string[]; // e.g. ["Chest", "Front Delts"]
-  secondaryMuscles: { muscle: string; impact: "High" | "Low" }[];
-  equipment: string;
-  description: string;
-}[]
-
-Please provide the JSON array first, followed by a brief reason for each recommendation.`;
+{
+  "type": "exercises",
+  "data": [
+      {
+        "id": "string (kebab-case)",
+        "name": "string",
+        "targetMuscles": {
+          "primary": ["string"],
+          "secondary": ["string"]
+        },
+        "equipmentList": ["string"],
+        "description": "string"
+      }
+  ],
+  "message": "Brief reason for each recommendation and summary."
+}`;
     }
     else if (options.enquiryType === 'analysis') {
         responseInstructions = `
 ### RESPONSE FORMAT REQUIRED
-Do NOT provide JSON. Provide a structured text response using Markdown.
-Structure your analysis as follows:
-1. **Consistency Score**: Evaluate adherence based on history.
-2. **Volume & Intensity Analysis**: Are they training hard enough? Too much?
-3. **Muscle Balance**: Neglected body parts? Overworked areas?
-4. **Actionable Recommendations**: 3 concrete steps to improve.
-`;
+You MUST reply with a STRICT JSON object using the following "Envelope" structure.
+DO NOT include any text outside the JSON object.
+DO NOT use markdown formatting (like \`\`\`json).
+
+{
+  "type": "analysis",
+  "data": {
+    "consistencyScore": number, // 0-100
+    "volumeAnalysis": "string (markdown allowed)",
+    "muscleBalance": "string (markdown allowed)",
+    "recommendations": ["string", "string", "string"]
+  },
+  "message": "Summary of analysis and key takeaways."
+}`;
     }
 
     sections.push(responseInstructions);

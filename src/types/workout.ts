@@ -10,12 +10,32 @@ export interface SecondaryMuscle {
 }
 
 export interface ExerciseDefinition {
-    id: string; // matches exerciseId in RoutineExercise
+    id: string;
     name: string;
-    primaryMuscles: string[];
-    secondaryMuscles: SecondaryMuscle[];
-    equipment: string;
-    description: string;
+    aliases?: string[];
+    exerciseType?: string; // e.g. "Strength"
+    mechanics?: string; // e.g. "Compound"
+    forceType?: string; // e.g. "Pull"
+    experienceLevel?: string; // e.g. "Advanced"
+    targetMuscles: {
+        primary: string[];
+        secondary: string[]; // Simple string array now, lost 'impact' granularity in pure JSON but can infer
+    };
+    equipmentList: string[]; // renamed from equipment string
+    instructions?: {
+        setup?: string;
+        execution?: string[];
+        tips?: string[];
+    };
+    media?: {
+        thumbnailUrl?: string;
+        videoUrl?: string;
+    };
+    metadata?: {
+        estimatedCaloriesBurnedPerMinute?: number;
+        isUnilateral?: boolean;
+    };
+    description?: string; // Kept for backward compat or just ease, though instructions effectively replace it.
 }
 
 // The configuration of an exercise within a specific routine
@@ -34,7 +54,6 @@ export interface RoutineExercise {
 export type HydratedExercise = RoutineExercise & ExerciseDefinition;
 
 export interface Routine {
-    version: string;
     id: string;
     name: string;
     category: string;

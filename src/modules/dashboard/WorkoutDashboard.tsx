@@ -82,7 +82,7 @@ export const WorkoutDashboard: React.FC = () => {
     const handleCreateRoutine = () => {
         const newRoutine: Routine = {
             id: crypto.randomUUID(),
-            version: '1.0.0',
+
             name: 'New Custom Routine',
             category: 'Custom',
             difficulty: 'Intermediate',

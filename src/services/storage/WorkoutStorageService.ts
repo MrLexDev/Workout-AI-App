@@ -75,7 +75,7 @@ export class WorkoutStorageService {
         }
 
         // Required fields for Routine v1.1.0
-        if (typeof obj.version !== 'string') throw new Error('Invalid routine: missing or invalid "version".');
+        // Required fields for Routine v1.1.0
         if (typeof obj.id !== 'string' || obj.id.trim() === '') throw new Error('Invalid routine: missing or invalid "id".');
         if (typeof obj.name !== 'string' || obj.name.trim() === '') throw new Error('Invalid routine: missing or invalid "name".');
         if (typeof obj.category !== 'string') throw new Error('Invalid routine: missing or invalid "category".');
@@ -132,7 +132,6 @@ export class WorkoutStorageService {
         });
 
         const routine: Routine = {
-            version: obj.version,
             id: obj.id,
             name: obj.name,
             category: obj.category,

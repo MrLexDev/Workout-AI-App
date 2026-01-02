@@ -69,7 +69,8 @@ export const HistoryView = () => {
         gender, setGender, birthDate, setBirthDate,
         availableEquipment, setAvailableEquipment,
         objective, setObjective,
-        specialConsiderations, setSpecialConsiderations
+        specialConsiderations, setSpecialConsiderations,
+        equipmentSelectionMode, setEquipmentSelectionMode
     } = useUserStore();
     const { displayWeight, toKg, unitLabel } = useWeight();
     const [weightInput, setWeightInput] = useState('');
@@ -80,7 +81,7 @@ export const HistoryView = () => {
     const [editGender, setEditGender] = useState<'male' | 'female' | 'other' | null>(null);
     const [editBirthDate, setEditBirthDate] = useState('');
     const [editEquipment, setEditEquipment] = useState<string[]>([]);
-    const [isEquipmentCustomOpen, setIsEquipmentCustomOpen] = useState(false);
+    const [editEquipmentMode, setEditEquipmentMode] = useState<'full_gym' | 'home_gym'>('home_gym');
     const [isEditingObjective, setIsEditingObjective] = useState(false);
     const [objectiveInput, setObjectiveInput] = useState(objective || '');
     const [isEditingConsiderations, setIsEditingConsiderations] = useState(false);
@@ -131,20 +132,12 @@ export const HistoryView = () => {
     const allEquipment = useMemo(() => {
         const equipment = new Set<string>();
         allExercises.forEach(ex => {
-            ex.equipment.split(',').forEach(eq => equipment.add(eq.trim()));
+            ex.equipmentList.forEach(eq => equipment.add(eq.trim()));
         });
         return Array.from(equipment).sort();
     }, [allExercises]);
 
-    // Define Equipment Presets
-    const equipmentPresets = useMemo(() => {
-        const homeKit = ['Dumbbells', 'Bodyweight', 'Mat', 'None', 'Bench', 'Pull-up Bar'];
-        const noEqKit = ['Bodyweight'];
-        return {
-            homeGym: allEquipment.filter(eq => homeKit.includes(eq)),
-            noEquipment: allEquipment.filter(eq => noEqKit.includes(eq))
-        };
-    }, [allEquipment]);
+
 
     // ----- RADAR CHART DATA -----
     const muscleRadarData = useMemo(() => {
@@ -252,6 +245,7 @@ export const HistoryView = () => {
         setGender(editGender);
         setBirthDate(editBirthDate || null);
         setAvailableEquipment(editEquipment);
+        setEquipmentSelectionMode(editEquipmentMode);
         setView('overview');
     };
 
@@ -286,13 +280,12 @@ export const HistoryView = () => {
 
     // Initialize profile edit state when opening profile view
     useEffect(() => {
-        if (view === 'profile') {
-            setEditHeight(height ? height.toString() : '');
-            setEditGender(gender);
-            setEditBirthDate(birthDate || '');
-            setEditEquipment(availableEquipment || []);
-        }
-    }, [view, height, gender, birthDate, availableEquipment]);
+        setEditHeight(height ? height.toString() : '');
+        setEditGender(gender);
+        setEditBirthDate(birthDate || '');
+        setEditEquipment(availableEquipment || []);
+        setEditEquipmentMode(equipmentSelectionMode);
+    }, [view, height, gender, birthDate, availableEquipment, equipmentSelectionMode]);
 
     // ... (existing helper functions) ...
 
@@ -384,77 +377,110 @@ export const HistoryView = () => {
                     <div className="space-y-3">
                         <label className="text-sm font-medium text-slate-400">Available Equipment</label>
 
-                        {/* Presets */}
-                        <div className="grid grid-cols-3 gap-2">
+                        {/* Mode Toggle */}
+                        <div className="flex bg-slate-900 rounded-xl p-1 border border-slate-800 mb-2">
                             <button
-                                onClick={() => setEditEquipment(allEquipment)}
-                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === allEquipment.length && allEquipment.length > 0
-                                    ? 'bg-blue-600 border-blue-600 text-white'
-                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                                onClick={() => {
+                                    if (editEquipmentMode !== 'full_gym') {
+                                        setEditEquipmentMode('full_gym');
+                                    }
+                                }}
+                                className={`flex-1 flex flex-col items-center py-2 rounded-lg text-xs font-bold transition-all ${editEquipmentMode === 'full_gym'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-300'
                                     }`}
                             >
-                                Full Gym
+                                <span className="uppercase tracking-wide">Full Gym</span>
+                                <span className="text-[10px] opacity-80 font-normal normal-case">Exceptions only</span>
                             </button>
                             <button
-                                onClick={() => setEditEquipment(equipmentPresets.homeGym)}
-                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === equipmentPresets.homeGym.length &&
-                                    equipmentPresets.homeGym.every(eq => editEquipment.includes(eq))
-                                    ? 'bg-blue-600 border-blue-600 text-white'
-                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
+                                onClick={() => {
+                                    if (editEquipmentMode !== 'home_gym') {
+                                        setEditEquipmentMode('home_gym');
+                                    }
+                                }}
+                                className={`flex-1 flex flex-col items-center py-2 rounded-lg text-xs font-bold transition-all ${editEquipmentMode === 'home_gym'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'text-slate-400 hover:text-slate-300'
                                     }`}
                             >
-                                Home Gym
-                            </button>
-                            <button
-                                onClick={() => setEditEquipment(equipmentPresets.noEquipment)}
-                                className={`py-2 rounded-lg border text-xs font-bold transition-all uppercase tracking-wide ${editEquipment.length === equipmentPresets.noEquipment.length &&
-                                    equipmentPresets.noEquipment.every(eq => editEquipment.includes(eq))
-                                    ? 'bg-blue-600 border-blue-600 text-white'
-                                    : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'
-                                    }`}
-                            >
-                                No Eq.
+                                <span className="uppercase tracking-wide">Home Gym</span>
+                                <span className="text-[10px] opacity-80 font-normal normal-case">Select items</span>
                             </button>
                         </div>
 
-                        {/* Custom Disclosure Toggle */}
-                        <button
-                            onClick={() => setIsEquipmentCustomOpen(!isEquipmentCustomOpen)}
-                            className="flex items-center justify-between w-full p-2 mt-1 rounded-lg bg-slate-900/50 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-                        >
-                            <span className="text-xs font-semibold uppercase tracking-wider">Custom Selection</span>
-                            <ChevronLeft className={`w-4 h-4 transition-transform ${isEquipmentCustomOpen ? 'rotate-90' : 'rotate-180'}`} />
-                        </button>
+                        {/* Helper Text */}
+                        <div className="px-1 text-xs text-slate-500 font-medium mb-2 uppercase tracking-wide">
+                            {editEquipmentMode === 'full_gym' ? 'Full Gym Except...' : 'Which includes...'}
+                        </div>
 
-                        {/* Custom Grid */}
-                        {isEquipmentCustomOpen && (
-                            <div className="grid grid-cols-2 gap-2 p-1 animate-in fade-in duration-200">
-                                {allEquipment.map(eq => {
-                                    const isSelected = editEquipment.includes(eq);
+                        {/* Selection Grid */}
+                        <div className="grid grid-cols-2 gap-2 p-1 max-h-[40vh] overflow-y-auto">
+                            {allEquipment.map(eq => {
+                                const isAvailable = editEquipment.includes(eq);
+
+                                // In Full Gym mode:
+                                // We show what is EXCLUDED in RED.
+                                // If it is available (isAvailable=true), it is NOT selected (visually neutral).
+                                // If it is NOT available (isAvailable=false), it IS selected as an exception (Red).
+                                const isExcluded = !isAvailable;
+
+                                // In Home Gym mode:
+                                // We show what is INCLUDED in Blue.
+                                // If it is available (isAvailable=true), it IS selected (Blue).
+
+                                if (editEquipmentMode === 'full_gym') {
                                     return (
                                         <button
                                             key={eq}
                                             onClick={() => {
-                                                if (isSelected) {
+                                                if (isAvailable) {
+                                                    // User clicks to EXCLUDE it. Remove from available list.
                                                     setEditEquipment(prev => prev.filter(e => e !== eq));
                                                 } else {
+                                                    // User clicks to INCLUDE it (remove exception). Add to available list.
                                                     setEditEquipment(prev => [...prev, eq]);
                                                 }
                                             }}
-                                            className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border ${isSelected
+                                            className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border ${isExcluded
+                                                ? 'bg-red-500/10 border-red-500 text-red-200'
+                                                : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'
+                                                }`}
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <span className="truncate">{eq}</span>
+                                                {isExcluded && <div className="w-1.5 h-1.5 rounded-full bg-red-400" />}
+                                            </div>
+                                        </button>
+                                    );
+                                } else {
+                                    // Home Gym Mode
+                                    return (
+                                        <button
+                                            key={eq}
+                                            onClick={() => {
+                                                if (isAvailable) {
+                                                    // User clicks to REMOVE.
+                                                    setEditEquipment(prev => prev.filter(e => e !== eq));
+                                                } else {
+                                                    // User clicks to ADD.
+                                                    setEditEquipment(prev => [...prev, eq]);
+                                                }
+                                            }}
+                                            className={`px-3 py-2 rounded-lg text-xs font-medium text-left transition-all border ${isAvailable
                                                 ? 'bg-blue-600/20 border-blue-500 text-blue-200'
                                                 : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span className="truncate">{eq}</span>
-                                                {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />}
+                                                {isAvailable && <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />}
                                             </div>
                                         </button>
                                     );
-                                })}
-                            </div>
-                        )}
+                                }
+                            })}
+                        </div>
                     </div>
 
 

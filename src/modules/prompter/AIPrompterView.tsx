@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { Sparkles, Copy, FileJson, Check, Settings, History, User, Target } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Sparkles, Copy, FileJson, Check, Settings, History, User, Target, CheckCircle } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { generateCoachPrompt, type PromptOptions } from '../../utils/promptHelpers';
 import { workoutStorageService } from '../../services/storage/WorkoutStorageService';
+import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
+import exerciseData from '../../data/exercises.json';
+import { type ExerciseDefinition } from '../../types/workout';
 
 export const AIPrompterView = () => {
     const [activeTab, setActiveTab] = useState<'generate' | 'import'>('generate');
@@ -12,7 +15,16 @@ export const AIPrompterView = () => {
     // Stores
     const userStore = useUserStore();
     const historyStore = useWorkoutHistoryStore();
-    const { createRoutine, routines } = useWorkoutStore();
+    const { createRoutine } = useWorkoutStore();
+
+    // Derive Unique Equipment List for context
+    const allEquipment = useMemo(() => {
+        const equipment = new Set<string>();
+        (exerciseData as ExerciseDefinition[]).forEach(ex => {
+            ex.equipmentList.forEach(eq => equipment.add(eq.trim()));
+        });
+        return Array.from(equipment).sort();
+    }, []);
 
     // Generation State
     const [options, setOptions] = useState<PromptOptions>({
@@ -30,13 +42,14 @@ export const AIPrompterView = () => {
     const [jsonInput, setJsonInput] = useState('');
     const [importError, setImportError] = useState<string | null>(null);
     const [importSuccess, setImportSuccess] = useState(false);
+    const [importMessage, setImportMessage] = useState<string | null>(null);
 
     const handleGenerate = () => {
         const prompt = generateCoachPrompt(
             {
                 user: userStore,
                 history: historyStore.sessions,
-                routines: routines
+                allEquipment
             },
             options
         );
@@ -55,9 +68,18 @@ export const AIPrompterView = () => {
         }
     };
 
+    // Analysis State
+    const [analysisResult, setAnalysisResult] = useState<{
+        consistencyScore: number;
+        volumeAnalysis: string;
+        muscleBalance: string;
+        recommendations: string[];
+    } | null>(null);
+
     const handleImport = () => {
         setImportError(null);
         setImportSuccess(false);
+        setAnalysisResult(null);
 
         if (!jsonInput.trim()) return;
 
@@ -71,15 +93,50 @@ export const AIPrompterView = () => {
                 jsonString = jsonInput.substring(firstBrace, lastBrace + 1);
             }
 
-            const validatedRoutine = workoutStorageService.validateAndParseRoutine(jsonString);
+            const parsed = JSON.parse(jsonString);
 
-            // Generate a truly unique ID if it conflicts? 
-            // For now, accept the one from AI or overwrite if ID matches.
-            // Let's ensure we don't accidentally overwrite unless intended, but for "Create", maybe we just append.
+            // Determine Import Type
+            // Determine Import Type
+            if (parsed.type === 'routine' && parsed.data) {
+                // Envelope Format: Routine
+                const validatedRoutine = workoutStorageService.validateAndParseRoutine(JSON.stringify(parsed.data));
+                createRoutine(validatedRoutine);
+                setImportSuccess(true);
+                setImportMessage(parsed.message || null);
+                setJsonInput('');
+            }
+            else if (parsed.type === 'exercises' && parsed.data) {
+                // Envelope Format: Exercises
+                const validatedExercises = exerciseStorageService.parseImportJson(JSON.stringify(parsed.data));
 
-            createRoutine(validatedRoutine);
-            setImportSuccess(true);
-            setJsonInput(''); // Clear after success
+                const existing = exerciseStorageService.loadCustomExercises();
+                const merged = [...existing, ...validatedExercises];
+                // Dedupe by ID
+                const unique = Array.from(new Map(merged.map(item => [item.id, item])).values());
+                exerciseStorageService.saveCustomExercises(unique);
+
+                setImportSuccess(true);
+                setImportMessage(parsed.message || null);
+                setJsonInput('');
+            }
+            else if (parsed.type === 'analysis' && parsed.data) {
+                // Envelope Format: Analysis
+                setAnalysisResult(parsed.data);
+                setImportSuccess(true);
+                setImportMessage(parsed.message || null);
+                setJsonInput('');
+            }
+            else {
+                // Fallback / Legacy: Try to parse as Routine directly
+                try {
+                    const validatedRoutine = workoutStorageService.validateAndParseRoutine(jsonString);
+                    createRoutine(validatedRoutine);
+                    setImportSuccess(true);
+                    setJsonInput('');
+                } catch (err) {
+                    throw new Error('Unknown JSON format. Could not detect type (routine/exercises/analysis).');
+                }
+            }
         } catch (e: any) {
             setImportError(e.message || 'Invalid JSON format');
         }
@@ -133,8 +190,8 @@ export const AIPrompterView = () => {
                             <button
                                 onClick={() => setOptions({ ...options, enquiryType: 'routine' })}
                                 className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'routine'
-                                        ? 'bg-blue-500/10 border-blue-500 text-blue-400'
-                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    ? 'bg-blue-500/10 border-blue-500 text-blue-400'
+                                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
                                     }`}
                             >
                                 <FileJson size={16} />
@@ -143,8 +200,8 @@ export const AIPrompterView = () => {
                             <button
                                 onClick={() => setOptions({ ...options, enquiryType: 'exercises' })}
                                 className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'exercises'
-                                        ? 'bg-purple-500/10 border-purple-500 text-purple-400'
-                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    ? 'bg-purple-500/10 border-purple-500 text-purple-400'
+                                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
                                     }`}
                             >
                                 <Target size={16} />
@@ -153,8 +210,8 @@ export const AIPrompterView = () => {
                             <button
                                 onClick={() => setOptions({ ...options, enquiryType: 'analysis' })}
                                 className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'analysis'
-                                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
-                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
+                                    : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
                                     }`}
                             >
                                 <Sparkles size={16} />
@@ -305,9 +362,53 @@ export const AIPrompterView = () => {
                     {importSuccess && (
                         <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-200 text-sm flex items-center gap-2 animate-in slide-in-from-top-1">
                             <Check size={16} className="text-green-400" />
-                            Routine imported successfully! check your dashboard.
+                            {analysisResult ? 'Analysis loaded below!' : 'Import successful!'}
                         </div>
                     )}
+
+                    {analysisResult && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-5">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="p-4 bg-slate-900 rounded-xl border border-slate-800 flex flex-col items-center">
+                                    <span className="text-slate-400 text-xs uppercase tracking-wider mb-1">Consistency</span>
+                                    <span className="text-3xl font-bold text-blue-500">{analysisResult.consistencyScore}%</span>
+                                </div>
+                                <div className="p-4 bg-slate-900 rounded-xl border border-slate-800 flex flex-col items-center">
+                                    <span className="text-slate-400 text-xs uppercase tracking-wider mb-1">Rating</span>
+                                    <span className="text-xl font-bold text-emerald-500">
+                                        {analysisResult.consistencyScore > 80 ? 'Excellent' : analysisResult.consistencyScore > 50 ? 'Good' : 'Improving'}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-2">
+                                <h3 className="text-sm font-semibold text-slate-200">Volume Analysis</h3>
+                                <div className="text-xs text-slate-400 leading-relaxed whitespace-pre-wrap">
+                                    {analysisResult.volumeAnalysis}
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-2">
+                                <h3 className="text-sm font-semibold text-slate-200">Muscle Balance</h3>
+                                <div className="text-xs text-slate-400 leading-relaxed whitespace-pre-wrap">
+                                    {analysisResult.muscleBalance}
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-2">
+                                <h3 className="text-sm font-semibold text-slate-200">Recommendations</h3>
+                                <ul className="space-y-2">
+                                    {analysisResult.recommendations.map((rec, i) => (
+                                        <li key={i} className="flex gap-2 text-xs text-slate-300">
+                                            <span className="text-blue-500 font-bold">{i + 1}.</span>
+                                            {rec}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    )}
+
 
                     <button
                         onClick={handleImport}
@@ -319,7 +420,30 @@ export const AIPrompterView = () => {
                     </button>
                 </div>
             )}
+
+            {/* Success Modal */}
+            {importMessage && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-slate-900 w-full max-w-md rounded-2xl border border-blue-500/30 shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 p-6 text-center">
+                        <div className="mx-auto w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4 text-blue-400">
+                            <CheckCircle size={32} />
+                        </div>
+                        <h2 className="text-2xl font-bold text-white mb-2">Import Successful!</h2>
+                        <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 mb-6 text-left">
+                            <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">{importMessage}</p>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setImportMessage(null);
+                                setImportSuccess(false); // Optionally clear success state if we want to reset
+                            }}
+                            className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-colors shadow-lg shadow-blue-900/20"
+                        >
+                            Awesome!
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
-

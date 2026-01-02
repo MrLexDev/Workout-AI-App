@@ -16,4 +16,5 @@ export interface UserData {
     availableEquipment: string[];
     objective: string | null;
     specialConsiderations: string | null;
+    equipmentSelectionMode: 'full_gym' | 'home_gym';
 }

@@ -2,226 +2,375 @@
     {
         "id": "weighted-pull-up",
         "name": "Weighted Pull-Up",
-        "primaryMuscles": [
-            "Lats"
+        "aliases": [],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Biceps",
+                "Upper Back",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Pull-up Bar",
+            "Weight Belt"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Biceps",
-                "impact": "High"
-            },
-            {
-                "muscle": "Upper Back",
-                "impact": "High"
-            },
-            {
-                "muscle": "Forearms",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Pull-up Bar, Weight Belt",
+        "instructions": {
+            "setup": "Attach a dip belt with weight around your waist. Grasp the bar with an overhand grip, hands slightly wider than shoulder-width.",
+            "execution": [
+                "Initiate the pull by driving your elbows down towards your hips.",
+                "Pull your body up until your chin clears the bar.",
+                "Lower yourself under control to a full dead hang."
+            ],
+            "tips": [
+                "Keep your core tight and legs straight or slightly crossed.",
+                "Avoid using momentum or swinging.",
+                "Focus on depressing your scapula before pulling."
+            ]
+        },
         "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
     },
     {
         "id": "weighted-pull-up2",
         "name": "Weighted Pull-Up -2",
-        "primaryMuscles": [
-            "Lats"
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Biceps",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Pull-up Bar",
+            "Weight Belt"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Biceps",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Upper Back",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Pull-up Bar, Weight Belt",
         "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
     },
     {
         "id": "overhead-press-barbell",
         "name": "Barbell Overhead Press",
-        "primaryMuscles": [
-            "Shoulders"
+        "targetMuscles": {
+            "primary": [
+                "Shoulders"
+            ],
+            "secondary": [
+                "Triceps",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Triceps",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Core",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Barbell",
+        "instructions": {
+            "setup": "Stand with feet shoulder-width apart. Grip the bar just outside your shoulders, resting it on your front delts.",
+            "execution": [
+                "Brace your core and squeeze your glutes.",
+                "Press the bar vertically in a straight line, moving your head back slightly to clear the path.",
+                "Lock out at the top with the bar directly over your mid-foot.",
+                "Lower the bar back to the starting position under control."
+            ],
+            "tips": [
+                "Do not use leg drive (that would be a Push Press).",
+                "Keep your elbows slightly in front of the bar at the start.",
+                "Do not hyperextend your lower back."
+            ]
+        },
         "description": "A fundamental strength exercise for the shoulders and upper body stability."
     },
     {
         "id": "weighted-dips",
         "name": "Weighted Chest Dips",
-        "primaryMuscles": [
-            "Chest"
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Parallel Bars"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Triceps",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Front Delts",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Parallel Bars",
+        "instructions": {
+            "setup": "Secure weight with a dip belt. Mount the parallel bars with arms locked out and shoulders depressed.",
+            "execution": [
+                "Lean forward slightly (approx 30 degrees) to target the chest.",
+                "Lower your body until your shoulders are slightly below your elbows.",
+                "Press back up to the starting position, extending the elbows."
+            ],
+            "tips": [
+                "Keep your elbows tucked in, don't let them flare out excessively.",
+                "Control the descent to protect your shoulders.",
+                "Maintain the forward lean throughout the movement."
+            ]
+        },
         "description": "Effective for building chest and triceps. Lean forward to emphasize the chest."
     },
     {
         "id": "face-pulls",
         "name": "Cable Face Pulls",
-        "primaryMuscles": [
-            "Rear Delts"
+        "targetMuscles": {
+            "primary": [
+                "Rear Delts"
+            ],
+            "secondary": [
+                "Rotator Cuff",
+                "Upper Traps"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Rotator Cuff",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Upper Traps",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Cable Machine",
+        "instructions": {
+            "setup": "Set a cable pulley to face height with a rope attachment. Grasp the rope with thumbs facing backward (neutral grip).",
+            "execution": [
+                "Pull the rope towards your forehead, separating your hands as you pull.",
+                "Externally rotate your shoulders at the end range (thumbs pointing back).",
+                "Squeeze your rear delts and upper back.",
+                "Return to start with control."
+            ],
+            "tips": [
+                "Focus on pulling with your elbows and rear delts, not your biceps.",
+                "This is a postural health exercise, prioritize form over heavy weight.",
+                "Keep your chest up and core braced."
+            ]
+        },
         "description": "Excellent for shoulder health and posture. Pull towards the forehead."
     },
     {
         "id": "barbell-back-squat",
         "name": "Barbell Back Squat",
-        "primaryMuscles": [
-            "Quads",
-            "Glutes"
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Lower Back",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Squat Rack"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Lower Back",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Core",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Barbell, Squat Rack",
+        "instructions": {
+            "setup": "Place the barbell on your upper back (traps). Feet shoulder-width apart, toes slightly out.",
+            "execution": [
+                "Take a deep breath and brace your core.",
+                "Initiate by breaking at the hips and knees simultaneously.",
+                "Lower until your hip crease is below your knee (parallel).",
+                "Drive through your heels to return to the standing position."
+            ],
+            "tips": [
+                "Keep your chest up and spine neutral.",
+                "Track your knees over your toes.",
+                "Do not let your knees cave inward."
+            ]
+        },
         "description": "The king of lower body exercises. Targets quads, glutes, and overall strength."
     },
     {
         "id": "romanian-deadlift",
         "name": "Dumbbell Romanian Deadlift",
-        "primaryMuscles": [
-            "Hamstrings",
-            "Glutes"
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Glutes"
+            ],
+            "secondary": [
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Lower Back",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Dumbbells",
+        "instructions": {
+            "setup": "Stand with feet hip-width apart, holding dumbbells/barbell in front of your thighs.",
+            "execution": [
+                "Unlock your knees slightly (do not squat).",
+                "Push your hips back as far as possible, keeping the weight close to your legs.",
+                "Lower until you feel a deep stretch in your hamstrings.",
+                "Squeeze your glutes to drive your hips forward and return to the start."
+            ],
+            "tips": [
+                "Keep your spine neutral (flat back) throughout.",
+                "Think about 'closing a car door with your butt'.",
+                "Do not go lower if your back starts to round."
+            ]
+        },
         "description": "Focuses on the posterior chain. Hinge at the hips and feel the stretch."
     },
     {
         "id": "dead-bug",
         "name": "Dead Bug",
-        "primaryMuscles": [
-            "Core"
+        "targetMuscles": {
+            "primary": [
+                "Core"
+            ],
+            "secondary": [
+                "Hip Flexors"
+            ]
+        },
+        "equipmentList": [
+            "Bodyweight"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Hip Flexors",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Bodyweight",
+        "instructions": {
+            "setup": "Lie on your back with arms extended towards the ceiling and legs in a tabletop position (knees bent at 90 degrees).",
+            "execution": [
+                "Press your lower back into the floor (flatten the curve).",
+                "Slowly lower opposite arm and leg towards the floor.",
+                "Exhale as you lower, inhaling as you return to start.",
+                "Repeat on the other side."
+            ],
+            "tips": [
+                "The most important part is keeping your lower back glued to the floor.",
+                "Do not let your ribs flare up.",
+                "Move slowly and with control."
+            ]
+        },
         "description": "A core stability exercise that teaches you to move your limbs while maintaining a neutral spine."
     },
     {
         "id": "liss-walking",
         "name": "Incline Treadmill Walk",
-        "primaryMuscles": [
-            "Cardiovascular System"
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System"
+            ],
+            "secondary": [
+                "Calves"
+            ]
+        },
+        "equipmentList": [
+            "Treadmill"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Calves",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Treadmill",
         "description": "Low-intensity steady-state cardio. Great for recovery and heart health."
     },
     {
         "id": "incline-db-bench-press",
         "name": "Incline Dumbbell Bench Press",
-        "primaryMuscles": [
-            "Upper Chest"
+        "targetMuscles": {
+            "primary": [
+                "Upper Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Incline Bench"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Front Delts",
-                "impact": "Low"
-            },
-            {
-                "muscle": "Triceps",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Dumbbells, Incline Bench",
+        "instructions": {
+            "setup": "Set the bench to a 30-45 degree incline. Kick the dumbbells up to your shoulders using your knees.",
+            "execution": [
+                "Retract your shoulder blades and puff your chest out.",
+                "Press the dumbbells up and slightly inward (but don't bang them together).",
+                "Lower the weights slowly until you feel a deep stretch in your upper chest."
+            ],
+            "tips": [
+                "Do not flare your elbows out 90 degrees; keep them around 45 degrees.",
+                "Keep your wrists stacked over your elbows.",
+                "Maintain contact with the bench with your head, upper back, and glutes."
+            ]
+        },
         "description": "Targets the upper pectoral muscles using dumbbells for a greater range of motion."
     },
     {
         "id": "chest-supported-row",
         "name": "Chest Supported Row",
-        "primaryMuscles": [
-            "Upper Back",
-            "Rear Delts"
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Rear Delts"
+            ],
+            "secondary": [
+                "Biceps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Bench"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Biceps",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Dumbbells, Bench",
+        "instructions": {
+            "setup": "Set an incline bench to around 45 degrees. Lie face down with a dumbbell in each hand.",
+            "execution": [
+                "Pull the weights towards your hips, retracting your shoulder blades.",
+                "Squeeze your back hard at the top.",
+                "Lower the weights fully to a stretched position."
+            ],
+            "tips": [
+                "Keep your chest pressed against the pad at all times.",
+                "Do not use momentum to jerk the weight up."
+            ]
+        },
         "description": "A rowing variation that isolates the back by removing the need for lower body stability."
     },
     {
         "id": "lateral-raise",
         "name": "Dumbbell Lateral Raise",
-        "primaryMuscles": [
-            "Side Delts"
+        "targetMuscles": {
+            "primary": [
+                "Side Delts"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Dumbbells"
         ],
-        "secondaryMuscles": [],
-        "equipment": "Dumbbells",
+        "instructions": {
+            "setup": "Stand with feet hip-width apart, holding dumbbells at your sides. Lean forward very slightly.",
+            "execution": [
+                "Raise the weights out to the sides, leading with your elbows.",
+                "Stop when your arms are parallel to the floor.",
+                "Lower the weights back down with control, stopping just before they touch your body to keep tension."
+            ],
+            "tips": [
+                "Imagine you are pouring water out of a pitcher at the top.",
+                "Do not use momentum or swing your torso.",
+                "Keep a slight bend in your elbows."
+            ]
+        },
         "description": "The primary exercise for isolating the lateral head of the deltoids for shoulder width."
     },
     {
         "id": "diamond-push-up",
         "name": "Diamond Push-Up",
-        "primaryMuscles": [
-            "Triceps"
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Chest"
+            ]
+        },
+        "equipmentList": [
+            "Bodyweight"
         ],
-        "secondaryMuscles": [
-            {
-                "muscle": "Chest",
-                "impact": "Low"
-            }
-        ],
-        "equipment": "Bodyweight",
+        "instructions": {
+            "setup": "Get into a push-up position with your hands close together, index fingers and thumbs touching to form a diamond.",
+            "execution": [
+                "Lower your chest towards your hands, keeping elbows tucked close to your body.",
+                "Touch your chest to your hands (or go as low as comfortable).",
+                "Push back up to full lockout."
+            ],
+            "tips": [
+                "Engage your core to prevent your hips from sagging.",
+                "Focus on squeezing your triceps at the top.",
+                "If it hurts your wrists, widen your hands slightly."
+            ]
+        },
         "description": "A push-up variation with hands close together to heavily emphasize the triceps."
     }
 ]

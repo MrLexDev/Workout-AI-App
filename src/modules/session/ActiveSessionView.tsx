@@ -315,7 +315,7 @@ export const ActiveSessionView: React.FC = () => {
                                     {stopwatch.isRunning ? 'Working' : 'Paused'}
                                 </div>
                                 <div className="text-[10px] text-slate-500 uppercase tracking-tighter">
-                                    {currentExercise.equipment}
+                                    {currentExercise.equipmentList.join(', ')}
                                 </div>
                             </div>
                         </CircularTimer>
@@ -582,7 +582,7 @@ export const ActiveSessionView: React.FC = () => {
                                             {isCurrent ? `SET ${currentExercise.targetSets - setsRemaining + 1}` : 'QUEUED'}
                                         </span>
                                         <span className="text-[9px] opacity-40 uppercase tracking-tighter">
-                                            {ex.equipment.split(',')[0]}
+                                            {ex.equipmentList[0]}
                                         </span>
                                     </div>
                                 </div>

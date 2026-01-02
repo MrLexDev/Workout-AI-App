@@ -32,7 +32,8 @@ export class UserStorageService {
             birthDate: null,
             availableEquipment: [],
             objective: null,
-            specialConsiderations: null
+            specialConsiderations: null,
+            equipmentSelectionMode: 'home_gym'
         };
 
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -50,7 +51,8 @@ export class UserStorageService {
                 birthDate: typeof parsed.birthDate === 'string' ? parsed.birthDate : null,
                 availableEquipment: Array.isArray(parsed.availableEquipment) ? parsed.availableEquipment : [],
                 objective: typeof parsed.objective === 'string' ? parsed.objective : null,
-                specialConsiderations: typeof parsed.specialConsiderations === 'string' ? parsed.specialConsiderations : null
+                specialConsiderations: typeof parsed.specialConsiderations === 'string' ? parsed.specialConsiderations : null,
+                equipmentSelectionMode: parsed.equipmentSelectionMode === 'full_gym' ? 'full_gym' : 'home_gym'
             };
         } catch (error) {
             console.error('Error parsing user data from localStorage:', error);

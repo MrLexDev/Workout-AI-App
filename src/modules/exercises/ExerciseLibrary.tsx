@@ -3,12 +3,16 @@ import { useNativeBack } from '../../hooks/useNativeBack';
 import { type ExerciseDefinition, type Routine } from '../../types/workout';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
-import { Dumbbell, Search, Info, ChevronDown, ChevronUp, Download, X, AlertCircle, Filter, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Dumbbell, Search, ChevronDown, ChevronUp, Download, X, AlertCircle, Filter, Eye, EyeOff, Trash2, BookOpen } from 'lucide-react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import initialRoutinesData from '../../data/initialRoutines.json';
 import { RoutinePreviewModal } from './RoutinePreviewModal';
 
-export const ExerciseLibrary: React.FC = () => {
+interface ExerciseLibraryProps {
+    onViewInstructions?: (exercise: ExerciseDefinition) => void;
+}
+
+export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstructions }) => {
     const [activeTab, setActiveTab] = useState<'exercises' | 'routines'>('exercises');
 
     // 1. Static + Custom Exercises
@@ -83,14 +87,12 @@ export const ExerciseLibrary: React.FC = () => {
         staticData.forEach(ex => defaultIds.add(ex.id));
 
         allExercises.forEach(ex => {
-            ex.primaryMuscles.forEach(m => muscles.add(m));
-            // Secondary muscles could be added if desired, but sticking to primary for now is cleaner
-            // ex.secondaryMuscles.forEach(sm => muscles.add(sm.muscle)); 
+            ex.targetMuscles.primary.forEach(m => muscles.add(m));
+            // Secondary muscles
+            ex.targetMuscles.secondary.forEach(m => muscles.add(m));
 
-            // Split equipment by comma if multiple listed? 
-            // The data usually has "Pull-up Bar, Weight Belt". 
-            // Simple split by comma and trim.
-            ex.equipment.split(',').forEach(eq => equipment.add(eq.trim()));
+            // Equipment list
+            ex.equipmentList.forEach(eq => equipment.add(eq.trim()));
         });
 
         return {
@@ -138,9 +140,9 @@ export const ExerciseLibrary: React.FC = () => {
             const lowerQuery = searchQuery.toLowerCase();
             result = result.filter(ex =>
                 ex.name.toLowerCase().includes(lowerQuery) ||
-                ex.primaryMuscles.some(m => m.toLowerCase().includes(lowerQuery)) ||
-                ex.secondaryMuscles.some(m => m.muscle.toLowerCase().includes(lowerQuery)) ||
-                ex.equipment.toLowerCase().includes(lowerQuery)
+                ex.targetMuscles.primary.some(m => m.toLowerCase().includes(lowerQuery)) ||
+                ex.targetMuscles.secondary.some(m => m.toLowerCase().includes(lowerQuery)) ||
+                ex.equipmentList.some(eq => eq.toLowerCase().includes(lowerQuery))
             );
         }
 
@@ -153,13 +155,16 @@ export const ExerciseLibrary: React.FC = () => {
 
         // 3. Muscle Filter
         if (selectedMuscle !== 'All') {
-            result = result.filter(ex => ex.primaryMuscles.includes(selectedMuscle));
+            result = result.filter(ex =>
+                ex.targetMuscles.primary.includes(selectedMuscle) ||
+                ex.targetMuscles.secondary.includes(selectedMuscle)
+            );
         }
 
         // 4. Equipment Filter
         if (selectedEquipment !== 'All') {
-            // Check if exact match or contained in comma-separated list
-            result = result.filter(ex => ex.equipment.includes(selectedEquipment));
+            // Check if exact match or contained
+            result = result.filter(ex => ex.equipmentList.includes(selectedEquipment));
         }
 
         // 5. Hide/Show Logic
@@ -435,12 +440,13 @@ export const ExerciseLibrary: React.FC = () => {
                                                 </div>
                                                 <div className="flex items-center gap-2 mt-1">
                                                     <span className="text-[10px] uppercase font-bold text-blue-400 bg-blue-900/20 px-2 py-0.5 rounded border border-blue-500/20">
-                                                        {ex.primaryMuscles[0]}
+                                                        {ex.targetMuscles.primary[0]}
                                                     </span>
                                                     <span className="text-xs text-slate-500 truncate">
-                                                        {ex.equipment}
+                                                        {ex.equipmentList.join(', ')}
                                                     </span>
                                                 </div>
+
                                             </div>
 
                                             <div className="flex items-center gap-1">
@@ -470,41 +476,43 @@ export const ExerciseLibrary: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        {/* Expanded Details */}
+                                        {/* Expanded Details - REFACTORED to minimal info as instructions moved */}
                                         {isExpanded && (
                                             <div className="px-4 pb-4 pt-0 border-t border-slate-700/50 bg-slate-900/30">
                                                 <div className="mt-4 grid grid-cols-2 gap-4">
                                                     <div>
                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Targets</span>
                                                         <div className="flex flex-wrap gap-1">
-                                                            {/* Primary Muscles - Always Bold */}
-                                                            {ex.primaryMuscles.map((m, i) => (
+                                                            {ex.targetMuscles.primary.map((m, i) => (
                                                                 <span key={`p-${i}`} className="text-xs font-bold text-blue-300 bg-blue-900/20 px-1.5 py-0.5 rounded border border-blue-500/20">
                                                                     {m}
                                                                 </span>
                                                             ))}
-                                                            {/* Secondary Muscles - Bold if Impact is High */}
-                                                            {ex.secondaryMuscles.map((sm, i) => (
-                                                                <span key={`s-${i}`} className={`text-xs px-1.5 py-0.5 rounded border border-slate-700 ${sm.impact === 'High' ? 'font-bold text-slate-100 bg-slate-700' : 'text-slate-300 bg-slate-800'}`}>
-                                                                    {sm.muscle}
+                                                            {ex.targetMuscles.secondary.map((m, i) => (
+                                                                <span key={`s-${i}`} className="text-xs text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+                                                                    {m}
                                                                 </span>
                                                             ))}
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Equipment</span>
-                                                        <span className="text-xs text-white">{ex.equipment}</span>
+                                                        <span className="text-xs text-white">{ex.equipmentList.join(', ')}</span>
                                                     </div>
                                                 </div>
 
-                                                {ex.description && (
-                                                    <div className="mt-4 bg-blue-500/5 border border-blue-500/10 p-3 rounded-lg flex gap-3">
-                                                        <Info size={16} className="text-blue-400 shrink-0 mt-0.5" />
-                                                        <p className="text-xs text-blue-200/80 leading-relaxed">
-                                                            {ex.description}
-                                                        </p>
-                                                    </div>
-                                                )}
+                                                <div className="mt-4">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (onViewInstructions) onViewInstructions(ex);
+                                                        }}
+                                                        className="w-full py-2 flex items-center justify-center gap-2 text-xs font-bold text-indigo-300 bg-indigo-500/20 hover:bg-indigo-500/30 rounded-lg border border-indigo-500/30 transition-colors"
+                                                    >
+                                                        <BookOpen size={14} />
+                                                        How to do
+                                                    </button>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
