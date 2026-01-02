@@ -17,7 +17,11 @@ import {
     Ruler,
     Weight,
     History,
-    ChevronLeft
+    ChevronLeft,
+    Target,
+    Edit3,
+    Check,
+    AlertCircle
 } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -60,7 +64,13 @@ export const HistoryView = () => {
     const { sessions, deleteSession } = useWorkoutHistoryStore();
 
     // ----- BODY STATS STATE -----
-    const { height, setHeight, weightHistory, addWeightEntry, deleteWeightEntry, gender, birthDate, availableEquipment, setGender, setBirthDate, setAvailableEquipment } = useUserStore();
+    const {
+        height, setHeight, weightHistory, addWeightEntry, deleteWeightEntry,
+        gender, setGender, birthDate, setBirthDate,
+        availableEquipment, setAvailableEquipment,
+        objective, setObjective,
+        specialConsiderations, setSpecialConsiderations
+    } = useUserStore();
     const { displayWeight, toKg, unitLabel } = useWeight();
     const [weightInput, setWeightInput] = useState('');
     const [dateInput, setDateInput] = useState(new Date().toISOString().split('T')[0]);
@@ -71,6 +81,19 @@ export const HistoryView = () => {
     const [editBirthDate, setEditBirthDate] = useState('');
     const [editEquipment, setEditEquipment] = useState<string[]>([]);
     const [isEquipmentCustomOpen, setIsEquipmentCustomOpen] = useState(false);
+    const [isEditingObjective, setIsEditingObjective] = useState(false);
+    const [objectiveInput, setObjectiveInput] = useState(objective || '');
+    const [isEditingConsiderations, setIsEditingConsiderations] = useState(false);
+    const [considerationsInput, setConsiderationsInput] = useState(specialConsiderations || '');
+
+    // Sync inputs with store when they change externally
+    useEffect(() => {
+        setObjectiveInput(objective || '');
+    }, [objective]);
+
+    useEffect(() => {
+        setConsiderationsInput(specialConsiderations || '');
+    }, [specialConsiderations]);
 
     // ----- EXERCISE STATS STATE -----
     const { getLogsByExercise } = usePerformanceStore();
@@ -238,6 +261,16 @@ export const HistoryView = () => {
             addWeightEntry(toKg(w), dateInput);
             setWeightInput('');
         }
+    };
+
+    const handleSaveObjective = () => {
+        setObjective(objectiveInput);
+        setIsEditingObjective(false);
+    };
+
+    const handleSaveConsiderations = () => {
+        setSpecialConsiderations(considerationsInput);
+        setIsEditingConsiderations(false);
     };
 
     // ----- VIEW STATE -----
@@ -592,6 +625,138 @@ export const HistoryView = () => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Current Objective */}
+                    <div className="bg-slate-800 p-4 rounded-xl space-y-3">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-semibold text-white flex items-center gap-2">
+                                <Target className="w-4 h-4 text-blue-400" />
+                                Current Objective
+                            </h3>
+                            {!isEditingObjective ? (
+                                <button
+                                    onClick={() => setIsEditingObjective(true)}
+                                    className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
+                                >
+                                    <Edit3 size={16} />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSaveObjective}
+                                    className="p-1.5 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-lg transition-all"
+                                >
+                                    <Check size={18} />
+                                </button>
+                            )}
+                        </div>
+
+                        {isEditingObjective ? (
+                            <div className="space-y-2 animate-in fade-in duration-200">
+                                <textarea
+                                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none min-h-[80px] text-sm resize-none"
+                                    placeholder="Set your fitness goal in your own words..."
+                                    value={objectiveInput}
+                                    onChange={(e) => setObjectiveInput(e.target.value)}
+                                    autoFocus
+                                />
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setIsEditingObjective(false);
+                                            setObjectiveInput(objective || '');
+                                        }}
+                                        className="text-[10px] uppercase tracking-wider font-bold text-slate-500 hover:text-slate-300 px-2 py-1"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleSaveObjective}
+                                        className="text-[10px] uppercase tracking-wider font-bold text-blue-400 hover:text-blue-300 px-2 py-1"
+                                    >
+                                        Save Goal
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="min-h-[40px] flex items-center">
+                                {objective ? (
+                                    <p className="text-sm text-slate-200 italic leading-relaxed">
+                                        "{objective}"
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-slate-500 italic">
+                                        No objective set yet. Click edit to define your fitness goal.
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Special Considerations */}
+                    <div className="bg-slate-800 p-4 rounded-xl space-y-3">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-semibold text-white flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4 text-amber-400" />
+                                Special Considerations
+                            </h3>
+                            {!isEditingConsiderations ? (
+                                <button
+                                    onClick={() => setIsEditingConsiderations(true)}
+                                    className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
+                                >
+                                    <Edit3 size={16} />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={handleSaveConsiderations}
+                                    className="p-1.5 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 rounded-lg transition-all"
+                                >
+                                    <Check size={18} />
+                                </button>
+                            )}
+                        </div>
+
+                        {isEditingConsiderations ? (
+                            <div className="space-y-2 animate-in fade-in duration-200">
+                                <textarea
+                                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 focus:ring-2 focus:ring-amber-500 outline-none min-h-[80px] text-sm resize-none"
+                                    placeholder="Add any injuries, limitations, or specific focus areas..."
+                                    value={considerationsInput}
+                                    onChange={(e) => setConsiderationsInput(e.target.value)}
+                                    autoFocus
+                                />
+                                <div className="flex justify-end gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setIsEditingConsiderations(false);
+                                            setConsiderationsInput(specialConsiderations || '');
+                                        }}
+                                        className="text-[10px] uppercase tracking-wider font-bold text-slate-500 hover:text-slate-300 px-2 py-1"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleSaveConsiderations}
+                                        className="text-[10px] uppercase tracking-wider font-bold text-amber-500 hover:text-amber-400 px-2 py-1"
+                                    >
+                                        Save Details
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="min-h-[40px] flex items-center">
+                                {specialConsiderations ? (
+                                    <p className="text-sm text-slate-200 leading-relaxed">
+                                        {specialConsiderations}
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-slate-500 italic">
+                                        No special considerations added.
+                                    </p>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Add Weight Form */}

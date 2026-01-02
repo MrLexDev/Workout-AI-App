@@ -30,7 +30,9 @@ export class UserStorageService {
             weightUnit: 'kg',
             gender: null,
             birthDate: null,
-            availableEquipment: []
+            availableEquipment: [],
+            objective: null,
+            specialConsiderations: null
         };
 
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -46,7 +48,9 @@ export class UserStorageService {
                 weightUnit: parsed.weightUnit === 'lb' ? 'lb' : 'kg',
                 gender: ['male', 'female', 'other'].includes(parsed.gender) ? parsed.gender : null,
                 birthDate: typeof parsed.birthDate === 'string' ? parsed.birthDate : null,
-                availableEquipment: Array.isArray(parsed.availableEquipment) ? parsed.availableEquipment : []
+                availableEquipment: Array.isArray(parsed.availableEquipment) ? parsed.availableEquipment : [],
+                objective: typeof parsed.objective === 'string' ? parsed.objective : null,
+                specialConsiderations: typeof parsed.specialConsiderations === 'string' ? parsed.specialConsiderations : null
             };
         } catch (error) {
             console.error('Error parsing user data from localStorage:', error);

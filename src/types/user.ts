@@ -14,4 +14,6 @@ export interface UserData {
     gender: 'male' | 'female' | 'other' | null;
     birthDate: string | null; // ISO Date string YYYY-MM-DD
     availableEquipment: string[];
+    objective: string | null;
+    specialConsiderations: string | null;
 }

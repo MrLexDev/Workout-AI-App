@@ -12,6 +12,8 @@ interface UserState extends UserData {
     setGender: (gender: 'male' | 'female' | 'other' | null) => void;
     setBirthDate: (date: string | null) => void;
     setAvailableEquipment: (equipment: string[]) => void;
+    setObjective: (objective: string | null) => void;
+    setSpecialConsiderations: (considerations: string | null) => void;
 }
 
 // Initial load
@@ -25,6 +27,8 @@ export const useUserStore = create<UserState>((set) => ({
     gender: initialData.gender,
     birthDate: initialData.birthDate,
     availableEquipment: initialData.availableEquipment,
+    objective: initialData.objective,
+    specialConsiderations: initialData.specialConsiderations,
 
     setHeight: (height: number) => {
         set((state) => {
@@ -38,7 +42,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { height };
         });
@@ -64,7 +70,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { weightHistory: newHistory };
         });
@@ -81,7 +89,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { weightHistory: newHistory };
         });
@@ -97,7 +107,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { autoSavePreference: value };
         });
@@ -113,7 +125,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: newData.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { weightUnit: unit };
         });
@@ -129,7 +143,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: newData.gender,
                 birthDate: state.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { gender };
         });
@@ -145,7 +161,9 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: newData.birthDate,
-                availableEquipment: state.availableEquipment
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { birthDate };
         });
@@ -161,9 +179,47 @@ export const useUserStore = create<UserState>((set) => ({
                 weightUnit: state.weightUnit,
                 gender: state.gender,
                 birthDate: state.birthDate,
-                availableEquipment: newData.availableEquipment
+                availableEquipment: newData.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: state.specialConsiderations
             });
             return { availableEquipment: equipment };
+        });
+    },
+
+    setObjective: (objective) => {
+        set((state) => {
+            const newData = { ...state, objective };
+            userStorageService.saveUserData({
+                height: state.height,
+                weightHistory: state.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment,
+                objective: newData.objective,
+                specialConsiderations: state.specialConsiderations
+            });
+            return { objective };
+        });
+    },
+
+    setSpecialConsiderations: (specialConsiderations) => {
+        set((state) => {
+            const newData = { ...state, specialConsiderations };
+            userStorageService.saveUserData({
+                height: state.height,
+                weightHistory: state.weightHistory,
+                autoSavePreference: state.autoSavePreference,
+                weightUnit: state.weightUnit,
+                gender: state.gender,
+                birthDate: state.birthDate,
+                availableEquipment: state.availableEquipment,
+                objective: state.objective,
+                specialConsiderations: newData.specialConsiderations
+            });
+            return { specialConsiderations };
         });
     }
 }));

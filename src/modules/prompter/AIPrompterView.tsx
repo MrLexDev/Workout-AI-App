@@ -1,18 +1,325 @@
-import { Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Sparkles, Copy, FileJson, Check, Settings, History, User, Target } from 'lucide-react';
+import { useUserStore } from '../../store/userStore';
+import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
+import { useWorkoutStore } from '../../store/workoutStore';
+import { generateCoachPrompt, type PromptOptions } from '../../utils/promptHelpers';
+import { workoutStorageService } from '../../services/storage/WorkoutStorageService';
 
 export const AIPrompterView = () => {
+    const [activeTab, setActiveTab] = useState<'generate' | 'import'>('generate');
+
+    // Stores
+    const userStore = useUserStore();
+    const historyStore = useWorkoutHistoryStore();
+    const { createRoutine, routines } = useWorkoutStore();
+
+    // Generation State
+    const [options, setOptions] = useState<PromptOptions>({
+        enquiryType: 'routine',
+        includeProfile: true,
+        includeStats: true,
+        includeHistory: true,
+        includeObjectives: true,
+        historyDays: 7
+    });
+    const [generatedPrompt, setGeneratedPrompt] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    // Import State
+    const [jsonInput, setJsonInput] = useState('');
+    const [importError, setImportError] = useState<string | null>(null);
+    const [importSuccess, setImportSuccess] = useState(false);
+
+    const handleGenerate = () => {
+        const prompt = generateCoachPrompt(
+            {
+                user: userStore,
+                history: historyStore.sessions,
+                routines: routines
+            },
+            options
+        );
+        setGeneratedPrompt(prompt);
+        setCopied(false);
+    };
+
+    const handleCopy = async () => {
+        if (!generatedPrompt) return;
+        try {
+            await navigator.clipboard.writeText(generatedPrompt);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Failed to copy', err);
+        }
+    };
+
+    const handleImport = () => {
+        setImportError(null);
+        setImportSuccess(false);
+
+        if (!jsonInput.trim()) return;
+
+        try {
+            // Locate JSON within the text (in case user pasted extra text)
+            let jsonString = jsonInput;
+            const firstBrace = jsonInput.indexOf('{');
+            const lastBrace = jsonInput.lastIndexOf('}');
+
+            if (firstBrace !== -1 && lastBrace !== -1) {
+                jsonString = jsonInput.substring(firstBrace, lastBrace + 1);
+            }
+
+            const validatedRoutine = workoutStorageService.validateAndParseRoutine(jsonString);
+
+            // Generate a truly unique ID if it conflicts? 
+            // For now, accept the one from AI or overwrite if ID matches.
+            // Let's ensure we don't accidentally overwrite unless intended, but for "Create", maybe we just append.
+
+            createRoutine(validatedRoutine);
+            setImportSuccess(true);
+            setJsonInput(''); // Clear after success
+        } catch (e: any) {
+            setImportError(e.message || 'Invalid JSON format');
+        }
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center h-[70vh] text-center p-6 space-y-6">
-            <div className="w-20 h-20 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/20">
-                <Sparkles size={40} className="text-white" />
+        <div className="h-full flex flex-col p-4 space-y-4 overflow-y-auto pb-24">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 bg-gradient-to-tr from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
+                    <Sparkles size={20} className="text-white" />
+                </div>
+                <div>
+                    <h1 className="text-2xl font-bold text-white">AI Coach</h1>
+                    <p className="text-xs text-slate-400">Powered by your data</p>
+                </div>
             </div>
 
-            <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-white">AI Coach</h2>
-                <p className="text-slate-400 max-w-xs">
-                    Your personal AI fitness assistant is coming soon. Get ready for personalized insights and workout generation.
-                </p>
+            {/* Tabs */}
+            <div className="flex p-1 bg-slate-900/50 rounded-xl border border-slate-800">
+                <button
+                    onClick={() => setActiveTab('generate')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'generate'
+                        ? 'bg-slate-800 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-300'
+                        }`}
+                >
+                    <Sparkles size={16} />
+                    Create Prompt
+                </button>
+                <button
+                    onClick={() => setActiveTab('import')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'import'
+                        ? 'bg-slate-800 text-white shadow-sm'
+                        : 'text-slate-400 hover:text-slate-300'
+                        }`}
+                >
+                    <FileJson size={16} />
+                    Import Response
+                </button>
             </div>
+
+            {/* Content Actions */}
+            {activeTab === 'generate' ? (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+
+                    {/* Enquiry Type Card */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-2">
+                        <h3 className="text-sm font-semibold text-slate-300 mb-2">I want to...</h3>
+                        <div className="grid grid-cols-3 gap-2">
+                            <button
+                                onClick={() => setOptions({ ...options, enquiryType: 'routine' })}
+                                className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'routine'
+                                        ? 'bg-blue-500/10 border-blue-500 text-blue-400'
+                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    }`}
+                            >
+                                <FileJson size={16} />
+                                New Routine
+                            </button>
+                            <button
+                                onClick={() => setOptions({ ...options, enquiryType: 'exercises' })}
+                                className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'exercises'
+                                        ? 'bg-purple-500/10 border-purple-500 text-purple-400'
+                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    }`}
+                            >
+                                <Target size={16} />
+                                More Exercises
+                            </button>
+                            <button
+                                onClick={() => setOptions({ ...options, enquiryType: 'analysis' })}
+                                className={`px-2 py-3 rounded-lg text-xs font-medium border flex flex-col items-center gap-1 transition-all ${options.enquiryType === 'analysis'
+                                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400'
+                                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-800'
+                                    }`}
+                            >
+                                <Sparkles size={16} />
+                                Analysis
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Options Card */}
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-4">
+                        <h3 className="text-sm font-semibold text-slate-300 mb-2">Include in Context</h3>
+
+                        <div className="grid grid-cols-1 gap-3">
+                            <label className="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/50">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                                        <User size={18} />
+                                    </div>
+                                    <span className="text-sm text-slate-200">Personal Profile</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    checked={options.includeProfile}
+                                    onChange={(e) => setOptions({ ...options, includeProfile: e.target.checked })}
+                                    className="w-5 h-5 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500/20"
+                                />
+                            </label>
+
+                            <label className="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/50">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-green-500/10 rounded-lg text-green-400">
+                                        <Settings size={18} />
+                                    </div>
+                                    <span className="text-sm text-slate-200">Equipment & Stats</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    checked={options.includeStats}
+                                    onChange={(e) => setOptions({ ...options, includeStats: e.target.checked })}
+                                    className="w-5 h-5 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500/20"
+                                />
+                            </label>
+
+                            <label className="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/50">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+                                        <Target size={18} />
+                                    </div>
+                                    <span className="text-sm text-slate-200">Objectives & Goals</span>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    checked={options.includeObjectives}
+                                    onChange={(e) => setOptions({ ...options, includeObjectives: e.target.checked })}
+                                    className="w-5 h-5 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500/20"
+                                />
+                            </label>
+
+                            <label className="flex items-center justify-between p-3 bg-slate-950 rounded-lg border border-slate-800/50">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-orange-500/10 rounded-lg text-orange-400">
+                                        <History size={18} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm text-slate-200">Workout History</span>
+                                        <span className="text-xs text-slate-500">Last {options.historyDays} days</span>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    {options.includeHistory && (
+                                        <select
+                                            value={options.historyDays}
+                                            onChange={(e) => setOptions({ ...options, historyDays: Number(e.target.value) })}
+                                            className="bg-slate-900 border border-slate-700 rounded text-xs text-white p-1"
+                                        >
+                                            <option value={7}>7 Days</option>
+                                            <option value={14}>14 Days</option>
+                                            <option value={30}>30 Days</option>
+                                        </select>
+                                    )}
+                                    <input
+                                        type="checkbox"
+                                        checked={options.includeHistory}
+                                        onChange={(e) => setOptions({ ...options, includeHistory: e.target.checked })}
+                                        className="w-5 h-5 rounded border-slate-700 bg-slate-800 text-blue-500 focus:ring-blue-500/20"
+                                    />
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleGenerate}
+                        className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2"
+                    >
+                        <Sparkles size={18} />
+                        Generate Prompt
+                    </button>
+
+                    {/* Result Area */}
+                    {generatedPrompt && (
+                        <div className="space-y-2 animate-in fade-in slide-in-from-bottom-2">
+                            <div className="flex justify-between items-center text-slate-400 px-1">
+                                <span className="text-xs font-medium uppercase tracking-wider">Ready to Copy</span>
+                                <span className="text-xs">{generatedPrompt.length} chars</span>
+                            </div>
+                            <div className="relative group">
+                                <textarea
+                                    value={generatedPrompt}
+                                    readOnly
+                                    className="w-full h-48 bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none resize-none"
+                                />
+                                <button
+                                    onClick={handleCopy}
+                                    className="absolute top-3 right-3 p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 transition-all flex items-center gap-2 shadow-xl"
+                                >
+                                    {copied ? <Check size={16} className="text-green-400" /> : <Copy size={16} />}
+                                    <span className="text-xs font-medium">{copied ? 'Copied!' : 'Copy'}</span>
+                                </button>
+                            </div>
+                            <p className="text-xs text-slate-500 text-center">
+                                Copy this prompt and paste it into ChatGPT, Claude, or your preferred AI.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4">
+                        <p className="text-sm text-slate-400 mb-4">
+                            Paste the JSON response from the AI below to automatically create a new routine.
+                        </p>
+                        <textarea
+                            value={jsonInput}
+                            onChange={(e) => setJsonInput(e.target.value)}
+                            placeholder='{ "id": "my-new-routine", ... }'
+                            className="w-full h-64 bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                        />
+                    </div>
+
+                    {importError && (
+                        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-200 text-sm flex items-center gap-2 animate-in slide-in-from-top-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
+                            {importError}
+                        </div>
+                    )}
+
+                    {importSuccess && (
+                        <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-200 text-sm flex items-center gap-2 animate-in slide-in-from-top-1">
+                            <Check size={16} className="text-green-400" />
+                            Routine imported successfully! check your dashboard.
+                        </div>
+                    )}
+
+                    <button
+                        onClick={handleImport}
+                        disabled={!jsonInput.trim()}
+                        className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2"
+                    >
+                        <FileJson size={18} />
+                        Import Routine
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
+
