@@ -18,6 +18,17 @@ function AppContent() {
     const [selectedExercise, setSelectedExercise] = useState<ExerciseDefinition | null>(null);
     const { handleBack, register } = useBackHandlerContext();
 
+    // Scroll to top whenever tab changes
+    useEffect(() => {
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(() => {
+            const scrollContainer = document.querySelector('[data-scroll-container]');
+            if (scrollContainer) {
+                scrollContainer.scrollTop = 0;
+            }
+        });
+    }, [activeTab]);
+
     // Priority 2 - Close Instruction View
     useEffect(() => {
         const unregister = register(() => {

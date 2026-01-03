@@ -17,6 +17,7 @@ interface PromptContextData {
     user: UserData;
     history: WorkoutSession[];
     allEquipment?: string[];
+    availableExerciseIds?: string[];
 }
 
 export const generateCoachPrompt = (data: PromptContextData, options: PromptOptions): string => {
@@ -83,8 +84,16 @@ ${weightHistory.map(w => `- ${new Date(w.date).toLocaleDateString()}: ${w.weight
             equipmentStr = availableEquipment.join(', ') || 'None specified';
         }
 
-        sections.push(`### Equipment & Experience
-- Available Equipment: ${equipmentStr}`);
+        let sectionContent = `### Equipment & Experience
+- Available Equipment: ${equipmentStr}`;
+
+        if (data.availableExerciseIds && data.availableExerciseIds.length > 0) {
+            sectionContent += `\n\n### Current Exercise Library (IDs)
+Use these IDs when creating routines if applicable. Do not invent new IDs unless recommending NEW exercises.
+${data.availableExerciseIds.join(', ')}`;
+        }
+
+        sections.push(sectionContent);
     }
 
     // 4. Objectives & Considerations
@@ -207,11 +216,21 @@ DO NOT use markdown formatting (like \`\`\`json).
       {
         "id": "string (kebab-case)",
         "name": "string",
+        "aliases": ["string"],
+        "exerciseType": "Strength" | "Cardio" | "Power" | "Plyometric",
+        "mechanics": "Compound" | "Isolation",
+        "forceType": "Push" | "Pull" | "Static",
+        "experienceLevel": "Beginner" | "Intermediate" | "Advanced",
         "targetMuscles": {
           "primary": ["string"],
           "secondary": ["string"]
         },
         "equipmentList": ["string"],
+        "instructions": {
+            "setup": "string",
+            "execution": ["string"],
+            "tips": ["string"]
+        },
         "description": "string"
       }
   ],

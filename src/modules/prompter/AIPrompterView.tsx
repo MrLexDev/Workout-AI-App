@@ -45,11 +45,18 @@ export const AIPrompterView = () => {
     const [importMessage, setImportMessage] = useState<string | null>(null);
 
     const handleGenerate = () => {
+        // Collect all exercise IDs (static + custom)
+        const staticIds = (exerciseData as ExerciseDefinition[]).map(ex => ex.id);
+        const customExercises = exerciseStorageService.loadCustomExercises();
+        const customIds = customExercises.map(ex => ex.id);
+        const allIds = Array.from(new Set([...staticIds, ...customIds])).sort();
+
         const prompt = generateCoachPrompt(
             {
                 user: userStore,
                 history: historyStore.sessions,
-                allEquipment
+                allEquipment,
+                availableExerciseIds: allIds
             },
             options
         );
