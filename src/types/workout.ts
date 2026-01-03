@@ -1,4 +1,6 @@
-﻿export interface SetTarget {
+﻿import type { Muscle } from './muscles';
+
+export interface SetTarget {
     reps: number;
     weight: number; // in kg
     rir?: number; // Reps in Reserve (optional)
@@ -18,8 +20,8 @@ export interface ExerciseDefinition {
     forceType?: string; // e.g. "Pull"
     experienceLevel?: string; // e.g. "Advanced"
     targetMuscles: {
-        primary: string[];
-        secondary: string[]; // Simple string array now, lost 'impact' granularity in pure JSON but can infer
+        primary: Muscle[];
+        secondary: Muscle[]; // Simple string array now, lost 'impact' granularity in pure JSON but can infer
     };
     equipmentList: string[]; // renamed from equipment string
     instructions?: {

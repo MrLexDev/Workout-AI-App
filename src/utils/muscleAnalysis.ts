@@ -1,7 +1,6 @@
 import { type WorkoutSession } from '../types/history';
 import { type ExerciseDefinition, type HydratedRoutine } from '../types/workout';
-
-
+import { MUSCLE_STRUCTURE, type MuscleGroup } from '../types/muscles';
 
 interface MuscleScore {
     [muscle: string]: number;
@@ -105,34 +104,21 @@ export const calculateRoutineMuscleVolume = (
     return scores;
 };
 
-export const MUSCLE_GROUPS: Record<string, string[]> = {
-    'Chest': ['Chest', 'Upper Chest', 'Lower Chest'],
-    'Back': ['Back', 'Upper Back', 'Lats', 'Lower Back', 'Traps', 'Rhomboids'],
-    'Shoulders': ['Shoulders', 'Front Delts', 'Side Delts', 'Rear Delts', 'Rotator Cuff'],
-    'Legs': ['Legs', 'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Adductors', 'Abductors'],
-    'Arms': ['Arms', 'Biceps', 'Triceps', 'Forearms'],
-    'Core': ['Core', 'Abs', 'Obliques', 'Hip Flexors']
-};
-
 export const groupMuscleScores = (scores: MuscleScore): Record<string, number> => {
-    const grouped: Record<string, number> = {
-        'Chest': 0,
-        'Back': 0,
-        'Shoulders': 0,
-        'Legs': 0,
-        'Arms': 0,
-        'Core': 0
-    };
+    // Initialize groups with 0
+    const grouped: Record<string, number> = {};
+    (Object.keys(MUSCLE_STRUCTURE) as MuscleGroup[]).forEach(group => {
+        grouped[group] = 0;
+    });
 
     Object.entries(scores).forEach(([muscle, score]) => {
-        for (const [group, members] of Object.entries(MUSCLE_GROUPS)) {
-            if (members.includes(muscle) || group === muscle) {
+        for (const [group, members] of Object.entries(MUSCLE_STRUCTURE)) {
+            // Check if muscle is in the group (members is readonly array)
+            if ((members as readonly string[]).includes(muscle)) {
                 grouped[group] += score;
                 break;
             }
         }
-        // If not found in specific groups, you might want a 'Other' or just ignore
-        // For now, if we have "Cardiovascular System" it will be ignored on the radar which is fine
     });
 
     return grouped;

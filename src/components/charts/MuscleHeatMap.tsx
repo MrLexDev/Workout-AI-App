@@ -27,24 +27,24 @@ export const MuscleHeatMap = ({ data, metric = 'effectiveReps' }: MuscleHeatMapP
 
         // Map SVG Slugs to our App's Muscle Groups
         switch (m) {
-            case 'chest': keysToCheck.push('Chest', 'Upper Chest', 'Lower Chest'); break;
-            case 'obliques': keysToCheck.push('Obliques', 'Core'); break;
-            case 'abs': keysToCheck.push('Abs', 'Core'); break;
-            case 'biceps': keysToCheck.push('Biceps', 'Arms'); break;
-            case 'triceps': keysToCheck.push('Triceps', 'Arms'); break;
+            case 'chest': keysToCheck.push('Pectoralis Major', 'Upper Chest', 'Lower Chest'); break;
+            case 'obliques': keysToCheck.push('Obliques', 'Abs'); break;
+            case 'abs': keysToCheck.push('Abs'); break;
+            case 'biceps': keysToCheck.push('Biceps'); break;
+            case 'triceps': keysToCheck.push('Triceps'); break;
             case 'forearm': keysToCheck.push('Forearms'); break;
-            case 'trapezius': keysToCheck.push('Traps', 'Upper Back', 'Back', 'Rhomboids'); break;
-            case 'upper-back': keysToCheck.push('Upper Back', 'Back', 'Lats', 'Rhomboids'); break;
-            case 'lower-back': keysToCheck.push('Lower Back', 'Back'); break;
-            case 'deltoids': keysToCheck.push('Shoulders', 'Front Delts', 'Side Delts', 'Rear Delts'); break;
-            case 'quadriceps': keysToCheck.push('Quads', 'Legs', 'Squat'); break; // Squat as muscle? No.
-            case 'hamstring': keysToCheck.push('Hamstrings', 'Legs'); break;
+            case 'trapezius': keysToCheck.push('Traps', 'Rhomboids', 'Rear Delts'); break;
+            case 'upper-back': keysToCheck.push('Traps', 'Rhomboids', 'Latissimus Dorsi'); break;
+            case 'lower-back': keysToCheck.push('Lower Back', 'Erectors'); break;
+            case 'deltoids': keysToCheck.push('Front Delts', 'Side Delts', 'Rear Delts'); break;
+            case 'quadriceps': keysToCheck.push('Quads'); break;
+            case 'hamstring': keysToCheck.push('Hamstrings'); break;
             case 'gluteal': keysToCheck.push('Glutes'); break;
             case 'calves': keysToCheck.push('Calves'); break;
-            case 'tibialis': keysToCheck.push('Calves'); break; // Tibialis usually treated as lower leg/calves context
-            case 'adductors': keysToCheck.push('Adductors', 'Legs'); break;
-            case 'neck': keysToCheck.push('Traps'); break; // Neck often exercises traps
-            case 'shoulders': keysToCheck.push('Shoulders', 'Front Delts', 'Side Delts', 'Rear Delts'); break;
+            case 'tibialis': keysToCheck.push('Calves'); break;
+            case 'adductors': keysToCheck.push('Adductors'); break;
+            case 'neck': keysToCheck.push('Traps'); break;
+            case 'shoulders': keysToCheck.push('Front Delts', 'Side Delts', 'Rear Delts'); break;
             case 'hand':
             case 'hands': keysToCheck.push('Forearms'); break;
             case 'feet':

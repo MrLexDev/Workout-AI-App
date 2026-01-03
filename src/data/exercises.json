@@ -9,11 +9,11 @@
         "experienceLevel": "Intermediate",
         "targetMuscles": {
             "primary": [
-                "Lats"
+                "Latissimus Dorsi"
             ],
             "secondary": [
                 "Biceps",
-                "Upper Back",
+                "Rhomboids",
                 "Forearms"
             ]
         },
@@ -34,36 +34,18 @@
                 "Focus on depressing your scapula before pulling."
             ]
         },
-        "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
-    },
-    {
-        "id": "weighted-pull-up2",
-        "name": "Weighted Pull-Up -2",
-        "targetMuscles": {
-            "primary": [
-                "Lats"
-            ],
-            "secondary": [
-                "Biceps",
-                "Upper Back"
-            ]
-        },
-        "equipmentList": [
-            "Pull-up Bar",
-            "Weight Belt"
-        ],
-        "description": "A compound upper body exercise that targets the back and arms. Adding weight increases intensity."
+        "description": "An advanced progression of the standard pull-up designed to maximize lat hypertrophy and pulling strength by introducing external resistance."
     },
     {
         "id": "overhead-press-barbell",
         "name": "Barbell Overhead Press",
         "targetMuscles": {
             "primary": [
-                "Shoulders"
+                "Front Delts"
             ],
             "secondary": [
                 "Triceps",
-                "Core"
+                "Abs"
             ]
         },
         "equipmentList": [
@@ -90,7 +72,7 @@
         "name": "Weighted Chest Dips",
         "targetMuscles": {
             "primary": [
-                "Chest"
+                "Lower Chest"
             ],
             "secondary": [
                 "Triceps",
@@ -124,7 +106,7 @@
             ],
             "secondary": [
                 "Rotator Cuff",
-                "Upper Traps"
+                "Traps"
             ]
         },
         "equipmentList": [
@@ -155,8 +137,8 @@
                 "Glutes"
             ],
             "secondary": [
-                "Lower Back",
-                "Core"
+                "Erectors",
+                "Abs"
             ]
         },
         "equipmentList": [
@@ -188,7 +170,7 @@
                 "Glutes"
             ],
             "secondary": [
-                "Lower Back"
+                "Erectors"
             ]
         },
         "equipmentList": [
@@ -215,7 +197,7 @@
         "name": "Dead Bug",
         "targetMuscles": {
             "primary": [
-                "Core"
+                "Abs"
             ],
             "secondary": [
                 "Hip Flexors"
@@ -292,11 +274,12 @@
         "name": "Chest Supported Row",
         "targetMuscles": {
             "primary": [
-                "Upper Back",
-                "Rear Delts"
+                "Rhomboids",
+                "Traps"
             ],
             "secondary": [
-                "Biceps"
+                "Biceps",
+                "Rear Delts"
             ]
         },
         "equipmentList": [
@@ -352,7 +335,7 @@
                 "Triceps"
             ],
             "secondary": [
-                "Chest"
+                "Pectoralis Major"
             ]
         },
         "equipmentList": [

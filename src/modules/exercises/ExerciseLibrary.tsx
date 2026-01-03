@@ -156,8 +156,8 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
         // 3. Muscle Filter
         if (selectedMuscle !== 'All') {
             result = result.filter(ex =>
-                ex.targetMuscles.primary.includes(selectedMuscle) ||
-                ex.targetMuscles.secondary.includes(selectedMuscle)
+                ex.targetMuscles.primary.includes(selectedMuscle as any) ||
+                ex.targetMuscles.secondary.includes(selectedMuscle as any)
             );
         }
 

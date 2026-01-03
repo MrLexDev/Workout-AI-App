@@ -11,7 +11,8 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
-import { calculateVolumeStats, MUSCLE_GROUPS } from '../../utils/muscleAnalysis';
+import { calculateVolumeStats } from '../../utils/muscleAnalysis';
+import { MUSCLE_STRUCTURE } from '../../types/muscles';
 import { MuscleHeatMap } from '../../components/charts/MuscleHeatMap';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
@@ -49,7 +50,7 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
 
     // Helper to find group for a muscle
     const getMuscleGroup = (muscle: string) => {
-        return Object.entries(MUSCLE_GROUPS).find(([_, members]) => members.includes(muscle) || _ === muscle)?.[0] || 'Other';
+        return Object.entries(MUSCLE_STRUCTURE).find(([_, members]) => (members as readonly string[]).includes(muscle))?.[0] || 'Other';
     };
 
     // Muscle groups found in data
