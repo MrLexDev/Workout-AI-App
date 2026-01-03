@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ChevronLeft, Info } from 'lucide-react';
+import { ChevronLeft, Info, List, Map } from 'lucide-react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +12,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
 import { calculateVolumeStats, MUSCLE_GROUPS } from '../../utils/muscleAnalysis';
+import { MuscleHeatMap } from '../../components/charts/MuscleHeatMap';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
 import { useWeight } from '../../hooks/useWeight';
@@ -33,6 +34,7 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
     const { sessions } = useWorkoutHistoryStore();
     const { displayWeight, unitLabel } = useWeight();
     const [granularity, setGranularity] = useState<'weekly' | 'monthly'>('weekly');
+    const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
     const [expandedMuscle, setExpandedMuscle] = useState<string | null>(null);
 
     // Load exercises
@@ -108,6 +110,28 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
                     <h2 className="text-lg font-bold text-white">Muscle Volume</h2>
                     <p className="text-xs text-slate-500">Track your weekly progress</p>
                 </div>
+
+                {/* View Toggle */}
+                <div className="ml-auto flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                    <button
+                        onClick={() => setViewMode('list')}
+                        className={`p-2 rounded-md transition-all ${viewMode === 'list'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                    >
+                        <List size={18} />
+                    </button>
+                    <button
+                        onClick={() => setViewMode('map')}
+                        className={`p-2 rounded-md transition-all ${viewMode === 'map'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-400 hover:text-slate-200'
+                            }`}
+                    >
+                        <Map size={18} />
+                    </button>
+                </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
@@ -148,67 +172,87 @@ export const VolumeStatsView = ({ onBack }: VolumeStatsViewProps) => {
                     </div>
                 </div>
 
-                {/* Muscle List */}
-                <div className="space-y-4">
-                    {activeMuscles.map(muscle => {
-                        const isExpanded = expandedMuscle === muscle;
-                        const data = volumeData[muscle];
-                        const lastPoint = data[data.length - 1];
-                        const group = getMuscleGroup(muscle);
 
-                        return (
-                            <div key={muscle} className="bg-slate-800/50 border border-slate-700/50 rounded-xl overflow-hidden transition-all duration-300">
-                                <button
-                                    onClick={() => setExpandedMuscle(isExpanded ? null : muscle)}
-                                    className="w-full flex items-center justify-between p-4 hover:bg-slate-800/80 transition-colors"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-2 h-8 rounded-full ${group === 'Chest' ? 'bg-blue-500' :
-                                            group === 'Back' ? 'bg-purple-500' :
-                                                group === 'Legs' ? 'bg-teal-500' :
-                                                    group === 'Shoulders' ? 'bg-orange-500' :
-                                                        group === 'Arms' ? 'bg-pink-500' : 'bg-slate-500'
-                                            }`} />
-                                        <div className="text-left">
-                                            <h3 className="font-bold text-white">{muscle}</h3>
-                                            <div className="text-xs text-slate-500 flex gap-2">
-                                                <span>Last: {Math.round(displayWeight(lastPoint?.volume || 0)).toLocaleString()}{unitLabel}</span>
-                                                <span>•</span>
-                                                <span>{Math.round(lastPoint?.effectiveReps || 0)} eff. reps</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <ChevronLeft
-                                        className={`text-slate-500 transition-transform duration-300 ${isExpanded ? '-rotate-90' : 'rotate-180'}`}
-                                        size={20}
-                                    />
-                                </button>
-
-                                {/* Expanded Content */}
-                                {isExpanded && (
-                                    <div className="p-4 pt-0 border-t border-slate-800/50 animate-in slide-in-from-top-2">
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                                            <div>
-                                                <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Volume Load</h4>
-                                                <Bar data={getChartData(muscle, 'volume')} options={chartOptions} />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Effective Reps</h4>
-                                                <Bar data={getChartData(muscle, 'effectiveReps')} options={chartOptions} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                {viewMode === 'map' ? (
+                    <div className="flex-1 flex flex-col">
+                        <MuscleHeatMap data={volumeData} metric="effectiveReps" />
+                        <div className="mt-4 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                            <h4 className="text-sm font-bold text-slate-300 mb-2">Heatmap Legend</h4>
+                            <div className="flex items-center gap-2 text-xs text-slate-400">
+                                <div className="w-4 h-4 rounded bg-white border border-slate-600"></div>
+                                <span>Less Intensity</span>
+                                <div className="flex-1 h-1 bg-gradient-to-r from-white to-red-600 mx-2 rounded-full"></div>
+                                <span>High Intensity</span>
+                                <div className="w-4 h-4 rounded bg-red-600"></div>
                             </div>
-                        );
-                    })}
-
-                    {activeMuscles.length === 0 && (
-                        <div className="text-center py-12 text-slate-500">
-                            No volume data found for the selected period.
+                            <p className="mt-2 text-[10px] text-slate-500">
+                                Intensity is based on the total number of effective reps accumulated for each muscle group.
+                            </p>
                         </div>
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    /* Muscle List */
+                    <div className="space-y-4">
+                        {activeMuscles.map(muscle => {
+                            const isExpanded = expandedMuscle === muscle;
+                            const data = volumeData[muscle];
+                            const lastPoint = data[data.length - 1];
+                            const group = getMuscleGroup(muscle);
+
+                            return (
+                                <div key={muscle} className="bg-slate-800/50 border border-slate-700/50 rounded-xl overflow-hidden transition-all duration-300">
+                                    <button
+                                        onClick={() => setExpandedMuscle(isExpanded ? null : muscle)}
+                                        className="w-full flex items-center justify-between p-4 hover:bg-slate-800/80 transition-colors"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-2 h-8 rounded-full ${group === 'Chest' ? 'bg-blue-500' :
+                                                group === 'Back' ? 'bg-purple-500' :
+                                                    group === 'Legs' ? 'bg-teal-500' :
+                                                        group === 'Shoulders' ? 'bg-orange-500' :
+                                                            group === 'Arms' ? 'bg-pink-500' : 'bg-slate-500'
+                                                }`} />
+                                            <div className="text-left">
+                                                <h3 className="font-bold text-white">{muscle}</h3>
+                                                <div className="text-xs text-slate-500 flex gap-2">
+                                                    <span>Last: {Math.round(displayWeight(lastPoint?.volume || 0)).toLocaleString()}{unitLabel}</span>
+                                                    <span>•</span>
+                                                    <span>{Math.round(lastPoint?.effectiveReps || 0)} eff. reps</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ChevronLeft
+                                            className={`text-slate-500 transition-transform duration-300 ${isExpanded ? '-rotate-90' : 'rotate-180'}`}
+                                            size={20}
+                                        />
+                                    </button>
+
+                                    {/* Expanded Content */}
+                                    {isExpanded && (
+                                        <div className="p-4 pt-0 border-t border-slate-800/50 animate-in slide-in-from-top-2">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                                                <div>
+                                                    <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Volume Load</h4>
+                                                    <Bar data={getChartData(muscle, 'volume')} options={chartOptions} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-xs font-bold text-slate-400 uppercase mb-2">Effective Reps</h4>
+                                                    <Bar data={getChartData(muscle, 'effectiveReps')} options={chartOptions} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+
+                        {activeMuscles.length === 0 && (
+                            <div className="text-center py-12 text-slate-500">
+                                No volume data found for the selected period.
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );
