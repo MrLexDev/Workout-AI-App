@@ -3,7 +3,7 @@ import { Sparkles, Copy, FileJson, Check, Settings, History, User, Target, Check
 import { useUserStore } from '../../store/userStore';
 import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
 import { useWorkoutStore } from '../../store/workoutStore';
-import { generateCoachPrompt, type PromptOptions } from '../../utils/promptHelpers';
+import { generateCoachPrompt, generateUnknownExercisesPrompt, type PromptOptions } from '../../utils/promptHelpers';
 import { workoutStorageService } from '../../services/storage/WorkoutStorageService';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
 import exerciseData from '../../data/exercises.json';
@@ -33,7 +33,8 @@ export const AIPrompterView = () => {
         includeStats: true,
         includeHistory: true,
         includeObjectives: true,
-        historyDays: 7
+        historyDays: 7,
+        customInstructions: ''
     });
     const [generatedPrompt, setGeneratedPrompt] = useState('');
     const [copied, setCopied] = useState(false);
@@ -107,6 +108,35 @@ export const AIPrompterView = () => {
             if (parsed.type === 'routine' && parsed.data) {
                 // Envelope Format: Routine
                 const validatedRoutine = workoutStorageService.validateAndParseRoutine(JSON.stringify(parsed.data));
+
+                // Check for unknown exercises
+                const staticIds = (exerciseData as ExerciseDefinition[]).map(ex => ex.id);
+                const customExercises = exerciseStorageService.loadCustomExercises();
+                const customIds = customExercises.map(ex => ex.id);
+                const allIds = new Set([...staticIds, ...customIds]);
+
+                const unknownIds: string[] = [];
+                validatedRoutine.exercises.forEach(ex => {
+                    if (!allIds.has(ex.exerciseId)) {
+                        unknownIds.push(ex.exerciseId);
+                    }
+                });
+
+                if (unknownIds.length > 0) {
+                    const instructions = generateUnknownExercisesPrompt(unknownIds);
+
+                    // Switch to generate tab, set type to exercises, and pre-fill instructions
+                    setOptions(prev => ({
+                        ...prev,
+                        enquiryType: 'exercises',
+                        customInstructions: instructions
+                    }));
+                    setActiveTab('generate');
+                    setImportError(`Found ${unknownIds.length} unknown exercises. Please generate a definition prompt for them.`);
+
+                    return;
+                }
+
                 createRoutine(validatedRoutine);
                 setImportSuccess(true);
                 setImportMessage(parsed.message || null);
@@ -190,6 +220,13 @@ export const AIPrompterView = () => {
             {activeTab === 'generate' ? (
                 <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
 
+                    {importError && (
+                        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-200 text-sm flex items-center gap-2 animate-in slide-in-from-top-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                            {importError}
+                        </div>
+                    )}
+
                     {/* Enquiry Type Card */}
                     <div className="bg-slate-900/50 border border-slate-800 rounded-xl p-4 space-y-2">
                         <h3 className="text-sm font-semibold text-slate-300 mb-2">I want to...</h3>
@@ -224,6 +261,17 @@ export const AIPrompterView = () => {
                                 <Sparkles size={16} />
                                 Analysis
                             </button>
+                        </div>
+
+                        {/* Custom Instructions */}
+                        <div className="pt-2">
+                            <label className="text-xs font-semibold text-slate-400 mb-1 block">Custom Instructions</label>
+                            <textarea
+                                value={options.customInstructions || ''}
+                                onChange={(e) => setOptions({ ...options, customInstructions: e.target.value })}
+                                placeholder="E.g., Focus on glutes, no equipment, avoid jumping..."
+                                className="w-full h-20 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 focus:outline-none focus:border-blue-500/50 resize-none"
+                            />
                         </div>
                     </div>
 

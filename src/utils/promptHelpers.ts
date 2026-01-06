@@ -11,6 +11,7 @@ export interface PromptOptions {
     includeHistory: boolean;
     includeObjectives: boolean;
     historyDays: number;
+    customInstructions?: string;
 }
 
 interface PromptContextData {
@@ -36,6 +37,13 @@ You are an expert Performance Data Analyst, Strength and Fitness Coach.`;
     }
 
     sections.push(roleDescription);
+
+    // 1.5 Custom Instructions (Early Influence)
+    if (options.customInstructions && options.customInstructions.trim()) {
+        sections.push(`### USER SPECIFIC REQUEST
+The user has provided the following specific instructions. prioritizing this over general role guidelines:
+"${options.customInstructions}"`);
+    }
 
     // 2. User Profile & Weight Evolution
     if (options.includeProfile) {
@@ -259,4 +267,11 @@ DO NOT use markdown formatting (like \`\`\`json).
     sections.push(responseInstructions);
 
     return sections.join('\n\n');
+};
+
+export const generateUnknownExercisesPrompt = (unknownIds: string[]): string => {
+    return `Generate following exercises that I don't have in my database:
+${unknownIds.map(id => `- ${id}`).join('\n')}
+
+Please provide the definition for these exercises`;
 };
