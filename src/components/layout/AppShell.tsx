@@ -4,7 +4,6 @@ import { LayoutDashboard, Dumbbell, History, Settings, Sparkles } from 'lucide-r
 
 interface AppShellProps {
     children: ReactNode;
-    title?: string;
     activeTab?: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter';
     onTabChange?: (tab: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter') => void;
 }
@@ -17,18 +16,14 @@ interface AppShellProps {
  * Each tab gets its own scroll container via the key prop - this ensures
  * each tab's scroll position is independent and always starts at the top.
  */
-export const AppShell: React.FC<AppShellProps> = ({ children, title, activeTab = 'dashboard', onTabChange }) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, activeTab = 'dashboard', onTabChange }) => {
     return (
         <div className="min-h-screen w-full bg-slate-950 flex justify-center overflow-hidden">
             {/* Mobile container limit */}
             <main className="w-full max-w-md bg-slate-900 h-screen shadow-2xl relative flex flex-col">
 
                 {/* Top Header */}
-                <header className="px-6 py-5 border-b border-slate-800 bg-slate-900/95 sticky top-0 z-10 backdrop-blur-sm">
-                    <h1 className="text-xl font-bold tracking-tight text-white">
-                        {title || 'Workout Tracker'}
-                    </h1>
-                </header>
+                {/* Header removed as per user request */}
 
                 {/* Content Area - Scroll container that can be targeted for scroll reset */}
                 <div data-scroll-container className="flex-1 p-4 overflow-y-auto pb-24">

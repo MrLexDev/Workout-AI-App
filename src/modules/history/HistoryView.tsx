@@ -327,7 +327,7 @@ export const HistoryView = () => {
 
     if (view === 'profile') {
         return (
-            <div className="flex flex-col h-full bg-slate-950 animate-in slide-in-from-right duration-300">
+            <div className="flex flex-col min-h-full bg-slate-950 animate-in slide-in-from-right duration-300">
                 <div className="flex items-center gap-4 p-4 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
                     <button
                         onClick={() => setView('overview')}
@@ -569,7 +569,7 @@ export const HistoryView = () => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-slate-950 pb-20 animate-in fade-in duration-500">
+        <div className="flex flex-col min-h-full bg-slate-950 pb-20 animate-in fade-in duration-500">
             {/* Tab Switcher */}
             <div className="flex p-1 bg-slate-900 mx-4 mt-4 rounded-xl mb-6 border border-slate-800">
                 <button

@@ -72,12 +72,7 @@ function AppContent() {
 
     return (
         <AppShell
-            title={isSessionActive ? "Workout In Progress" : (
-                activeTab === 'dashboard' ? 'Dashboard' :
-                    activeTab === 'workout' ? 'Exercise Library' :
-                        activeTab === 'history' ? 'History' :
-                            activeTab === 'settings' ? 'Settings' : 'AI Coach'
-            )}
+
             activeTab={activeTab}
             onTabChange={setActiveTab}
         >

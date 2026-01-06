@@ -1,6 +1,6 @@
 export const MUSCLE_STRUCTURE = {
-    Chest: ['Pectoralis Major', 'Upper Chest', 'Lower Chest'],
-    Back: ['Latissimus Dorsi', 'Rhomboids', 'Traps', 'Lower Back', 'Erectors'],
+    Chest: ['Chest', 'Upper Chest', 'Lower Chest'],
+    Back: ['Lats', 'Rhomboids', 'Traps', 'Lower Back', 'Upper Back'],
     Shoulders: ['Front Delts', 'Side Delts', 'Rear Delts', 'Rotator Cuff'],
     Legs: ['Quads', 'Hamstrings', 'Glutes', 'Calves', 'Adductors', 'Abductors'],
     Arms: ['Biceps', 'Triceps', 'Forearms'],
