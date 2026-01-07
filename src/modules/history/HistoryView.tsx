@@ -616,12 +616,12 @@ export const HistoryView = () => {
     return (
         <div className="flex flex-col min-h-full bg-slate-950 pb-20 animate-in fade-in duration-500">
             {/* Tab Switcher */}
-            <div className="flex p-1 bg-slate-900 mx-4 mt-4 rounded-xl mb-6 border border-slate-800">
+            <div className="flex w-full border-b border-slate-800 mb-6 bg-slate-900/50 backdrop-blur sticky top-0 z-10">
                 <button
                     onClick={() => setHistoryTab('body')}
-                    className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'body'
-                        ? 'bg-slate-800 text-white shadow-sm'
-                        : 'text-slate-500 hover:text-slate-300'
+                    className={`flex-1 py-3 text-sm font-bold transition-all flex items-center justify-center gap-2 border-b-2 ${historyTab === 'body'
+                        ? 'border-blue-500 text-blue-500'
+                        : 'border-transparent text-slate-500 hover:text-white'
                         }`}
                 >
                     <User size={16} />
@@ -629,9 +629,9 @@ export const HistoryView = () => {
                 </button>
                 <button
                     onClick={() => setHistoryTab('exercises')}
-                    className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'exercises'
-                        ? 'bg-slate-800 text-white shadow-sm'
-                        : 'text-slate-500 hover:text-slate-300'
+                    className={`flex-1 py-3 text-sm font-bold transition-all flex items-center justify-center gap-2 border-b-2 ${historyTab === 'exercises'
+                        ? 'border-blue-500 text-blue-500'
+                        : 'border-transparent text-slate-500 hover:text-white'
                         }`}
                 >
                     <Activity size={16} />
@@ -639,9 +639,9 @@ export const HistoryView = () => {
                 </button>
                 <button
                     onClick={() => setHistoryTab('workouts')}
-                    className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all flex items-center justify-center gap-2 ${historyTab === 'workouts'
-                        ? 'bg-slate-800 text-white shadow-sm'
-                        : 'text-slate-500 hover:text-slate-300'
+                    className={`flex-1 py-3 text-sm font-bold transition-all flex items-center justify-center gap-2 border-b-2 ${historyTab === 'workouts'
+                        ? 'border-blue-500 text-blue-500'
+                        : 'border-transparent text-slate-500 hover:text-white'
                         }`}
                 >
                     <BarChart size={16} />

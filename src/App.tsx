@@ -75,6 +75,7 @@ function AppContent() {
 
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            disablePadding={isSessionActive}
         >
             {isSessionActive ? (
                 <ActiveSessionView />

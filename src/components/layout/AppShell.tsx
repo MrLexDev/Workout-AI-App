@@ -6,6 +6,7 @@ interface AppShellProps {
     children: ReactNode;
     activeTab?: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter';
     onTabChange?: (tab: 'dashboard' | 'workout' | 'history' | 'settings' | 'ai_prompter') => void;
+    disablePadding?: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ interface AppShellProps {
  * Each tab gets its own scroll container via the key prop - this ensures
  * each tab's scroll position is independent and always starts at the top.
  */
-export const AppShell: React.FC<AppShellProps> = ({ children, activeTab = 'dashboard', onTabChange }) => {
+export const AppShell: React.FC<AppShellProps> = ({ children, activeTab = 'dashboard', onTabChange, disablePadding = false }) => {
     return (
         <div className="min-h-screen w-full bg-slate-950 flex justify-center overflow-hidden">
             {/* Mobile container limit */}
@@ -26,7 +27,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children, activeTab = 'dashb
                 {/* Header removed as per user request */}
 
                 {/* Content Area - Scroll container that can be targeted for scroll reset */}
-                <div data-scroll-container className="flex-1 p-4 overflow-y-auto pb-24">
+                <div data-scroll-container className={`flex-1 overflow-y-auto pb-24 ${(activeTab === 'history' || disablePadding) ? 'p-0' : 'p-4'}`}>
                     {children}
                 </div>
 
