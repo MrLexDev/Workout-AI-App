@@ -21,7 +21,9 @@ import {
     Target,
     Edit3,
     Check,
-    AlertCircle
+    AlertCircle,
+    Search,
+    TrendingUp
 } from 'lucide-react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -39,6 +41,7 @@ import {
 import { MuscleRadarChart } from '../../components/charts/MuscleRadarChart';
 import { calculateMuscleVolume, groupMuscleScores } from '../../utils/muscleAnalysis';
 import { VolumeStatsView } from './VolumeStatsView';
+import { DateWheelPicker } from '../../components/inputs/DateWheelPicker';
 import { useNativeBack } from '../../hooks/useNativeBack';
 import { useWeight } from '../../hooks/useWeight';
 
@@ -97,8 +100,10 @@ export const HistoryView = () => {
     }, [specialConsiderations]);
 
     // ----- EXERCISE STATS STATE -----
-    const { getLogsByExercise } = usePerformanceStore();
+    const { getLogsByExercise, preSelectedExerciseId, setPreSelectedExerciseId, logs } = usePerformanceStore();
     const [selectedExerciseId, setSelectedExerciseId] = useState<string>('');
+    const [exerciseSearch, setExerciseSearch] = useState('');
+    const [showWithProgressOnly, setShowWithProgressOnly] = useState(false);
     const [customExercises, setCustomExercises] = useState<ExerciseDefinition[]>([]);
     const [radarRange, setRadarRange] = useState<'7d' | '30d' | 'all'>('7d');
 
@@ -115,12 +120,52 @@ export const HistoryView = () => {
         return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
     }, [customExercises]);
 
-    // Initialize selected exercise
+    // Initialize selected exercise or handle redirect
     useEffect(() => {
-        if (!selectedExerciseId && allExercises.length > 0) {
+        if (preSelectedExerciseId) {
+            // Check validity
+            const exists = allExercises.some(e => e.id === preSelectedExerciseId);
+            if (exists) {
+                setSelectedExerciseId(preSelectedExerciseId);
+                setHistoryTab('exercises');
+            }
+            // Consumed
+            setPreSelectedExerciseId(null);
+        } else if (!selectedExerciseId && allExercises.length > 0) {
             setSelectedExerciseId(allExercises[0].id);
         }
-    }, [allExercises, selectedExerciseId]);
+    }, [allExercises, selectedExerciseId, preSelectedExerciseId, setPreSelectedExerciseId]);
+
+    // Identify exercises with >= 2 logs (sufficient for chart)
+    const exercisesWithProgress = useMemo(() => {
+        const counts = new Map<string, number>();
+        logs.forEach(log => {
+            counts.set(log.exerciseId, (counts.get(log.exerciseId) || 0) + 1);
+        });
+        const set = new Set<string>();
+        counts.forEach((count, id) => {
+            if (count >= 2) set.add(id);
+        });
+        return set;
+    }, [logs]);
+
+    // Filter exercises based on search and progress availability
+    const filteredExercises = useMemo(() => {
+        let result = allExercises;
+
+        // 1. Search Query
+        if (exerciseSearch.trim()) {
+            const lower = exerciseSearch.toLowerCase();
+            result = result.filter(ex => ex.name.toLowerCase().includes(lower));
+        }
+
+        // 2. Progress Filter
+        if (showWithProgressOnly) {
+            result = result.filter(ex => exercisesWithProgress.has(ex.id));
+        }
+
+        return result;
+    }, [allExercises, exerciseSearch, showWithProgressOnly, exercisesWithProgress]);
 
     // Get logs for selected exercise
     const exerciseLogs = useMemo(() => {
@@ -487,12 +532,12 @@ export const HistoryView = () => {
                     {/* Birth Date */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-400">Date of Birth</label>
-                        <input
-                            type="date"
-                            className="w-full bg-slate-800 border-slate-700 text-white rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                            value={editBirthDate}
-                            onChange={(e) => setEditBirthDate(e.target.value)}
-                        />
+                        <div className="flex justify-center py-2">
+                            <DateWheelPicker
+                                value={editBirthDate}
+                                onChange={(val) => setEditBirthDate(val)}
+                            />
+                        </div>
                     </div>
 
                     <button
@@ -910,13 +955,39 @@ export const HistoryView = () => {
                                 <Dumbbell className="w-4 h-4 text-purple-500" />
                                 Select Exercise
                             </div>
+                            <div className="relative mb-2">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                <input
+                                    type="text"
+                                    placeholder="Search exercise..."
+                                    value={exerciseSearch}
+                                    onChange={(e) => setExerciseSearch(e.target.value)}
+                                    className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-purple-500 outline-none"
+                                />
+                            </div>
+
+                            {/* Progress Filter Toggle */}
+                            <button
+                                onClick={() => setShowWithProgressOnly(!showWithProgressOnly)}
+                                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium border transition-all mb-2 ${showWithProgressOnly
+                                    ? 'bg-purple-500/10 border-purple-500 text-purple-300'
+                                    : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-700'
+                                    }`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <TrendingUp size={14} />
+                                    <span>Show only with charts</span>
+                                </div>
+                                <div className={`w-3 h-3 rounded-full border ${showWithProgressOnly ? 'bg-purple-500 border-purple-500' : 'border-slate-600'}`} />
+                            </button>
+
                             <div className="relative">
                                 <select
                                     className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-3 appearance-none focus:ring-2 focus:ring-purple-500 outline-none"
                                     value={selectedExerciseId}
                                     onChange={(e) => setSelectedExerciseId(e.target.value)}
                                 >
-                                    {allExercises.map(ex => (
+                                    {filteredExercises.map(ex => (
                                         <option key={ex.id} value={ex.id}>{ex.name}</option>
                                     ))}
                                 </select>

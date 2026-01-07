@@ -10,6 +10,10 @@ interface PerformanceState {
     deleteLogs: (ids: string[]) => void;
     getLogsByExercise: (exerciseId: string) => ExerciseLog[];
     getPersonalRecord: (exerciseId: string) => number; // Max weight lifted
+
+    // Navigation State
+    preSelectedExerciseId: string | null;
+    setPreSelectedExerciseId: (id: string | null) => void;
 }
 
 // Initial load
@@ -62,5 +66,8 @@ export const usePerformanceStore = create<PerformanceState>((set, get) => ({
         const exerciseLogs = get().logs.filter(log => log.exerciseId === exerciseId);
         if (exerciseLogs.length === 0) return 0;
         return Math.max(...exerciseLogs.map(log => log.weight));
-    }
+    },
+
+    preSelectedExerciseId: null,
+    setPreSelectedExerciseId: (id) => set({ preSelectedExerciseId: id })
 }));

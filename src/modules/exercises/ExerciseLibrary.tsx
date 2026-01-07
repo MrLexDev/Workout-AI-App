@@ -3,16 +3,19 @@ import { useNativeBack } from '../../hooks/useNativeBack';
 import { type ExerciseDefinition, type Routine } from '../../types/workout';
 import exerciseData from '../../data/exercises.json';
 import { exerciseStorageService } from '../../services/storage/ExerciseStorageService';
-import { Dumbbell, Search, ChevronDown, ChevronUp, Download, X, AlertCircle, Filter, Eye, EyeOff, Trash2, BookOpen } from 'lucide-react';
+import { Dumbbell, Search, ChevronDown, ChevronUp, Download, X, AlertCircle, Filter, Eye, EyeOff, Trash2, BookOpen, History } from 'lucide-react';
+import { usePerformanceStore } from '../../store/performanceStore';
 import { useWorkoutStore } from '../../store/workoutStore';
 import initialRoutinesData from '../../data/initialRoutines.json';
 import { RoutinePreviewModal } from './RoutinePreviewModal';
 
 interface ExerciseLibraryProps {
     onViewInstructions?: (exercise: ExerciseDefinition) => void;
+    onGoToHistory?: () => void;
 }
 
-export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstructions }) => {
+export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstructions, onGoToHistory }) => {
+    const { setPreSelectedExerciseId } = usePerformanceStore();
     const [activeTab, setActiveTab] = useState<'exercises' | 'routines'>('exercises');
 
     // 1. Static + Custom Exercises
@@ -450,6 +453,19 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
                                             </div>
 
                                             <div className="flex items-center gap-1">
+                                                {/* History Button */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setPreSelectedExerciseId(ex.id);
+                                                        if (onGoToHistory) onGoToHistory();
+                                                    }}
+                                                    className="p-2 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-full transition-colors"
+                                                    title="View Progress"
+                                                >
+                                                    <History size={18} />
+                                                </button>
+
                                                 {/* Hide/Unhide Button */}
                                                 <button
                                                     onClick={(e) => toggleHide(ex.id, e)}

@@ -84,6 +84,7 @@ function AppContent() {
                     {activeTab === 'workout' && (
                         <ExerciseLibrary
                             onViewInstructions={(exercise) => setSelectedExercise(exercise)}
+                            onGoToHistory={() => setActiveTab('history')}
                         />
                     )}
                     {activeTab === 'history' && <HistoryView />}

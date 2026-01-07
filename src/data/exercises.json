@@ -20,7 +20,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Place hands slightly wider than shoulder-width on the floor, feet together, creating a straight line from head to heels.",
@@ -95,7 +94,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Stand with feet shoulder-width apart, toes slightly pointed out.",
@@ -207,7 +205,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Place hands together under your chest so thumbs and index fingers form a diamond shape.",
@@ -276,7 +273,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a push-up position, then walk feet forward until your body forms an inverted V-shape.",
@@ -313,7 +309,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Stand on one leg with the other leg extended straight out in front.",
@@ -328,41 +323,6 @@
             ]
         },
         "description": "An advanced single-leg exercise that requires strength, balance, and mobility."
-    },
-    {
-        "id": "lunges",
-        "name": "Forward Lunge",
-        "aliases": [],
-        "exerciseType": "Strength",
-        "mechanics": "Compound",
-        "forceType": "Push",
-        "experienceLevel": "Beginner",
-        "targetMuscles": {
-            "primary": [
-                "Quads",
-                "Glutes"
-            ],
-            "secondary": [
-                "Hamstrings",
-                "Calves"
-            ]
-        },
-        "equipmentList": [
-            "None"
-        ],
-        "instructions": {
-            "setup": "Stand with feet hip-width apart.",
-            "execution": [
-                "Step forward with one leg and lower your hips until both knees are bent at a 90-degree angle.",
-                "Keep the front knee over the ankle.",
-                "Push off the front foot to return to the start."
-            ],
-            "tips": [
-                "Keep your torso upright.",
-                "Switch legs each rep for a balanced workout."
-            ]
-        },
-        "description": "A fundamental movement for unilateral leg strength and stability."
     },
     {
         "id": "chin-up",
@@ -441,7 +401,7 @@
         "exerciseType": "Strength",
         "mechanics": "Compound",
         "forceType": "Pull",
-        "experienceLevel": "Advanced",
+        "experienceLevel": "Expert",
         "targetMuscles": {
             "primary": [
                 "Lats",
@@ -490,7 +450,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Place hands very wide, with one arm acting as the primary mover and the other kept straight.",
@@ -528,7 +487,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "In a push-up position, turn your hands slightly outward and lean your shoulders forward past your hands.",
@@ -564,7 +522,7 @@
             ]
         },
         "equipmentList": [
-            "Bench or Chair"
+            "Bench"
         ],
         "instructions": {
             "setup": "Place one foot behind you on a bench and the other foot forward.",
@@ -598,7 +556,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back with knees bent and feet flat on the floor.",
@@ -620,7 +577,7 @@
         "aliases": [],
         "exerciseType": "Isometric",
         "mechanics": "Isolation",
-        "forceType": "Push",
+        "forceType": "Static",
         "experienceLevel": "Beginner",
         "targetMuscles": {
             "primary": [
@@ -632,7 +589,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back with arms extended overhead and legs straight.",
@@ -734,7 +690,6 @@
             "secondary": []
         },
         "equipmentList": [
-            "Elevated surface (optional)"
         ],
         "instructions": {
             "setup": "Stand on the edge of a step or on flat ground.",
@@ -770,7 +725,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie face down with arms extended in front and legs straight.",
@@ -806,7 +760,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Stand with a very wide stance.",
@@ -830,7 +783,7 @@
         ],
         "exerciseType": "Isometric",
         "mechanics": "Isolation",
-        "forceType": "Push",
+        "forceType": "Static",
         "experienceLevel": "Beginner",
         "targetMuscles": {
             "primary": [
@@ -843,7 +796,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Place forearms on the floor, elbows under shoulders, feet together.",
@@ -864,7 +816,7 @@
         "aliases": [],
         "exerciseType": "Isometric",
         "mechanics": "Isolation",
-        "forceType": "Push",
+        "forceType": "Static",
         "experienceLevel": "Beginner",
         "targetMuscles": {
             "primary": [
@@ -877,7 +829,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your side with your weight on one forearm and the side of your foot.",
@@ -911,7 +862,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a high plank position.",
@@ -946,7 +896,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Stand with feet shoulder-width apart.",
@@ -979,7 +928,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back with arms and legs extended.",
@@ -1012,7 +960,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Stand with feet together and arms at your sides.",
@@ -1045,7 +992,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back with hands behind your head and knees bent.",
@@ -1078,7 +1024,7 @@
             ]
         },
         "equipmentList": [
-            "Bench or Chair"
+            "Bench"
         ],
         "instructions": {
             "setup": "Sit on a bench, place hands next to hips, and move your feet forward.",
@@ -1168,7 +1114,7 @@
         "exerciseType": "Isometric",
         "mechanics": "Compound",
         "forceType": "Push",
-        "experienceLevel": "Intermediate",
+        "experienceLevel": "Expert",
         "targetMuscles": {
             "primary": [
                 "Front Delts",
@@ -1180,7 +1126,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "In a push-up position, protract your shoulder blades (round your upper back).",
@@ -1246,7 +1191,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a high plank position with arms straight.",
@@ -1348,7 +1292,7 @@
             ]
         },
         "equipmentList": [
-            "Box or Elevated Platform"
+            "Box"
         ],
         "instructions": {
             "setup": "Stand in front of a sturdy box.",
@@ -1384,7 +1328,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a pike position (hips high).",
@@ -1401,45 +1344,12 @@
         "description": "A dynamic push-up variation that incorporates mobility and strength."
     },
     {
-        "id": "russian-twist",
-        "name": "Russian Twist",
-        "aliases": [],
-        "exerciseType": "Strength",
-        "mechanics": "Isolation",
-        "forceType": "Push",
-        "experienceLevel": "Beginner",
-        "targetMuscles": {
-            "primary": [
-                "Obliques"
-            ],
-            "secondary": [
-                "Abs",
-                "Hip Flexors"
-            ]
-        },
-        "equipmentList": [
-            "None"
-        ],
-        "instructions": {
-            "setup": "Sit with your knees bent and feet slightly off the ground, leaning back.",
-            "execution": [
-                "Twist your torso to the right and touch the floor with your hands.",
-                "Twist to the left and repeat."
-            ],
-            "tips": [
-                "Keep your core engaged to protect your lower back.",
-                "Follow your hands with your eyes to ensure rotation."
-            ]
-        },
-        "description": "A rotational core exercise focusing on the obliques."
-    },
-    {
         "id": "leg-flutter",
         "name": "Flutter Kicks",
         "aliases": [],
         "exerciseType": "Strength",
         "mechanics": "Isolation",
-        "forceType": "Push",
+        "forceType": "Pull",
         "experienceLevel": "Beginner",
         "targetMuscles": {
             "primary": [
@@ -1451,7 +1361,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back with legs straight and hands under your glutes for support.",
@@ -1521,7 +1430,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a standing position.",
@@ -1589,7 +1497,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Place one hand on the floor and spread your feet wide for balance.",
@@ -1679,7 +1586,7 @@
         "aliases": [],
         "exerciseType": "Strength",
         "mechanics": "Isolation",
-        "forceType": "Push",
+        "forceType": "Static",
         "experienceLevel": "Beginner",
         "targetMuscles": {
             "primary": [
@@ -1691,7 +1598,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Start in a high plank position.",
@@ -1726,7 +1632,6 @@
             ]
         },
         "equipmentList": [
-            "None"
         ],
         "instructions": {
             "setup": "Lie on your back, one foot flat and the other leg extended in the air.",
@@ -1740,5 +1645,4987 @@
             ]
         },
         "description": "Increases intensity on the glutes and hamstrings unilaterally."
+    },
+    {
+        "id": "barbell-bench-press-flat",
+        "name": "Barbell Bench Press (Flat)",
+        "aliases": [
+            "Flat Bench",
+            "BB Bench"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Bench",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Lie on a flat bench. Grip the barbell slightly wider than shoulder-width. Plant your feet firmly on the ground.",
+            "execution": [
+                "Unrack the bar and stabilize it directly over your shoulders.",
+                "Retract your shoulder blades into the bench.",
+                "Lower the bar under control to the middle of your chest.",
+                "Press the bar back up to the starting position, extending the elbows but not locking them out softly."
+            ],
+            "tips": [
+                "Keep your elbows at roughly a 45-degree angle to your body, not flared out 90 degrees.",
+                "Maintain an arch in your lower back, but keep glutes on the bench."
+            ]
+        },
+        "description": "The standard compound movement for overall chest development and upper body pushing strength."
+    },
+    {
+        "id": "barbell-bench-press-incline",
+        "name": "Barbell Bench Press (Incline)",
+        "aliases": [
+            "Incline Bench"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Bench",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Set an adjustable bench to an incline of 30-45 degrees. Lie back and grip the bar slightly wider than shoulder-width.",
+            "execution": [
+                "Unrack the bar and hold it above your upper chest.",
+                "Lower the bar specifically toward the upper portion of your chest, just below the collarbone.",
+                "Press the bar vertically back to the starting position."
+            ],
+            "tips": [
+                "Do not set the incline too steep, or the load will shift primarily to the Front Delts.",
+                "Control the negative to feel the stretch in the upper pectorals."
+            ]
+        },
+        "description": "A variation of the bench press that shifts the focus to the clavicular head of the pectoralis major."
+    },
+    {
+        "id": "barbell-bench-press-decline",
+        "name": "Barbell Bench Press (Decline)",
+        "aliases": [
+            "Decline Bench"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Decline Bench",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Secure your legs in the decline bench rollers. Lie back and grasp the bar.",
+            "execution": [
+                "Unrack the bar and stabilize it.",
+                "Lower the bar to the lower part of your chest (sternum level).",
+                "Press the weight back up powerfully."
+            ],
+            "tips": [
+                "This variation often allows for more weight due to shorter range of motion and mechanical advantage.",
+                "Ensure a spotter is present as racking the weight can be difficult."
+            ]
+        },
+        "description": "Targets the sternal/abdominal head of the pectoralis major and often reduces shoulder stress compared to flat pressing."
+    },
+    {
+        "id": "dumbbell-press-flat",
+        "name": "Dumbbell Press (Flat)",
+        "aliases": [
+            "DB Bench",
+            "Flat DB Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on a flat bench with dumbbells resting on your knees. Kick them up to your shoulders as you lie back.",
+            "execution": [
+                "Press the dumbbells up until arms are extended above your chest.",
+                "Lower the weights slowly, allowing a deep stretch at the bottom.",
+                "Press back up, bringing the dumbbells close together without touching."
+            ],
+            "tips": [
+                "Utilize the greater range of motion dumbbells provide compared to a barbell.",
+                "Keep your wrists stacked directly over your elbows."
+            ]
+        },
+        "description": "A unilateral chest exercise that helps correct muscle imbalances and allows for a greater range of motion."
+    },
+    {
+        "id": "dumbbell-press-incline",
+        "name": "Dumbbell Press (Incline)",
+        "aliases": [
+            "Incline DB Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Upper Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Set bench to 30-45 degrees. Lie back with dumbbells at shoulder height.",
+            "execution": [
+                "Press the weights straight up over your upper chest.",
+                "Lower them under control until the hands are near shoulder level.",
+                "Drive the weights back up."
+            ],
+            "tips": [
+                "Focus on squeezing the upper chest at the top of the movement.",
+                "Keep shoulders depressed to avoid upper trap dominance."
+            ]
+        },
+        "description": "Isolates the upper pectorals while requiring significant stabilizer muscle engagement."
+    },
+    {
+        "id": "dumbbell-press-decline",
+        "name": "Dumbbell Press (Decline)",
+        "aliases": [
+            "Decline DB Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Decline Bench"
+        ],
+        "instructions": {
+            "setup": "Secure legs in a decline bench. Lie back with dumbbells at chest level.",
+            "execution": [
+                "Press the dumbbells straight up perpendicular to the floor.",
+                "Lower them until you feel a stretch in the lower pecs.",
+                "Press back to the start."
+            ],
+            "tips": [
+                "Be careful getting into position with heavy dumbbells; consider a partner's help."
+            ]
+        },
+        "description": "Focuses on the lower pectoral fibers with the freedom of movement provided by dumbbells."
+    },
+    {
+        "id": "cable-flye-high",
+        "name": "Cable Flye (High Pulley)",
+        "aliases": [
+            "High-to-Low Flye",
+            "Cable Crossover"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Chest"
+            ],
+            "secondary": [
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine"
+        ],
+        "instructions": {
+            "setup": "Set pulleys to the highest position. Grasp handles and step forward with a staggered stance.",
+            "execution": [
+                "With a slight bend in the elbows, bring your hands together downward toward your waist.",
+                "Squeeze the chest hard at the bottom.",
+                "Return slowly to the starting position, feeling a stretch across the chest."
+            ],
+            "tips": [
+                "Keep your torso upright; leaning too far forward changes the angle of emphasis.",
+                "Imagine trying to hug a large tree trunk downwards."
+            ]
+        },
+        "description": "An isolation movement performed from a high angle to specifically target the lower sternal fibers of the chest."
+    },
+    {
+        "id": "cable-flye-mid",
+        "name": "Cable Flye (Mid Pulley)",
+        "aliases": [
+            "Standing Cable Flye"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine"
+        ],
+        "instructions": {
+            "setup": "Set pulleys to shoulder height. Grasp handles and step forward.",
+            "execution": [
+                "Bring hands together directly in front of the chest.",
+                "Squeeze the pectorals at the center.",
+                "Open arms back up horizontally until a stretch is felt."
+            ],
+            "tips": [
+                "Maintain a fixed elbow angle throughout the movement; do not press the weight."
+            ]
+        },
+        "description": "Targets the chest muscle as a whole, providing constant tension throughout the range of motion."
+    },
+    {
+        "id": "cable-flye-low",
+        "name": "Cable Flye (Low Pulley)",
+        "aliases": [
+            "Low-to-High Flye"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Chest"
+            ],
+            "secondary": [
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine"
+        ],
+        "instructions": {
+            "setup": "Set pulleys to the lowest position. Grasp handles with palms facing forward/up.",
+            "execution": [
+                "Bring your hands upward and together to meet at eye level.",
+                "Squeeze the upper chest specifically.",
+                "Lower strictly under control."
+            ],
+            "tips": [
+                "Avoid using body sway or momentum to swing the weight up.",
+                "Keep the chest proud and shoulder blades retracted."
+            ]
+        },
+        "description": "Specifically targets the clavicular (upper) fibers of the chest by working against gravity in an upward arc."
+    },
+    {
+        "id": "chest-dips",
+        "name": "Chest Dips",
+        "aliases": [
+            "Parallel Bar Dips"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Dip Station"
+        ],
+        "instructions": {
+            "setup": "Mount the dip bars, supporting your weight with straight arms.",
+            "execution": [
+                "Lean your torso forward significantly (approx 45 degrees).",
+                "Lower your body by bending elbows until shoulders are slightly below elbows.",
+                "Press back up to the start, maintaining the forward lean."
+            ],
+            "tips": [
+                "The forward lean is critical; staying upright shifts focus almost entirely to the triceps.",
+                "Avoid rolling shoulders forward at the bottom of the movement."
+            ]
+        },
+        "description": "A bodyweight compound movement often called the 'squat for the upper body', excellent for lower chest development."
+    },
+    {
+        "id": "pec-deck",
+        "name": "Pec Deck",
+        "aliases": [
+            "Machine Flye",
+            "Butterfly"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Pec Deck Machine"
+        ],
+        "instructions": {
+            "setup": "Adjust seat height so handles/pads are at chest level. Sit with back flat against the pad.",
+            "execution": [
+                "Push the handles together until they touch in front of you.",
+                "Hold the peak contraction for a second.",
+                "Return slowly to the starting position without letting the weight stack touch."
+            ],
+            "tips": [
+                "Do not overstretch the shoulders at the back of the movement.",
+                "Focus on driving with the elbows, not just the hands."
+            ]
+        },
+        "description": "A stable machine exercise that isolates the pectoral muscles and removes the need for stabilization."
+    },
+    {
+        "id": "machine-chest-press",
+        "name": "Machine Chest Press",
+        "aliases": [
+            "Seated Chest Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Chest Press Machine"
+        ],
+        "instructions": {
+            "setup": "Adjust seat so handles align with the middle of your chest.",
+            "execution": [
+                "Press the handles forward until arms are extended.",
+                "Return slowly to the start position.",
+                "Keep your back firmly against the pad throughout."
+            ],
+            "tips": [
+                "Great for safely training to failure without a spotter.",
+                "Ensure the elbows do not flare excessively high."
+            ]
+        },
+        "description": "A machine-based compound movement allowing for heavy loading with high stability."
+    },
+    {
+        "id": "floor-press",
+        "name": "Floor Press",
+        "aliases": [
+            "Barbell Floor Press"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Lie on the floor inside a rack. Grip the bar as you would for a bench press.",
+            "execution": [
+                "Unrack the bar and lower it until your triceps touch the floor completely.",
+                "Pause briefly to break the eccentric-concentric chain.",
+                "Explosively press the bar back up."
+            ],
+            "tips": [
+                "This limits range of motion, placing high demand on the lockout (triceps) and mid-range chest strength.",
+                "Do not bounce your elbows off the floor."
+            ]
+        },
+        "description": "A partial range of motion press performed on the floor, often used to improve lockout strength."
+    },
+    {
+        "id": "landmine-press",
+        "name": "Landmine Press",
+        "aliases": [
+            "Standing Landmine Press"
+        ],
+        "exerciseType": "Functional",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Landmine Attachment"
+        ],
+        "instructions": {
+            "setup": "Place one end of a barbell in a landmine base or corner. Hold the other end at shoulder height.",
+            "execution": [
+                "Press the bar upward and forward at a roughly 45-degree angle.",
+                "Lean slightly into the press at the top.",
+                "Lower under control to the shoulder."
+            ],
+            "tips": [
+                "This can be done with one or two hands.",
+                "The pressing path is ideal for upper chest recruitment with less shoulder impingement risk."
+            ]
+        },
+        "description": "A functional pressing movement that bridges the gap between vertical and horizontal pressing."
+    },
+    {
+        "id": "weighted-push-up",
+        "name": "Weighted Push-Up",
+        "aliases": [
+            "Plate Push-Up"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Triceps",
+                "Front Delts",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Weight Plate",
+            "Weight Vest"
+        ],
+        "instructions": {
+            "setup": "Assume a standard push-up position with a weight plate on your back (or wearing a vest).",
+            "execution": [
+                "Lower your body until the chest nearly touches the floor.",
+                "Keep the body in a rigid plank line.",
+                "Push forcefully back to the top position."
+            ],
+            "tips": [
+                "Ensure the weight is placed on the upper back/scapula area, not the lower back.",
+                "Prevent the hips from sagging."
+            ]
+        },
+        "description": "A progressed version of the classic calisthenics exercise using external resistance."
+    },
+    {
+        "id": "smith-machine-press",
+        "name": "Smith Machine Press",
+        "aliases": [
+            "Smith Bench"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Smith Machine",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Place a flat bench under the Smith Machine bar.",
+            "execution": [
+                "Unlatch the bar and lower it to the chest.",
+                "Press the bar up along the fixed vertical path.",
+                "Re-latch the bar when the set is complete."
+            ],
+            "tips": [
+                "Because the path is fixed, ensure your alignment is perfect before starting to avoid joint stress.",
+                "Useful for slow negatives (eccentrics) safely."
+            ]
+        },
+        "description": "A guided barbell press that provides stability, allowing focus on muscle contraction over stabilization."
+    },
+    {
+        "id": "svend-press",
+        "name": "Svend Press",
+        "aliases": [
+            "Plate Pinch Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Chest"
+            ],
+            "secondary": [
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Weight Plate"
+        ],
+        "instructions": {
+            "setup": "Stand holding a light weight plate pressed between your palms at chest level.",
+            "execution": [
+                "Squeeze your palms together as hard as possible.",
+                "Press the plate straight out in front of you while maintaining the squeeze.",
+                "Return the plate to your chest."
+            ],
+            "tips": [
+                "The weight of the plate matters less than the inward pressure (squeezing) you create.",
+                "This is primarily an isometric tension exercise."
+            ]
+        },
+        "description": "A constant-tension accessory exercise focusing on the peak contraction of the inner chest."
+    },
+    {
+        "id": "dumbbell-pullover",
+        "name": "Dumbbell Pullover",
+        "aliases": [
+            "Cross-Bench Pullover"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Chest",
+                "Lats"
+            ],
+            "secondary": [
+                "Triceps",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Lie perpendicular across a bench (upper back on bench) holding a dumbbell with both hands above your chest.",
+            "execution": [
+                "Keeping a slight bend in elbows, lower the weight in an arc behind your head.",
+                "Lower until a deep stretch is felt in the chest and lats.",
+                "Pull the dumbbell back over your chest to the starting position."
+            ],
+            "tips": [
+                "To bias the chest, focus on squeezing the pectorals to bring the weight up.",
+                "Do not let the hips shoot up; keep them low to maximize the stretch."
+            ]
+        },
+        "description": "A unique movement that works both the chest and back, utilizing a pulling motion to stretch the pectorals."
+    },
+    {
+        "id": "deadlift-conventional",
+        "name": "Conventional Deadlift",
+        "aliases": [
+            "BB Deadlift"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back",
+                "Hamstrings",
+                "Glutes"
+            ],
+            "secondary": [
+                "Traps",
+                "Forearms",
+                "Quads",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Plates"
+        ],
+        "instructions": {
+            "setup": "Stand with feet hip-width apart, mid-foot under the bar. Grip the bar just outside your legs.",
+            "execution": [
+                "Hinge at the hips to grab the bar, keeping your spine neutral.",
+                "Engage your lats (pull the slack out of the bar) and drive your shins to the bar.",
+                "Push the floor away with your feet while pulling the bar up along your legs.",
+                "Lock out hips and knees simultaneously at the top."
+            ],
+            "tips": [
+                "Do not hyperextend your back at the top.",
+                "Keep the bar in contact with your legs throughout the entire movement."
+            ]
+        },
+        "description": "The king of posterior chain exercises, heavily taxing the lower back, glutes, and hamstrings."
+    },
+    {
+        "id": "deadlift-sumo",
+        "name": "Sumo Deadlift",
+        "aliases": [],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Quads",
+                "Adductors"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Lower Back",
+                "Forearms",
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Plates"
+        ],
+        "instructions": {
+            "setup": "Take a very wide stance with toes pointed out. Grip the bar inside your knees (shoulder-width apart).",
+            "execution": [
+                "Drop your hips down while keeping your chest upright.",
+                "Drive your knees out over your toes.",
+                "Push effectively through the floor to separate the bar from the ground.",
+                "Lock out by thrusting hips forward."
+            ],
+            "tips": [
+                "Torso remains much more upright than in conventional deadlifts.",
+                "Focus on 'spreading the floor' with your feet."
+            ]
+        },
+        "description": "A deadlift variation that shifts load from the lower back to the hips, glutes, and quads."
+    },
+    {
+        "id": "barbell-row",
+        "name": "Barbell Bent-Over Row",
+        "aliases": [
+            "BB Row"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lats",
+                "Upper Back"
+            ],
+            "secondary": [
+                "Rhomboids",
+                "Biceps",
+                "Lower Back",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell"
+        ],
+        "instructions": {
+            "setup": "Stand holding a barbell with a double overhand grip. Hinge forward until your torso is roughly 45 degrees to parallel.",
+            "execution": [
+                "Pull the bar towards your lower chest or upper abdomen.",
+                "Retract your shoulder blades at the top of the movement.",
+                "Lower the bar under control to a full stretch."
+            ],
+            "tips": [
+                "Avoid using momentum or jerking the torso upward to move the weight.",
+                "Keep the core braced to protect the lower back."
+            ]
+        },
+        "description": "A foundational back builder that adds thickness to the entire back musculature."
+    },
+    {
+        "id": "pendlay-row",
+        "name": "Pendlay Row",
+        "aliases": [
+            "Dead Stop Row"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Lats"
+            ],
+            "secondary": [
+                "Rhomboids",
+                "Traps",
+                "Biceps",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Plates"
+        ],
+        "instructions": {
+            "setup": "Setup similar to a deadlift. The back must be parallel to the floor.",
+            "execution": [
+                "Explosively pull the bar from the floor to your chest/upper abs.",
+                "Return the bar fully to the floor after every rep to a dead stop.",
+                "Do not raise your torso angle during the pull."
+            ],
+            "tips": [
+                "This is a power movement; strictly minimize body english.",
+                "If you cannot keep your back parallel, reduce the weight."
+            ]
+        },
+        "description": "A strict barbell row performed from a dead stop on the floor for each rep, prioritizing explosive power."
+    },
+    {
+        "id": "dumbbell-row",
+        "name": "One-Arm Dumbbell Row",
+        "aliases": [
+            "DB Row",
+            "Single Arm Row"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Biceps",
+                "Rhomboids",
+                "Forearms",
+                "Rear Delts"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Place one knee and one hand on a flat bench for support. Hold the DB in the free hand.",
+            "execution": [
+                "Pull the dumbbell towards your hip bone (not your shoulder).",
+                "Keep the elbow tucked close to the body.",
+                "Lower the weight to a deep stretch."
+            ],
+            "tips": [
+                "Imagine pulling with your elbow to engage the lats maximally.",
+                "Avoid rotating the torso excessively."
+            ]
+        },
+        "description": "A unilateral movement allowing for a greater range of motion and isolation of the latissimus dorsi."
+    },
+    {
+        "id": "lat-pulldown-wide",
+        "name": "Lat Pulldown (Wide Grip)",
+        "aliases": [
+            "Wide Grip Pulldown"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Biceps",
+                "Rear Delts",
+                "Rhomboids"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Lat Bar"
+        ],
+        "instructions": {
+            "setup": "Sit with knees secured under pads. Grip the bar wider than shoulder-width, palms facing away.",
+            "execution": [
+                "Depress shoulder blades down and back.",
+                "Pull the bar down to your upper chest.",
+                "Control the ascent back to a full stretch."
+            ],
+            "tips": [
+                "Do not lean back excessively to turn it into a row.",
+                "Focus on driving elbows down towards the floor."
+            ]
+        },
+        "description": "Targets the upper and outer lats, contributing to back width."
+    },
+    {
+        "id": "lat-pulldown-narrow",
+        "name": "Lat Pulldown (Narrow/Neutral Grip)",
+        "aliases": [
+            "V-Bar Pulldown",
+            "Neutral Grip Pulldown"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Rhomboids",
+                "Biceps",
+                "Brachialis"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "V-Bar Attachment"
+        ],
+        "instructions": {
+            "setup": "Attach a V-handle. Sit with knees secured.",
+            "execution": [
+                "Pull the handle down to the middle of your chest.",
+                "Squeeze the shoulder blades together hard at the bottom.",
+                "Allow a full stretch at the top."
+            ],
+            "tips": [
+                "This variation allows for slightly greater range of motion and bicep recruitment.",
+                "Keep the chest proud to hit the mid-back."
+            ]
+        },
+        "description": "Targets the lats and the mid-back musculature (rhomboids/traps) due to the neutral grip."
+    },
+    {
+        "id": "lat-pulldown-underhand",
+        "name": "Lat Pulldown (Underhand/Reverse)",
+        "aliases": [
+            "Reverse Grip Pulldown"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lats"
+            ],
+            "secondary": [
+                "Biceps",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Lat Bar"
+        ],
+        "instructions": {
+            "setup": "Grip the bar shoulder-width apart with palms facing you (supinated).",
+            "execution": [
+                "Pull the bar down to the lower chest.",
+                "Keep elbows driven down and close to the body.",
+                "Return to start under control."
+            ],
+            "tips": [
+                "Biases the lower lat fibers and heavily involves the biceps.",
+                "Great for those who struggle to feel their lats with a wide grip."
+            ]
+        },
+        "description": "A variation that places the biceps in a strong mechanical position and targets the lower lats."
+    },
+    {
+        "id": "t-bar-row",
+        "name": "T-Bar Row",
+        "aliases": [
+            "Landmine Row"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Rhomboids",
+                "Traps"
+            ],
+            "secondary": [
+                "Lats",
+                "Biceps",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "T-Bar Machine",
+            "Landmine Attachment"
+        ],
+        "instructions": {
+            "setup": "Straddle the bar. Hinge at hips to 45 degrees. Grip the handles (or bar) securely.",
+            "execution": [
+                "Retract scapula and pull the weight toward your chest.",
+                "Squeeze the upper back at the top.",
+                "Lower the weight without rounding the spine."
+            ],
+            "tips": [
+                "The fixed path often allows for heavier loading than free barbell rows.",
+                "Avoid letting the ego dictate weight; range of motion is key."
+            ]
+        },
+        "description": "Excellent for adding thickness to the middle and upper back."
+    },
+    {
+        "id": "seated-cable-row",
+        "name": "Seated Cable Row",
+        "aliases": [
+            "Cable Row"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Rhomboids",
+                "Lats"
+            ],
+            "secondary": [
+                "Traps",
+                "Biceps",
+                "Rear Delts"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "V-Bar Attachment"
+        ],
+        "instructions": {
+            "setup": "Sit at the machine with feet on the platform, knees slightly bent. Grab the handle.",
+            "execution": [
+                "Keep torso upright. Pull the handle to your abdomen.",
+                "Focus on retracting the scapula fully.",
+                "Extend arms forward, allowing the lats to stretch, but keep the torso stationary."
+            ],
+            "tips": [
+                "Do not swing back and forth to move the weight.",
+                "Keep shoulders down (depressed) to avoid overusing upper traps."
+            ]
+        },
+        "description": "A stable horizontal pull that effectively targets the mid-back thickness."
+    },
+    {
+        "id": "face-pulls",
+        "name": "Face Pull",
+        "aliases": [
+            "Cable Face Pull"
+        ],
+        "exerciseType": "Corrective",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Rear Delts",
+                "Rotator Cuff"
+            ],
+            "secondary": [
+                "Traps",
+                "Rhomboids"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Rope Attachment"
+        ],
+        "instructions": {
+            "setup": "Set pulley to face height. Grasp rope with thumbs facing backward (neutral/hammer grip).",
+            "execution": [
+                "Pull the rope towards your face, separating your hands as they near your ears.",
+                "Externally rotate your shoulders at the end range (knuckles facing back).",
+                "Return slowly."
+            ],
+            "tips": [
+                "Do not go too heavy; this is for shoulder health and posture.",
+                "Focus on the external rotation component."
+            ]
+        },
+        "description": "Crucial for shoulder health, targeting the rear delts and external rotators to counteract slouching."
+    },
+    {
+        "id": "rack-pull",
+        "name": "Rack Pull",
+        "aliases": [
+            "Partial Deadlift"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Traps",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Lats",
+                "Glutes",
+                "Hamstrings",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Power Rack"
+        ],
+        "instructions": {
+            "setup": "Set safety pins in a rack just below or above the knee. Place bar on pins.",
+            "execution": [
+                "Grip the bar and set your back tight (similar to top half of deadlift).",
+                "Pull the bar up and lock out hips and upper back.",
+                "Lower the bar back to the pins (don't drop it)."
+            ],
+            "tips": [
+                "Allows for overloading the upper back/traps with weight heavier than a full deadlift.",
+                "Be careful not to 'hitch' or ramp the bar up the thighs."
+            ]
+        },
+        "description": "A partial deadlift focusing on the lockout portion, heavily overloading the traps and erectors."
+    },
+    {
+        "id": "back-extension",
+        "name": "Back Extension",
+        "aliases": [
+            "Hyperextension"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back"
+            ],
+            "secondary": [
+                "Glutes",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [
+            "Back Extension Bench"
+        ],
+        "instructions": {
+            "setup": "Adjust pad to sit just below your hip bone (allows hip flex). Cross arms over chest.",
+            "execution": [
+                "Lower your torso until you feel a stretch in the hamstrings.",
+                "Raise your torso back to neutral (straight line).",
+                "Squeeze glutes and lower back at the top."
+            ],
+            "tips": [
+                "Do not hyperextend (arch) excessively at the top.",
+                "To bias glutes, round the upper back slightly. To bias lower back, keep spine neutral."
+            ]
+        },
+        "description": "Strengthens the erector spinae and posterior chain without heavy axial loading."
+    },
+    {
+        "id": "barbell-shrug",
+        "name": "Barbell Shrug",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Traps"
+            ],
+            "secondary": [
+                "Upper Back",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell"
+        ],
+        "instructions": {
+            "setup": "Stand holding a barbell with a double overhand grip, arms fully extended.",
+            "execution": [
+                "Elevate your shoulders straight up towards your ears.",
+                "Hold the peak contraction briefly.",
+                "Lower the shoulders back down fully."
+            ],
+            "tips": [
+                "Do not roll your shoulders; move strictly up and down.",
+                "If grip fails, use straps."
+            ]
+        },
+        "description": "Isolation exercise for developing the upper trapezius muscles."
+    },
+    {
+        "id": "good-morning",
+        "name": "Good Morning",
+        "aliases": [
+            "Barbell Good Morning"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Glutes",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Place bar on your upper back (low bar position preferred). Stand hip-width apart.",
+            "execution": [
+                "Hinge at the hips, sending your butt back while keeping legs nearly straight (soft bend).",
+                "Lower torso until it is nearly parallel to the floor.",
+                "Reverse the motion by driving hips forward to upright."
+            ],
+            "tips": [
+                "This is a hinge, not a squat. Knees should not travel forward.",
+                "Start light; the lever arm places high stress on the lower back."
+            ]
+        },
+        "description": "A posterior chain builder that strengthens the lower back and hamstrings effectively."
+    },
+    {
+        "id": "overhead-press-barbell",
+        "name": "Barbell Overhead Press",
+        "aliases": [
+            "OHP",
+            "Military Press",
+            "Strict Press"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Front Delts"
+            ],
+            "secondary": [
+                "Triceps",
+                "Side Delts",
+                "Upper Chest",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Rack the bar at chest height. Grip slightly wider than shoulders. Elbows should be slightly in front of the bar.",
+            "execution": [
+                "Brace your core and glutes excessively to prevent lumbar arching.",
+                "Press the bar vertically in a straight line, moving your head back slightly to clear the path.",
+                "Once the bar passes the forehead, move the head back under the bar (head through the window).",
+                "Lock out overhead with shrugged shoulders."
+            ],
+            "tips": [
+                "The bar path must be vertical; do not press the bar around your face.",
+                "Squeeze glutes to protect the lower back."
+            ]
+        },
+        "description": "The primary measure of upper body vertical pushing strength."
+    },
+    {
+        "id": "overhead-press-dumbbell",
+        "name": "Dumbbell Overhead Press",
+        "aliases": [
+            "DB Shoulder Press",
+            "Seated DB Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Front Delts"
+            ],
+            "secondary": [
+                "Triceps",
+                "Side Delts"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on a bench with back support (or stand). Kick weights up to shoulder height.",
+            "execution": [
+                "Press the weights upward and slightly in toward the center (without touching).",
+                "Lower the weights until the dumbbells touch your shoulders or are roughly ear level.",
+                "Maintain vertical forearms throughout."
+            ],
+            "tips": [
+                "Offers more freedom of movement than a barbell, making it friendlier on the joints.",
+                "Do not flare elbows completely out to the sides; keep them slightly tucked (scapular plane)."
+            ]
+        },
+        "description": "A compound press that demands more stability than the barbell version, excellent for hypertrophy."
+    },
+    {
+        "id": "arnold-press",
+        "name": "Arnold Press",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Front Delts",
+                "Side Delts"
+            ],
+            "secondary": [
+                "Triceps",
+                "Rotator Cuff"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Hold dumbbells at shoulder height with palms facing your body (supinated).",
+            "execution": [
+                "Press the weights up while simultaneously rotating your palms outward.",
+                "Finish the movement at the top with palms facing away (pronated).",
+                "Reverse the rotation on the way down to the starting position."
+            ],
+            "tips": [
+                "This increases the time under tension and range of motion for the front delts.",
+                "Start with lighter weight as the rotational mechanics can tax the rotator cuff."
+            ]
+        },
+        "description": "A rotational pressing variation popularized by Arnold Schwarzenegger to hit all three deltoid heads."
+    },
+    {
+        "id": "lateral-raise-db",
+        "name": "Dumbbell Lateral Raise",
+        "aliases": [
+            "Side Raise"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Side Delts"
+            ],
+            "secondary": [
+                "Traps",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand with dumbbells at your sides, slight bend in elbows.",
+            "execution": [
+                "Raise arms out to the sides until elbows are at shoulder height.",
+                "Lead the movement with your elbows, not your hands.",
+                "Lower under control."
+            ],
+            "tips": [
+                "Avoid swinging the torso to generate momentum.",
+                "Think about pushing the weights 'out' towards the walls, not just 'up'."
+            ]
+        },
+        "description": "The bread-and-butter isolation exercise for building shoulder width (lateral deltoids)."
+    },
+    {
+        "id": "lateral-raise-cable",
+        "name": "Cable Lateral Raise",
+        "aliases": [
+            "One-Arm Cable Raise"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Side Delts"
+            ],
+            "secondary": [
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine"
+        ],
+        "instructions": {
+            "setup": "Set pulley to the lowest height. Stand sideways to the machine. Grip handle with the far hand.",
+            "execution": [
+                "Raise the cable out and up to shoulder height.",
+                "Maintain constant tension on the way down.",
+                "Ideally, the cable should run behind your legs to hit the side delt better."
+            ],
+            "tips": [
+                "Provides a superior resistance profile compared to dumbbells, as tension is high even at the bottom.",
+                "Do not lean away from the stack excessively."
+            ]
+        },
+        "description": "A lateral raise variation providing constant tension throughout the entire range of motion."
+    },
+    {
+        "id": "front-raise",
+        "name": "Dumbbell Front Raise",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Front Delts"
+            ],
+            "secondary": [
+                "Upper Chest",
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand holding dumbbells in front of your thighs.",
+            "execution": [
+                "Lift the weight straight out in front of you to shoulder height.",
+                "Pause briefly.",
+                "Lower slowly."
+            ],
+            "tips": [
+                "Often redundant if you are already doing heavy overhead or bench pressing.",
+                "Can be done with a barbell or weight plate as well."
+            ]
+        },
+        "description": "Isolates the anterior deltoid."
+    },
+    {
+        "id": "rear-delt-flye-db",
+        "name": "Dumbbell Rear Delt Flye",
+        "aliases": [
+            "Bent Over Reverse Flye"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Rear Delts"
+            ],
+            "secondary": [
+                "Rhomboids",
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Hinge at the hips until torso is nearly parallel to the floor (or lie chest-down on an incline bench).",
+            "execution": [
+                "With a slight elbow bend, raise arms out to the sides in a reverse hugging motion.",
+                "Squeeze the back of the shoulders.",
+                "Lower without losing tension."
+            ],
+            "tips": [
+                "Do not retract the scapula (shoulder blades) excessively; keep the movement in the shoulder joint to isolate rear delts.",
+                "Pinkies should lead the movement."
+            ]
+        },
+        "description": "Targets the often-neglected posterior deltoids, crucial for posture and 3D shoulder look."
+    },
+    {
+        "id": "upright-row",
+        "name": "Upright Row",
+        "aliases": [
+            "BB Upright Row"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Side Delts",
+                "Traps"
+            ],
+            "secondary": [
+                "Biceps",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "EZ Bar"
+        ],
+        "instructions": {
+            "setup": "Hold bar with a shoulder-width grip (avoid very narrow grips).",
+            "execution": [
+                "Pull the bar straight up the body by driving elbows high and out.",
+                "Stop when elbows reach shoulder height (chest level).",
+                "Lower under control."
+            ],
+            "tips": [
+                "Going too high (chin level) with a narrow grip is a primary cause of shoulder impingement.",
+                "Use a wider grip to bias the side delts and reduce joint stress."
+            ]
+        },
+        "description": "Builds the 'yoke' (traps and side delts), but requires careful form to avoid injury."
+    },
+    {
+        "id": "push-press",
+        "name": "Push Press",
+        "aliases": [],
+        "exerciseType": "Power",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Front Delts",
+                "Triceps"
+            ],
+            "secondary": [
+                "Quads",
+                "Glutes",
+                "Calves",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Same setup as a strict overhead press.",
+            "execution": [
+                "Initiate with a shallow dip of the knees (keep torso upright).",
+                "Explosively drive through the legs to launch the bar off the shoulders.",
+                "Press out the remainder of the rep with the arms."
+            ],
+            "tips": [
+                "Use the legs to generate momentum; the arms finish the movement.",
+                "Allows for heavier loads than a strict press, overloading the lockout phase."
+            ]
+        },
+        "description": "An explosive power movement that utilizes leg drive to press heavy loads overhead."
+    },
+    {
+        "id": "cuban-press",
+        "name": "Cuban Press",
+        "aliases": [
+            "Cuban Rotation"
+        ],
+        "exerciseType": "Corrective",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Rotator Cuff",
+                "Rear Delts"
+            ],
+            "secondary": [
+                "Side Delts",
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Barbell"
+        ],
+        "instructions": {
+            "setup": "Stand holding light dumbbells in front of thighs.",
+            "execution": [
+                "Phase 1: Perform a wide upright row until elbows are at 90 degrees/shoulder height.",
+                "Phase 2: Externally rotate the arms upward (scarecrow position).",
+                "Phase 3: Press the weight overhead.",
+                "Reverse strictly through all three phases."
+            ],
+            "tips": [
+                "Use extremely light weight.",
+                "Excellent warm-up or rehab exercise for rotator cuff stability."
+            ]
+        },
+        "description": "A complex three-part movement specifically designed to strengthen the rotator cuff and stabilizers."
+    },
+    {
+        "id": "lu-raise",
+        "name": "Lu Raise",
+        "aliases": [
+            "Full ROM Lateral Raise"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Side Delts",
+                "Traps"
+            ],
+            "secondary": [
+                "Rear Delts",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells",
+            "Plates"
+        ],
+        "instructions": {
+            "setup": "Stand with light plates or dumbbells.",
+            "execution": [
+                "Perform a lateral raise, but instead of stopping at shoulder height, continue lifting.",
+                "Rotate the scapula and bring the weights all the way until they touch overhead.",
+                "Lower under control through the full arc."
+            ],
+            "tips": [
+                "Requires good shoulder mobility.",
+                "Heavily recruits the traps at the top of the movement, unlike standard lateral raises."
+            ]
+        },
+        "description": "A full range-of-motion raise popularized by Olympic weightlifters (Lu Xiaojun) for shoulder stability and mass."
+    },
+    {
+        "id": "machine-lateral-raise",
+        "name": "Machine Lateral Raise",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Side Delts"
+            ],
+            "secondary": [
+                "Traps"
+            ]
+        },
+        "equipmentList": [
+            "Lateral Raise Machine"
+        ],
+        "instructions": {
+            "setup": "Adjust seat height so your shoulder aligns with the machine's pivot point.",
+            "execution": [
+                "Place arms against the pads.",
+                "Raise elbows out and up to shoulder level.",
+                "Lower slowly."
+            ],
+            "tips": [
+                "Strictly removes the ability to 'cheat' with body momentum.",
+                "Perfect for drop sets and training to failure safely."
+            ]
+        },
+        "description": "A machine isolation movement that enforces strict form and constant tension on the side delts."
+    },
+    {
+        "id": "squat-back",
+        "name": "Barbell Back Squat",
+        "aliases": [
+            "High Bar Squat",
+            "Low Bar Squat"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Lower Back",
+                "Core",
+                "Adductors"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Place bar on upper traps (high bar) or rear delts (low bar). Feet shoulder-width apart, toes slightly out.",
+            "execution": [
+                "Brace core firmly (Valsalva maneuver).",
+                "Break at the hips and knees simultaneously to descend.",
+                "Keep knees tracking over toes.",
+                "Descend until thighs are at least parallel to the floor.",
+                "Drive back up, keeping the chest high."
+            ],
+            "tips": [
+                "Do not let knees cave inward (valgus collapse).",
+                "Keep the weight over the mid-foot, not the toes or heels."
+            ]
+        },
+        "description": "The definitive lower body compound movement for overall mass and strength."
+    },
+    {
+        "id": "squat-front",
+        "name": "Barbell Front Squat",
+        "aliases": [],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Upper Back"
+            ],
+            "secondary": [
+                "Glutes",
+                "Core",
+                "Abductors"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Rack"
+        ],
+        "instructions": {
+            "setup": "Rack the bar across your front delts, securing it with a 'clean grip' or crossed arms. Elbows must be high.",
+            "execution": [
+                "Descend vertically. The torso must remain much more upright than in a back squat.",
+                "Sit 'between' your legs rather than back.",
+                "Drive straight up, leading with your elbows to prevent dumping the bar forward."
+            ],
+            "tips": [
+                "Requires significant thoracic mobility.",
+                "Isolates the quads more than back squats and places less shear force on the lumbar spine."
+            ]
+        },
+        "description": "A squat variation that emphasizes the quadriceps and upper back posture."
+    },
+    {
+        "id": "leg-press",
+        "name": "Leg Press",
+        "aliases": [
+            "45 Degree Leg Press"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads"
+            ],
+            "secondary": [
+                "Glutes",
+                "Hamstrings",
+                "Adductors"
+            ]
+        },
+        "equipmentList": [
+            "Leg Press Machine"
+        ],
+        "instructions": {
+            "setup": "Sit in the machine with back flat against the pad. Place feet shoulder-width on the platform.",
+            "execution": [
+                "Lower the platform until your legs form a 90-degree angle (or slightly deeper if mobility allows).",
+                "Press the weight back up.",
+                "Do NOT lock your knees at the top."
+            ],
+            "tips": [
+                "Ensure your lower back stays glued to the pad; if your butt lifts (butt wink), you are going too deep.",
+                "High foot placement biases glutes/hams; low placement biases quads."
+            ]
+        },
+        "description": "Allows for heavy loading of the legs without the spinal compression of squats."
+    },
+    {
+        "id": "hack-squat",
+        "name": "Machine Hack Squat",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Quads"
+            ],
+            "secondary": [
+                "Glutes",
+                "Calves"
+            ]
+        },
+        "equipmentList": [
+            "Hack Squat Machine"
+        ],
+        "instructions": {
+            "setup": "Position shoulders under pads and feet on the platform.",
+            "execution": [
+                "Descend deep, allowing the knees to travel forward over the toes.",
+                "Drive through the whole foot to return to the top.",
+                "Keep the back flat against the pad."
+            ],
+            "tips": [
+                "One of the best exercises for sweeping quad development.",
+                "Often safer to train to failure here than with free weights."
+            ]
+        },
+        "description": "A guided squat movement that stabilizes the back, allowing for maximum quad isolation."
+    },
+    {
+        "id": "lunge-forward",
+        "name": "Forward Lunge",
+        "aliases": [
+            "Walking Lunge"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads"
+            ],
+            "secondary": [
+                "Glutes",
+                "Adductors",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand tall with dumbbells in hand.",
+            "execution": [
+                "Step forward significantly.",
+                "Lower hips until both knees are at 90 degrees.",
+                "Push off the FRONT foot explosively to return to start."
+            ],
+            "tips": [
+                "Requires deceleration, placing higher stress on the knees than reverse lunges.",
+                "Keep the torso upright."
+            ]
+        },
+        "description": "A dynamic movement emphasizing the quads and deceleration mechanics."
+    },
+    {
+        "id": "lunge-reverse",
+        "name": "Reverse Lunge",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Quads"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand tall.",
+            "execution": [
+                "Step backward.",
+                "Lower the back knee towards the floor.",
+                "Drive through the FRONT heel to pull yourself back to the standing position."
+            ],
+            "tips": [
+                "Generally safer for the knees than forward lunges.",
+                "Allows for a greater hip angle, increasing glute recruitment."
+            ]
+        },
+        "description": "A stable unilateral exercise often preferred for knee health."
+    },
+    {
+        "id": "lunge-lateral",
+        "name": "Lateral Lunge",
+        "aliases": [
+            "Side Lunge"
+        ],
+        "exerciseType": "Functional",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Adductors",
+                "Glutes"
+            ],
+            "secondary": [
+                "Quads",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell"
+        ],
+        "instructions": {
+            "setup": "Stand with feet wide or start together.",
+            "execution": [
+                "Step out to the side (or shift weight to one side).",
+                "Keep the trailing leg completely straight.",
+                "Push hips back and bend the working knee.",
+                "Push off the bent leg to return to center."
+            ],
+            "tips": [
+                "Crucial for frontal plane movement (side-to-side), which is often neglected.",
+                "Keep the heel of the working foot flat."
+            ]
+        },
+        "description": "Targets the inner thigh and glute medius, improving lateral stability."
+    },
+    {
+        "id": "romanian-deadlift",
+        "name": "Romanian Deadlift",
+        "aliases": [
+            "RDL"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Glutes"
+            ],
+            "secondary": [
+                "Lower Back",
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Start from the top (standing) holding the weight.",
+            "execution": [
+                "Unlock knees slightly (soft bend) and keep them fixed there.",
+                "Push your hips backward as far as possible while sliding the weight down your legs.",
+                "Stop when your hips stop moving back (usually mid-shin).",
+                "Squeeze glutes to thrust hips forward to standing."
+            ],
+            "tips": [
+                "Movement is horizontal (hips back), not vertical (squatting down).",
+                "Keep the bar in contact with your legs to protect the lower back."
+            ]
+        },
+        "description": "The gold standard for hamstring hypertrophy and hip hinge mechanics."
+    },
+    {
+        "id": "stiff-leg-deadlift",
+        "name": "Stiff-Leg Deadlift",
+        "aliases": [
+            "SLDL"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Glutes"
+            ]
+        },
+        "equipmentList": [
+            "Barbell"
+        ],
+        "instructions": {
+            "setup": "Start with bar on the floor. Hips are higher than in a conventional deadlift. Legs are nearly straight.",
+            "execution": [
+                "Pull the weight up using a pure hip hinge.",
+                "Lower the bar all the way to the floor (dead stop) between reps.",
+                "Maintain a neutral spine, though some rounding of the upper back is common."
+            ],
+            "tips": [
+                "Biases the hamstrings through lengthening.",
+                "Often allows for greater range of motion than RDL but requires more flexibility."
+            ]
+        },
+        "description": "A pulling movement starting from a dead stop that places maximum stretch on the hamstrings."
+    },
+    {
+        "id": "leg-extension",
+        "name": "Leg Extension",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Leg Extension Machine"
+        ],
+        "instructions": {
+            "setup": "Adjust seat so your knee aligns with the machine pivot.",
+            "execution": [
+                "Extend legs until knees are locked out.",
+                "Squeeze quads hard at the top.",
+                "Lower under control."
+            ],
+            "tips": [
+                "The only exercise that loads the rectus femoris in its shortened position.",
+                "Avoid jerking the weight to protect knee ligaments."
+            ]
+        },
+        "description": "Isolates the quadriceps, specifically helpful for finishing off the legs after compounds."
+    },
+    {
+        "id": "leg-curl-seated",
+        "name": "Seated Leg Curl",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings"
+            ],
+            "secondary": [
+                "Calves"
+            ]
+        },
+        "equipmentList": [
+            "Seated Leg Curl Machine"
+        ],
+        "instructions": {
+            "setup": "Lock the lap pad down tight against your thighs.",
+            "execution": [
+                "Curl the weight down and back as far as possible.",
+                "Control the return to the stretch position."
+            ],
+            "tips": [
+                "Research suggests seated curls are superior to lying curls for hypertrophy due to the stretched position of the hamstrings at the hip.",
+                "Do not lift your body out of the seat."
+            ]
+        },
+        "description": "Isolates the hamstrings in a lengthened position."
+    },
+    {
+        "id": "leg-curl-lying",
+        "name": "Lying Leg Curl",
+        "aliases": [
+            "Prone Leg Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings"
+            ],
+            "secondary": [
+                "Calves"
+            ]
+        },
+        "equipmentList": [
+            "Lying Leg Curl Machine"
+        ],
+        "instructions": {
+            "setup": "Lie face down. Knee pivot aligns with machine pivot.",
+            "execution": [
+                "Curl heels towards glutes.",
+                "Squeeze hard.",
+                "Lower slowly."
+            ],
+            "tips": [
+                "Keep your hips pressed into the bench; if they rise, you are using your lower back.",
+                "Works the hamstrings in a more shortened position."
+            ]
+        },
+        "description": "A staple isolation movement for the posterior chain."
+    },
+    {
+        "id": "hip-thrust",
+        "name": "Barbell Hip Thrust",
+        "aliases": [
+            "Glute Bridge"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Glutes"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Adductors"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on floor with upper back against a bench. Roll bar over hips (use a pad).",
+            "execution": [
+                "Drive through heels to extend hips vertically.",
+                "Fully lock out hips at the top (posterior pelvic tilt).",
+                "Chin tucked, eyes forward.",
+                "Lower hips back to floor."
+            ],
+            "tips": [
+                "If you feel it in your lower back, you are likely hyperextending the spine rather than extending the hips.",
+                "Keep shins vertical at the top."
+            ]
+        },
+        "description": "The most effective loaded exercise for isolating and building the glutes."
+    },
+    {
+        "id": "calf-raise-seated",
+        "name": "Seated Calf Raise",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Calves"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Seated Calf Machine"
+        ],
+        "instructions": {
+            "setup": "Sit with pads over lower thighs.",
+            "execution": [
+                "Lower heels fully.",
+                "Raise heels fully."
+            ],
+            "tips": [
+                "Because the knees are bent, the Gastrocnemius is slack, forcing the Soleus (underlying muscle) to do the work.",
+                "Crucial for calf width."
+            ]
+        },
+        "description": "Targets the soleus muscle, which lies underneath the gastrocnemius."
+    },
+    {
+        "id": "adductor-machine",
+        "name": "Adductor Machine",
+        "aliases": [
+            "Inner Thigh Machine"
+        ],
+        "exerciseType": "Corrective",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Adductors"
+            ],
+            "secondary": [
+                "Glutes"
+            ]
+        },
+        "equipmentList": [
+            "Adductor Machine"
+        ],
+        "instructions": {
+            "setup": "Sit with pads on the INSIDE of knees.",
+            "execution": [
+                "Squeeze legs together.",
+                "Pause at the center.",
+                "Return slowly to stretch."
+            ],
+            "tips": [
+                "Essential for injury prevention (groin strains) and stabilizing squats.",
+                "Don't go so wide in the stretch that you feel pain."
+            ]
+        },
+        "description": "Isolates the inner thigh muscles."
+    },
+    {
+        "id": "abductor-machine",
+        "name": "Abductor Machine",
+        "aliases": [
+            "Outer Thigh Machine"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Abductors",
+                "Glutes"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Abductor Machine"
+        ],
+        "instructions": {
+            "setup": "Sit with pads on the OUTSIDE of knees.",
+            "execution": [
+                "Push legs outward against resistance.",
+                "Focus on using the glutes to drive the movement."
+            ],
+            "tips": [
+                "Targets the Glute Medius/Minimus.",
+                "Lean forward slightly to increase glute recruitment."
+            ]
+        },
+        "description": "Targets the outer hip muscles responsible for stabilization and aesthetics."
+    },
+    {
+        "id": "goblet-squat",
+        "name": "Goblet Squat",
+        "aliases": [
+            "DB Squat"
+        ],
+        "exerciseType": "Functional",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Core"
+            ],
+            "secondary": [
+                "Glutes",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Kettlebell"
+        ],
+        "instructions": {
+            "setup": "Hold a dumbbell or kettlebell against your chest with both hands (goblet hold).",
+            "execution": [
+                "Squat down (between your legs).",
+                "Keep elbows inside knees at the bottom.",
+                "Drive back up."
+            ],
+            "tips": [
+                "The front load acts as a counterbalance, making it easier to hit depth with good form.",
+                "Excellent teaching tool for squat mechanics."
+            ]
+        },
+        "description": "A user-friendly squat variation that naturally enforces good posture and depth."
+    },
+    {
+        "id": "step-up",
+        "name": "Step-Up",
+        "aliases": [
+            "Box Step-Up"
+        ],
+        "exerciseType": "Functional",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Quads"
+            ],
+            "secondary": [
+                "Calves",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [
+            "Box",
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Place one foot entirely on a box/bench (knee should be roughly 90 degrees).",
+            "execution": [
+                "Drive through the boxed foot to lift the body up.",
+                "Do not push off the floor with the trailing leg.",
+                "Stand tall, then lower slowly."
+            ],
+            "tips": [
+                "A higher box biases the glutes; a lower box biases the quads.",
+                "Control the descent; don't just drop."
+            ]
+        },
+        "description": "A functional unilateral movement that challenges balance and single-leg strength."
+    },
+    {
+        "id": "bicep-curl-barbell",
+        "name": "Barbell Curl",
+        "aliases": [
+            "Standing Barbell Curl"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Biceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell"
+        ],
+        "instructions": {
+            "setup": "Stand tall holding a barbell with a shoulder-width underhand grip.",
+            "execution": [
+                "Keep elbows pinned to your sides.",
+                "Curl the bar up towards your chest.",
+                "Squeeze biceps hard at the top.",
+                "Lower under control to full extension."
+            ],
+            "tips": [
+                "Do not swing the hips to cheat the weight up.",
+                "Keep the wrists straight; do not curl the wrists at the top."
+            ]
+        },
+        "description": "The standard mass builder for the biceps, allowing for the heaviest loading."
+    },
+    {
+        "id": "bicep-curl-dumbbell",
+        "name": "Dumbbell Curl",
+        "aliases": [
+            "Standing DB Curl",
+            "Supinating Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Biceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand holding dumbbells at your sides, palms facing your legs (neutral).",
+            "execution": [
+                "Curl the weights up.",
+                "As you pass the thigh, rotate (supinate) your palms so they face the ceiling.",
+                "Squeeze at the top.",
+                "Rotate back to neutral on the way down."
+            ],
+            "tips": [
+                "Supination (twisting the wrist) is a primary function of the biceps; emphasize this twist.",
+                "Can be done alternating or both arms at once."
+            ]
+        },
+        "description": "Allows for separate arm training and maximal bicep contraction via supination."
+    },
+    {
+        "id": "preacher-curl",
+        "name": "Preacher Curl",
+        "aliases": [
+            "EZ Bar Preacher Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Biceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "EZ Bar",
+            "Preacher Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on the preacher bench. Adjust height so armpits rest comfortably over the pad.",
+            "execution": [
+                "Lower the bar until arms are fully extended.",
+                "Curl the weight up.",
+                "Stop just before the forearms are vertical to maintain tension."
+            ],
+            "tips": [
+                "Offers a strict movement that prevents body momentum.",
+                "Be careful not to hyperextend elbows at the bottom with heavy weights."
+            ]
+        },
+        "description": "Isolates the biceps by stabilizing the upper arm, focusing on the short head."
+    },
+    {
+        "id": "hammer-curl",
+        "name": "Hammer Curl",
+        "aliases": [
+            "Neutral Grip Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Forearms",
+                "Biceps"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand holding dumbbells with palms facing your body.",
+            "execution": [
+                "Curl the weight up while keeping palms facing each other (neutral grip).",
+                "Do not rotate the wrist.",
+                "Lower under control."
+            ],
+            "tips": [
+                "Targets the Brachialis (pushes the bicep up) and Brachioradialis (forearm).",
+                "Great for adding thickness to the arm."
+            ]
+        },
+        "description": "A bicep curl variation performed with a neutral grip to target the outer arm and forearm."
+    },
+    {
+        "id": "concentration-curl",
+        "name": "Concentration Curl",
+        "aliases": [
+            "Seated Concentration Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Biceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on a bench. Rest the back of your upper arm against your inner thigh.",
+            "execution": [
+                "Curl the dumbbell towards your shoulder.",
+                "Squeeze firmly at the peak.",
+                "Lower slowly without lifting the arm off the thigh."
+            ],
+            "tips": [
+                "Prevents any shoulder involvement or swinging.",
+                "Focus on the 'peak' of the bicep."
+            ]
+        },
+        "description": "A strict isolation movement that removes all momentum, focusing on the peak contraction."
+    },
+    {
+        "id": "spider-curl",
+        "name": "Spider Curl",
+        "aliases": [
+            "Prone Incline Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Biceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Lie chest-down on an incline bench set to 45 degrees. Arms hang straight down.",
+            "execution": [
+                "Curl the bar up without moving your elbows forward or backward.",
+                "Squeeze at the top.",
+                "Lower fully."
+            ],
+            "tips": [
+                "Gravity provides maximum resistance at the point of peak contraction.",
+                "Ensure the shoulders stay relaxed."
+            ]
+        },
+        "description": "Targets the short head of the biceps with elbows positioned in front of the body."
+    },
+    {
+        "id": "skull-crusher",
+        "name": "Skull Crusher",
+        "aliases": [
+            "Lying Tricep Extension",
+            "Nose Breakers"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "EZ Bar",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Lie on a flat bench. Hold bar directly above chest.",
+            "execution": [
+                "Bend at the elbows to lower the bar towards your forehead (or slightly behind head).",
+                "Keep elbows pointing at the ceiling.",
+                "Extend arms back to the starting position."
+            ],
+            "tips": [
+                "Lowering the bar behind the head (rather than to the forehead) increases long-head recruitment and saves elbows.",
+                "Keep elbows tucked in."
+            ]
+        },
+        "description": "A staple tricep exercise that places high tension on the muscle during the stretch."
+    },
+    {
+        "id": "tricep-extension-overhead-db",
+        "name": "Overhead Tricep Extension (DB)",
+        "aliases": [
+            "Seated DB Extension"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit (or stand) holding one dumbbell with both hands overhead.",
+            "execution": [
+                "Lower the weight behind your head by bending elbows.",
+                "Get a deep stretch in the triceps.",
+                "Press the weight back up to full extension."
+            ],
+            "tips": [
+                "Ideally performed seated to protect the lower back.",
+                "Crucial for hitting the 'Long Head' of the triceps."
+            ]
+        },
+        "description": "Targets the long head of the triceps by placing the shoulder in flexion."
+    },
+    {
+        "id": "tricep-extension-overhead-cable",
+        "name": "Overhead Tricep Extension (Cable)",
+        "aliases": [
+            "Cable Overhead Extension"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Rope Attachment"
+        ],
+        "instructions": {
+            "setup": "Set pulley to low (or high if leaning forward). Grab rope and turn away from machine.",
+            "execution": [
+                "Extend arms overhead.",
+                "Bend elbows to lower rope behind head.",
+                "Extend arms forward/upward."
+            ],
+            "tips": [
+                "Constant tension from the cable makes this superior to dumbbells for some.",
+                "Keep core tight to avoid arching back."
+            ]
+        },
+        "description": "Cable variation of the overhead extension providing consistent resistance."
+    },
+    {
+        "id": "close-grip-bench-press",
+        "name": "Close-Grip Bench Press",
+        "aliases": [
+            "CGBP"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Chest",
+                "Front Delts"
+            ]
+        },
+        "equipmentList": [
+            "Barbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Lie on bench. Grip bar shoulder-width apart (hands aligned with shoulders).",
+            "execution": [
+                "Unrack and lower bar to lower chest.",
+                "Keep elbows tucked close to the torso.",
+                "Press back up explosively."
+            ],
+            "tips": [
+                "Do not go too narrow (hands touching), as this strains wrists without adding benefit.",
+                "The heavy loading capability makes this the best mass builder for triceps."
+            ]
+        },
+        "description": "A compound movement that shifts the emphasis of the bench press from chest to triceps."
+    },
+    {
+        "id": "tricep-dips",
+        "name": "Tricep Dips",
+        "aliases": [
+            "Upright Dips"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Chest"
+            ]
+        },
+        "equipmentList": [
+            "Dip Station"
+        ],
+        "instructions": {
+            "setup": "Mount dip bars with arms straight.",
+            "execution": [
+                "Keep torso UPRIGHT (do not lean forward).",
+                "Lower body until elbows are at 90 degrees.",
+                "Press back up, focusing on extending the elbows."
+            ],
+            "tips": [
+                "If you lean forward, you recruit the chest; stay vertical for triceps.",
+                "Keep elbows tucked in, not flared out."
+            ]
+        },
+        "description": "Bodyweight compound exercise emphasizing the triceps via vertical torso positioning."
+    },
+    {
+        "id": "reverse-curl",
+        "name": "Reverse Curl",
+        "aliases": [
+            "Pronated Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Forearms",
+                "Biceps"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Barbell",
+            "EZ Bar"
+        ],
+        "instructions": {
+            "setup": "Hold bar with an overhand (pronated) grip, shoulder-width apart.",
+            "execution": [
+                "Curl the weight up using the tops of your forearms.",
+                "Keep wrists straight or slightly extended.",
+                "Lower slowly."
+            ],
+            "tips": [
+                "Primary target is the Brachioradialis and wrist extensors.",
+                "Use an EZ bar if a straight bar hurts your wrists."
+            ]
+        },
+        "description": "Targets the forearm extensors and the brachialis muscle."
+    },
+    {
+        "id": "wrist-curl",
+        "name": "Wrist Curl",
+        "aliases": [
+            "Forearm Curl"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Forearms"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Dumbbell",
+            "Barbell",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Sit on bench. Rest forearms on thighs with wrists hanging off knees, palms up.",
+            "execution": [
+                "Allow the weight to roll down into your fingers.",
+                "Curl the wrist upward as high as possible.",
+                "Squeeze the forearm flexors."
+            ],
+            "tips": [
+                "Use high reps.",
+                "Do not use the biceps to lift the weight; isolate the wrist."
+            ]
+        },
+        "description": "Directly isolates the wrist flexor muscles on the underside of the forearm."
+    },
+    {
+        "id": "zottman-curl",
+        "name": "Zottman Curl",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Biceps",
+                "Forearms"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Dumbbells"
+        ],
+        "instructions": {
+            "setup": "Stand with dumbbells at sides.",
+            "execution": [
+                "Phase 1: Curl up with palms facing up (standard curl).",
+                "Phase 2: At the top, rotate wrists 180 degrees so palms face down.",
+                "Phase 3: Lower the weight slowly with the overhand grip (reverse curl).",
+                "Rotate back to start at the bottom."
+            ],
+            "tips": [
+                "Hits the biceps on the concentric (way up) and forearms on the eccentric (way down).",
+                "Control the negative portion; that is the key to this exercise."
+            ]
+        },
+        "description": "A hybrid curl that targets both the biceps and the forearms in a single rep."
+    },
+    {
+        "id": "rope-pushdown",
+        "name": "Rope Pushdown",
+        "aliases": [
+            "Tricep Rope Pressdown"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Triceps"
+            ],
+            "secondary": [
+                "Forearms"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Rope Attachment"
+        ],
+        "instructions": {
+            "setup": "Attach rope to high pulley. Grip ends with neutral grip.",
+            "execution": [
+                "Start with elbows bent at 90 degrees by your sides.",
+                "Push the rope down until arms are fully extended.",
+                "Pull the rope ends APART at the bottom for peak contraction."
+            ],
+            "tips": [
+                "Keep elbows pinned to your ribs; do not let them drift forward.",
+                "Separating the rope maximizes the contraction of the lateral head."
+            ]
+        },
+        "description": "An isolation exercise focusing on the lateral head of the tricep and peak contraction."
+    },
+    {
+        "id": "cable-crunch",
+        "name": "Kneeling Cable Crunch",
+        "aliases": [
+            "Rope Crunch"
+        ],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abs"
+            ],
+            "secondary": [
+                "Obliques"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "Rope Attachment"
+        ],
+        "instructions": {
+            "setup": "Kneel facing the cable stack. Hold the rope behind your head/neck.",
+            "execution": [
+                "Keeping your hips fixed (do not sit back onto your heels), curl your spine downwards.",
+                "Imagine trying to bring your forehead to your knees.",
+                "Squeeze the abs hard at the bottom.",
+                "Uncurl slowly to the starting position."
+            ],
+            "tips": [
+                "If your hips move back and forth, you are using your weight to pull, not your abs.",
+                "Round the back; keeping a straight back disengages the abs and uses hip flexors."
+            ]
+        },
+        "description": "One of the few weighted ab exercises allowing for progressive overload."
+    },
+    {
+        "id": "ab-wheel-rollout",
+        "name": "Ab Wheel Rollout",
+        "aliases": [
+            "Ab Roller"
+        ],
+        "exerciseType": "Strength",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Core"
+            ],
+            "secondary": [
+                "Lats",
+                "Shoulders",
+                "Hip Flexors"
+            ]
+        },
+        "equipmentList": [
+            "Ab Wheel"
+        ],
+        "instructions": {
+            "setup": "Kneel on a pad. Hold the wheel with both hands directly under shoulders.",
+            "execution": [
+                "Roll the wheel forward, extending your body as far as you can without arching your back.",
+                "Maintain a slight posterior pelvic tilt (tucked tailbone) throughout.",
+                "Use your abs and lats to pull yourself back to the start."
+            ],
+            "tips": [
+                "If you feel this in your lower back, you have lost core tension; reduce the range of motion.",
+                "Think of it as an 'Anti-Extension' exercise."
+            ]
+        },
+        "description": "An advanced anti-extension exercise that builds significant core stability."
+    },
+    {
+        "id": "russian-twist",
+        "name": "Russian Twist",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Obliques",
+                "Abs"
+            ],
+            "secondary": [
+                "Hip Flexors"
+            ]
+        },
+        "equipmentList": [
+            "Medicine Ball",
+            "Weight Plate"
+        ],
+        "instructions": {
+            "setup": "Sit on floor, lean torso back 45 degrees, and lift feet off the floor (balancing on glutes).",
+            "execution": [
+                "Holding a weight, rotate your torso from side to side.",
+                "Touch the weight to the floor on each side.",
+                "Follow the weight with your eyes/head."
+            ],
+            "tips": [
+                "Move the shoulders, not just the arms.",
+                "If lower back hurts, put feet down on the floor."
+            ]
+        },
+        "description": "A rotational core exercise that targets the obliques and balance."
+    },
+    {
+        "id": "dragon-flag",
+        "name": "Dragon Flag",
+        "aliases": [
+            "Bruce Lee Kick"
+        ],
+        "exerciseType": "Skill",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Expert",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Core"
+            ],
+            "secondary": [
+                "Lats",
+                "Hip Flexors",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Lie on a bench. Grip the edge of the bench firmly behind your head.",
+            "execution": [
+                "Lift your entire body (legs and torso) up until nearly vertical, resting only on upper back.",
+                "Keep the body rigid (straight line).",
+                "Lower the entire body slowly as a single unit without breaking at the hips."
+            ],
+            "tips": [
+                "This is an extreme anti-extension exercise.",
+                "Do not attempt if you have lower back issues."
+            ]
+        },
+        "description": "Legendary core exercise popularized by Bruce Lee, requiring immense total body tension."
+    },
+    {
+        "id": "decline-sit-up",
+        "name": "Decline Sit-Up",
+        "aliases": [],
+        "exerciseType": "Hypertrophy",
+        "mechanics": "Isolation",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Hip Flexors"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [
+            "Decline Bench"
+        ],
+        "instructions": {
+            "setup": "Secure legs in a decline bench.",
+            "execution": [
+                "Lie back fully.",
+                "Contract abs to curl the torso up towards knees.",
+                "Lower under control."
+            ],
+            "tips": [
+                "Place hands across chest for easier difficulty, or behind head for harder.",
+                "Avoid pulling on the neck."
+            ]
+        },
+        "description": "Increases the range of motion and gravity leverage compared to floor sit-ups."
+    },
+    {
+        "id": "cable-woodchopper",
+        "name": "Cable Woodchopper",
+        "aliases": [
+            "Woodchops"
+        ],
+        "exerciseType": "Functional",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Obliques",
+                "Core"
+            ],
+            "secondary": [
+                "Shoulders",
+                "Glutes",
+                "Hips"
+            ]
+        },
+        "equipmentList": [
+            "Cable Machine",
+            "D-Handle"
+        ],
+        "instructions": {
+            "setup": "Set pulley to high (high-to-low) or low (low-to-high). Stand sideways.",
+            "execution": [
+                "Grab handle with both hands.",
+                "Rotate torso explosively away from the machine, pivoting the back foot.",
+                "Return slowly to the start resisting the pull."
+            ],
+            "tips": [
+                "Power comes from the hips and torso rotation, not just arm swinging.",
+                "Keep arms relatively straight."
+            ]
+        },
+        "description": "A functional rotational power exercise that mimics real-world throwing or swinging patterns."
+    },
+    {
+        "id": "dead-bug",
+        "name": "Dead Bug",
+        "aliases": [],
+        "exerciseType": "Corrective",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Core",
+                "Abs"
+            ],
+            "secondary": [
+                "Hip Flexors"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie on back with arms extended to ceiling and legs in tabletop (90 degrees).",
+            "execution": [
+                "Press lower back FIRMLY into the floor (flatten the gap).",
+                "Slowly extend opposite arm and opposite leg toward the floor.",
+                "Return to center and switch sides.",
+                "Never let the lower back peel off the floor."
+            ],
+            "tips": [
+                "If the back arches, you have failed the rep.",
+                "Exhale hard as you extend limbs to brace the core."
+            ]
+        },
+        "description": "The best exercise for learning how to dissociate limb movement from spine stability."
+    },
+    {
+        "id": "bird-dog",
+        "name": "Bird Dog",
+        "aliases": [
+            "Quadruped Extension"
+        ],
+        "exerciseType": "Corrective",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Core",
+                "Lower Back",
+                "Glutes"
+            ],
+            "secondary": [
+                "Shoulders"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Start on hands and knees (quadruped position), spine neutral.",
+            "execution": [
+                "Extend opposite arm and opposite leg straight out.",
+                "Pause and hold stability without shifting hips.",
+                "Return to start and switch."
+            ],
+            "tips": [
+                "Imagine balancing a glass of water on your lower back; don't spill it.",
+                "Great for spinal health and coordination."
+            ]
+        },
+        "description": "A rehabilitative and stability exercise for the posterior chain and core."
+    },
+    {
+        "id": "assault-bike",
+        "name": "Assault Bike",
+        "aliases": [
+            "Air Bike",
+            "Fan Bike",
+            "Echo Bike"
+        ],
+        "exerciseType": "Cardio",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Quads"
+            ],
+            "secondary": [
+                "Triceps",
+                "Lats",
+                "Shoulders"
+            ]
+        },
+        "equipmentList": [
+            "Air Bike"
+        ],
+        "instructions": {
+            "setup": "Adjust seat height so leg is nearly straight at the bottom of the pedal stroke.",
+            "execution": [
+                "Pedal hard with legs while simultaneously pushing and pulling the handles.",
+                "Coordinate the rhythm: as one leg kicks down, the opposite arm pushes forward.",
+                "Maintain an upright torso."
+            ],
+            "tips": [
+                "Do not let the arms go limp; the 'push-pull' of the upper body significantly increases calorie burn.",
+                "Use for high-intensity interval training (HIIT)."
+            ]
+        },
+        "description": "A full-body conditioning tool where resistance increases as you pedal faster."
+    },
+    {
+        "id": "rowing-machine",
+        "name": "Concept 2 Rower",
+        "aliases": [
+            "Ergometer"
+        ],
+        "exerciseType": "Cardio",
+        "mechanics": "Compound",
+        "forceType": "Pull",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Back",
+                "Legs"
+            ],
+            "secondary": [
+                "Biceps",
+                "Core",
+                "Glutes"
+            ]
+        },
+        "equipmentList": [
+            "Rowing Machine"
+        ],
+        "instructions": {
+            "setup": "Secure feet in straps. Grab handle.",
+            "execution": [
+                "Sequence: Legs push, hips hinge back, arms pull.",
+                "Return: Arms extend, hips hinge forward, legs bend.",
+                "Drive powerfully through the heels."
+            ],
+            "tips": [
+                "60% legs, 30% core, 10% arms. Do not pull with arms early.",
+                "Keep the damper setting reasonable (3-5 is standard for water simulation)."
+            ]
+        },
+        "description": "A low-impact, high-output posterior chain endurance exercise."
+    },
+    {
+        "id": "treadmill-incline-walk",
+        "name": "Treadmill Incline Walk",
+        "aliases": [
+            "12-3-30"
+        ],
+        "exerciseType": "Cardio",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Glutes",
+                "Calves"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Treadmill"
+        ],
+        "instructions": {
+            "setup": "Set treadmill to max incline (usually 12-15%) and a moderate walking speed (3-4 km/h).",
+            "execution": [
+                "Walk with long strides.",
+                "Do NOT hold the handrails.",
+                "Keep torso upright; do not lean forward into the console."
+            ],
+            "tips": [
+                "Holding the rails leans your body back, effectively making the incline 0% relative to your body angle.",
+                "Excellent for Zone 2 heart rate training."
+            ]
+        },
+        "description": "Low impact steady state (LISS) cardio that specifically targets the posterior chain due to the incline."
+    },
+    {
+        "id": "stairmaster",
+        "name": "Stairmaster",
+        "aliases": [
+            "Stair Climber"
+        ],
+        "exerciseType": "Cardio",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Glutes",
+                "Quads"
+            ],
+            "secondary": [
+                "Calves",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Stairmaster Machine"
+        ],
+        "instructions": {
+            "setup": "Step onto the machine and select level.",
+            "execution": [
+                "Climb the rotating stairs.",
+                "Press through the heel to engage glutes.",
+                "Avoid leaning your entire bodyweight on the arm supports."
+            ],
+            "tips": [
+                "Leaning on the console reduces calorie burn by up to 30%.",
+                "Take deep steps (skipping a step) to bias glutes more."
+            ]
+        },
+        "description": "Simulates continuous stair climbing, providing a potent stimulus for legs and heart rate."
+    },
+    {
+        "id": "battle-ropes",
+        "name": "Battle Ropes",
+        "aliases": [],
+        "exerciseType": "Cardio",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Shoulders"
+            ],
+            "secondary": [
+                "Core",
+                "Arms",
+                "Legs"
+            ]
+        },
+        "equipmentList": [
+            "Battle Ropes"
+        ],
+        "instructions": {
+            "setup": "Stand in a quarter squat holding rope ends. Leave some slack.",
+            "execution": [
+                "Create waves by rapidly raising and lowering arms (alternating or double whip).",
+                "Keep the core braced tightly to prevent torso swaying.",
+                "Maintain rhythm for time."
+            ],
+            "tips": [
+                "It's not just an arm workout; use your legs and hips to generate power.",
+                "Great finisher for shoulder endurance."
+            ]
+        },
+        "description": "High-intensity metabolic conditioning tool focusing on upper body power output."
+    },
+    {
+        "id": "jump-rope",
+        "name": "Jump Rope",
+        "aliases": [
+            "Skipping"
+        ],
+        "exerciseType": "Plyometric",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Calves"
+            ],
+            "secondary": [
+                "Shoulders",
+                "Forearms",
+                "Core"
+            ]
+        },
+        "equipmentList": [
+            "Jump Rope"
+        ],
+        "instructions": {
+            "setup": "Hold handles with elbows tucked in.",
+            "execution": [
+                "Flick wrists to rotate rope (do not use big arm circles).",
+                "Bounce lightly on the balls of your feet.",
+                "Clear the rope by only an inch or two."
+            ],
+            "tips": [
+                "Stay relaxed; tension causes fatigue.",
+                "Improves footwork, coordination, and bone density."
+            ]
+        },
+        "description": "Classic conditioning exercise developing coordination, ankle stiffness, and cardiovascular endurance."
+    },
+    {
+        "id": "downward-facing-dog",
+        "name": "Downward-Facing Dog",
+        "aliases": [
+            "Adho Mukha Svanasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Calves",
+                "Side Delts"
+            ],
+            "secondary": [
+                "Lats",
+                "Lower Back",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Start on hands and knees, hands slightly forward of shoulders.",
+            "execution": [
+                "Lift knees away from floor, reaching tailbone toward the ceiling.",
+                "Straighten legs without locking knees and press heels toward the floor.",
+                "Press firmly through palms and knuckles, keeping ears aligned with upper arms."
+            ],
+            "tips": [
+                "Rotate inner elbows forward to engage the shoulders.",
+                "Keep the spine long rather than focusing on flat heels."
+            ]
+        },
+        "description": "A foundational yoga pose that provides a full-body stretch and builds shoulder stability."
+    },
+    {
+        "id": "worlds-greatest-stretch",
+        "name": "World's Greatest Stretch",
+        "aliases": [
+            "Lunge with Thoracic Rotation"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hip Flexors",
+                "Upper Back",
+                "Adductors"
+            ],
+            "secondary": [
+                "Glutes",
+                "Hamstrings",
+                "Obliques"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Step into a deep lunge with the back knee off the ground.",
+            "execution": [
+                "Place the hand opposite the front foot on the ground.",
+                "Rotate the torso, reaching the arm closest to the front foot toward the sky.",
+                "Bring the elbow of the reaching arm down toward the instep of the front foot."
+            ],
+            "tips": [
+                "Keep the back leg active and straight.",
+                "Follow your hand with your eyes to maximize thoracic rotation."
+            ]
+        },
+        "description": "A comprehensive mobility drill targeting the hips, spine, and shoulders in one movement."
+    },
+    {
+        "id": "pigeon-pose",
+        "name": "Pigeon Pose",
+        "aliases": [
+            "Eka Pada Rajakapotasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Abductors"
+            ],
+            "secondary": [
+                "Hip Flexors",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "From a plank or downward dog, bring one knee forward toward the same-side wrist.",
+            "execution": [
+                "Place the shin on the floor, aiming to keep it parallel to the front of the mat.",
+                "Extend the back leg straight behind you, hips squared to the floor.",
+                "Lower the torso over the front leg as comfort permits."
+            ],
+            "tips": [
+                "Flex the front foot to protect the knee joint.",
+                "Use a block under the glute if hips are tight."
+            ]
+        },
+        "description": "An intense hip-opening pose targeting the gluteus muscles and deep hip rotators."
+    },
+    {
+        "id": "skater-jumps",
+        "name": "Skater Jumps",
+        "aliases": [
+            "Lateral Bounds"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Abductors",
+                "Quads"
+            ],
+            "secondary": [
+                "Calves",
+                "Adductors",
+                "Obliques"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand in a small semi-squat position.",
+            "execution": [
+                "Jump laterally to the right, landing on the right foot with a soft knee.",
+                "Sweep the left leg behind the right and swing arms across the body.",
+                "Immediately jump back to the left, repeating the motion."
+            ],
+            "tips": [
+                "Maintain a low center of gravity.",
+                "Focus on distance and control rather than just speed."
+            ]
+        },
+        "description": "A lateral plyometric exercise that builds side-to-side power and ankle stability."
+    },
+    {
+        "id": "ninety-ninety-hip-switch",
+        "name": "90/90 Hip Switch",
+        "aliases": [
+            "Hip Shin Box"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hip Flexors",
+                "Abductors",
+                "Adductors"
+            ],
+            "secondary": [
+                "Glutes"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Sit on the floor with knees bent at 90 degrees, one leg in front and one to the side.",
+            "execution": [
+                "Keeping feet on the floor, rotate the knees to the opposite side.",
+                "Maintain an upright torso without using hands for support if possible.",
+                "Pause in the end range to feel the internal and external rotation."
+            ],
+            "tips": [
+                "Try to keep the spine as vertical as possible.",
+                "Drive the knees toward the floor actively."
+            ]
+        },
+        "description": "Improves internal and external hip rotation, essential for squat depth and lower back health."
+    },
+    {
+        "id": "cat-cow",
+        "name": "Cat-Cow",
+        "aliases": [
+            "Chakravakasana"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back",
+                "Upper Back"
+            ],
+            "secondary": [
+                "Abs",
+                "Rhomboids"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Start on all fours in a tabletop position.",
+            "execution": [
+                "Inhale, drop the belly, and look up (Cow).",
+                "Exhale, round the spine, and tuck the chin (Cat).",
+                "Flow between positions following the breath."
+            ],
+            "tips": [
+                "Initiate movement from the pelvis.",
+                "Avoid collapsing into the shoulders."
+            ]
+        },
+        "description": "A gentle flow to improve spinal flexibility and core awareness."
+    },
+    {
+        "id": "broad-jump",
+        "name": "Broad Jump",
+        "aliases": [
+            "Long Jump"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes",
+                "Hamstrings"
+            ],
+            "secondary": [
+                "Calves",
+                "Abs"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand with feet hip-width apart.",
+            "execution": [
+                "Hinge hips back and swing arms backward.",
+                "Explode forward as far as possible, swinging arms for momentum.",
+                "Land on both feet, absorbing impact through hips and knees."
+            ],
+            "tips": [
+                "Do not land with locked knees.",
+                "Focus on horizontal distance."
+            ]
+        },
+        "description": "Develops explosive horizontal power and lower body coordination."
+    },
+    {
+        "id": "warrior-two",
+        "name": "Warrior II",
+        "aliases": [
+            "Virabhadrasana II"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Side Delts"
+            ],
+            "secondary": [
+                "Glutes",
+                "Abductors",
+                "Adductors"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand with feet wide apart, right foot facing forward and left foot turned 90 degrees.",
+            "execution": [
+                "Bend the right knee so it is directly over the ankle.",
+                "Extend arms parallel to the floor, palms down.",
+                "Gaze over the right hand, keeping the torso centered."
+            ],
+            "tips": [
+                "Keep the back leg engaged and straight.",
+                "Do not let the front knee cave inward."
+            ]
+        },
+        "description": "A standing pose that builds leg strength, endurance, and hip flexibility."
+    },
+    {
+        "id": "thoracic-bridge",
+        "name": "Thoracic Bridge",
+        "aliases": [
+            "Crab Reach"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Dynamic",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Rotator Cuff",
+                "Glutes"
+            ],
+            "secondary": [
+                "Hip Flexors",
+                "Triceps",
+                "Abs"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Sit with feet flat and hands behind you, like a crab walk position.",
+            "execution": [
+                "Lift the hips and reach one arm diagonally over the opposite shoulder.",
+                "Rotate the torso to look at the ground while driving the hips high.",
+                "Return to center and switch sides."
+            ],
+            "tips": [
+                "Push the ground away with the supporting hand.",
+                "Drive through the heels to engage the glutes."
+            ]
+        },
+        "description": "Combines glute activation with significant thoracic spine and shoulder mobilization."
+    },
+    {
+        "id": "cobra-pose",
+        "name": "Cobra Pose",
+        "aliases": [
+            "Bhujangasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back"
+            ],
+            "secondary": [
+                "Chest",
+                "Front Delts",
+                "Triceps"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie face down with hands under the shoulders.",
+            "execution": [
+                "Press the tops of the feet into the mat.",
+                "Inhale and lift the chest off the floor using back strength.",
+                "Keep the elbows close to the body and shoulders down."
+            ],
+            "tips": [
+                "Don't use only arm strength; focus on the back.",
+                "Keep the neck neutral."
+            ]
+        },
+        "description": "A heart-opening backbend that strengthens the spine and stretches the chest."
+    },
+    {
+        "id": "tuck-jumps",
+        "name": "Tuck Jumps",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Quads",
+                "Hip Flexors"
+            ],
+            "secondary": [
+                "Calves",
+                "Glutes"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand with feet hip-width apart.",
+            "execution": [
+                "Jump vertically as high as possible.",
+                "Pull the knees toward the chest at the peak of the jump.",
+                "Land softly and immediately prepare for the next rep."
+            ],
+            "tips": [
+                "Focus on a quick ground contact time.",
+                "Land on the balls of the feet."
+            ]
+        },
+        "description": "An advanced plyometric move that requires high power output and core engagement."
+    },
+    {
+        "id": "childs-pose",
+        "name": "Child's Pose",
+        "aliases": [
+            "Balasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back"
+            ],
+            "secondary": [
+                "Lats",
+                "Glutes",
+                "Abductors"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Kneel on the floor, big toes touching, sitting on your heels.",
+            "execution": [
+                "Separate your knees hip-width or wider.",
+                "Fold forward, resting your forehead on the floor.",
+                "Extend arms forward or rest them alongside the body."
+            ],
+            "tips": [
+                "Breathe into the back of the ribs.",
+                "Use a block for the forehead if the floor is too far."
+            ]
+        },
+        "description": "A restorative pose used to calm the nervous system and stretch the back."
+    },
+    {
+        "id": "scapular-wall-slides",
+        "name": "Scapular Wall Slides",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Traps",
+                "Rhomboids"
+            ],
+            "secondary": [
+                "Rear Delts",
+                "Rotator Cuff"
+            ]
+        },
+        "equipmentList": [
+            "Wall"
+        ],
+        "instructions": {
+            "setup": "Stand with back, head, and glutes against a wall.",
+            "execution": [
+                "Place arms in a 'goalpost' position against the wall.",
+                "Slide arms upward while keeping elbows and wrists in contact with the wall.",
+                "Lower back down with control, squeezing the shoulder blades."
+            ],
+            "tips": [
+                "Keep the lower back pressed against the wall.",
+                "Don't shrug the shoulders."
+            ]
+        },
+        "description": "Corrects posture and improves scapular upward rotation and stability."
+    },
+    {
+        "id": "boat-pose",
+        "name": "Boat Pose",
+        "aliases": [
+            "Navasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Hip Flexors"
+            ],
+            "secondary": [
+                "Lower Back",
+                "Quads"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Sit with knees bent and feet flat on the floor.",
+            "execution": [
+                "Lean back slightly and lift feet off the floor.",
+                "Straighten the legs to form a 'V' shape with the body.",
+                "Extend arms forward, parallel to the floor."
+            ],
+            "tips": [
+                "Keep the chest lifted and spine long.",
+                "Bend knees if the lower back rounds."
+            ]
+        },
+        "description": "A core-strengthening pose that challenges balance and hip flexor endurance."
+    },
+    {
+        "id": "depth-jumps",
+        "name": "Depth Jumps",
+        "aliases": [
+            "Shock Jumps"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes",
+                "Calves"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Plyo Box"
+        ],
+        "instructions": {
+            "setup": "Stand on top of a box (12-24 inches).",
+            "execution": [
+                "Step off the box, landing on both feet.",
+                "Immediately upon contact, jump as high as possible.",
+                "Minimize time spent on the ground."
+            ],
+            "tips": [
+                "Do not jump off the box; step off.",
+                "Focus on reactive speed."
+            ]
+        },
+        "description": "Utilizes the stretch-shortening cycle to maximize reactive power."
+    },
+    {
+        "id": "shoulder-dislocations",
+        "name": "Shoulder Dislocations",
+        "aliases": [
+            "PVC Pass-Throughs"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Rotator Cuff",
+                "Chest"
+            ],
+            "secondary": [
+                "Side Delts",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "PVC Pipe",
+            "Resistance Band"
+        ],
+        "instructions": {
+            "setup": "Hold a PVC pipe with a very wide grip.",
+            "execution": [
+                "With straight arms, bring the pipe over the head and down to the lower back.",
+                "Reverse the movement back to the starting position.",
+                "Gradually narrow the grip as mobility improves."
+            ],
+            "tips": [
+                "Keep the elbows locked.",
+                "Don't arch the lower back."
+            ]
+        },
+        "description": "Improves shoulder range of motion and joint health."
+    },
+    {
+        "id": "triangle-pose",
+        "name": "Triangle Pose",
+        "aliases": [
+            "Trikonasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Obliques"
+            ],
+            "secondary": [
+                "Abductors",
+                "Side Delts",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand with wide legs, right foot out and left foot slightly in.",
+            "execution": [
+                "Reach the right arm forward, then down to the shin or a block.",
+                "Extend the left arm toward the ceiling.",
+                "Keep both sides of the torso long and gaze upward."
+            ],
+            "tips": [
+                "Don't collapse into the lower hand.",
+                "Keep the body in one plane as if between two panes of glass."
+            ]
+        },
+        "description": "Stretches the hamstrings and groins while strengthening the core."
+    },
+    {
+        "id": "plyo-push-ups",
+        "name": "Plyometric Push-Ups",
+        "aliases": [
+            "Clapping Push-Ups"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Chest",
+                "Triceps"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Abs"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Start in a standard push-up position.",
+            "execution": [
+                "Lower the chest to the floor.",
+                "Push up with enough force that the hands leave the ground.",
+                "Land softly and transition into the next rep."
+            ],
+            "tips": [
+                "Keep the core tight to prevent hip sagging.",
+                "Start on knees to build power if needed."
+            ]
+        },
+        "description": "Develops explosive power in the upper body pushing muscles."
+    },
+    {
+        "id": "ankle-dorsiflexion-stretch",
+        "name": "Ankle Dorsiflexion Stretch",
+        "aliases": [
+            "Wall Ankle Mobilization"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Calves"
+            ],
+            "secondary": [
+            ]
+        },
+        "equipmentList": [
+            "Wall"
+        ],
+        "instructions": {
+            "setup": "Stand facing a wall in a staggered stance.",
+            "execution": [
+                "Drive the front knee toward the wall without lifting the heel.",
+                "Pulse forward and back to increase the range.",
+                "Move the foot further back as mobility increases."
+            ],
+            "tips": [
+                "Keep the heel glued to the floor.",
+                "Ensure the knee tracks over the toes."
+            ]
+        },
+        "description": "Essential for squat mechanics and preventing lower limb injuries."
+    },
+    {
+        "id": "med-ball-slams",
+        "name": "Medicine Ball Slams",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Lats",
+                "Cardiovascular System"
+            ],
+            "secondary": [
+                "Triceps",
+                "Glutes",
+                "Quads"
+            ]
+        },
+        "equipmentList": [
+            "Medicine Ball"
+        ],
+        "instructions": {
+            "setup": "Stand with feet shoulder-width apart, holding a ball.",
+            "execution": [
+                "Reach the ball overhead, extending the body.",
+                "Slam the ball into the floor as hard as possible, following through with hips.",
+                "Catch the ball on the bounce or pick it up and repeat."
+            ],
+            "tips": [
+                "Use the core to generate the power, not just arms.",
+                "Keep a flat back."
+            ]
+        },
+        "description": "Develops explosive core power and metabolic conditioning."
+    },
+    {
+        "id": "thread-the-needle",
+        "name": "Thread the Needle",
+        "aliases": [
+            "Parsva Balasana"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Rear Delts"
+            ],
+            "secondary": [
+                "Rhomboids",
+                "Obliques"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Start on all fours.",
+            "execution": [
+                "Reach one arm under the opposite arm, resting the shoulder on the floor.",
+                "Keep hips stacked over the knees.",
+                "Extend the other arm forward or wrap it around the back."
+            ],
+            "tips": [
+                "Breathe into the stretch between the shoulder blades.",
+                "Do not force the shoulder down."
+            ]
+        },
+        "description": "A relaxing stretch that improves thoracic rotation and shoulder mobility."
+    },
+    {
+        "id": "split-squat-jumps",
+        "name": "Split Squat Jumps",
+        "aliases": [
+            "Jumping Lunges"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Calves",
+                "Abs"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Start in a lunge position.",
+            "execution": [
+                "Jump explosively upward.",
+                "Switch leg positions in mid-air.",
+                "Land softly in a lunge with the opposite foot forward."
+            ],
+            "tips": [
+                "Maintain an upright torso.",
+                "Focus on vertical height."
+            ]
+        },
+        "description": "Builds explosive power and unilateral leg stability."
+    },
+    {
+        "id": "tree-pose",
+        "name": "Tree Pose",
+        "aliases": [
+            "Vrksasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Calves",
+                "Adductors"
+            ],
+            "secondary": [
+                "Abs",
+                "Glutes"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand on one leg.",
+            "execution": [
+                "Place the sole of the other foot on the inner calf or thigh.",
+                "Avoid the knee joint.",
+                "Bring hands to heart center or reach them overhead."
+            ],
+            "tips": [
+                "Find a focal point (Drishti) for balance.",
+                "Press the foot and thigh into each other."
+            ]
+        },
+        "description": "Improves balance, focus, and ankle strength."
+    },
+    {
+        "id": "jefferson-curl",
+        "name": "Jefferson Curl",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Dynamic",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Upper Back",
+                "Calves"
+            ]
+        },
+        "equipmentList": [
+            "Kettlebell",
+            "Dumbbell"
+        ],
+        "instructions": {
+            "setup": "Stand on a bench or floor with light weight.",
+            "execution": [
+                "Slowly tuck the chin and roll down one vertebra at a time.",
+                "Keep legs straight as you reach the weight toward or below the feet.",
+                "Slowly roll back up to a standing position."
+            ],
+            "tips": [
+                "Use very light weight to start.",
+                "Movement should be slow and controlled."
+            ]
+        },
+        "description": "Develops spinal articulation and extreme posterior chain flexibility."
+    },
+    {
+        "id": "crow-pose",
+        "name": "Crow Pose",
+        "aliases": [
+            "Bakasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abs",
+                "Triceps",
+                "Forearms"
+            ],
+            "secondary": [
+                "Front Delts",
+                "Chest"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Squat down and place hands flat on the floor, shoulder-width apart.",
+            "execution": [
+                "Place knees high up on the back of the triceps.",
+                "Lean forward, shifting weight into the hands until feet lift.",
+                "Squeeze the inner thighs and pull the navel in."
+            ],
+            "tips": [
+                "Look forward, not down at your feet.",
+                "Spread fingers wide for a stable base."
+            ]
+        },
+        "description": "An introductory arm balance that builds core and wrist strength."
+    },
+    {
+        "id": "sphinx-pose",
+        "name": "Sphinx Pose",
+        "aliases": [
+            "Salamba Bhujangasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back"
+            ],
+            "secondary": [
+                "Chest",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie on your stomach with elbows under the shoulders.",
+            "execution": [
+                "Forearms are parallel on the floor.",
+                "Press into the elbows to lift the chest.",
+                "Lengthen the tailbone toward the heels."
+            ],
+            "tips": [
+                "Keep the neck long and shoulders away from ears.",
+                "Engage the glutes slightly to protect the lower back."
+            ]
+        },
+        "description": "A gentle backbend ideal for counteracting a seated posture."
+    },
+    {
+        "id": "scorpion-stretch",
+        "name": "Scorpion Stretch",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Dynamic",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Hip Flexors",
+                "Chest",
+                "Obliques"
+            ],
+            "secondary": [
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Lie face down with arms out in a 'T' shape.",
+            "execution": [
+                "Lift the left leg and reach the foot toward the right hand.",
+                "Keep the right shoulder in contact with the floor.",
+                "Switch sides and repeat."
+            ],
+            "tips": [
+                "Move slowly to avoid straining the spine.",
+                "Focus on the chest and hip stretch."
+            ]
+        },
+        "description": "A dynamic stretch for the anterior chain and spinal rotation."
+    },
+    {
+        "id": "bridge-pose",
+        "name": "Bridge Pose",
+        "aliases": [
+            "Setu Bandhasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Glutes",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Quads",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie on your back with knees bent and feet flat on the floor.",
+            "execution": [
+                "Lift the hips toward the ceiling.",
+                "Interlace hands under the back and roll the shoulders underneath.",
+                "Keep the thighs parallel."
+            ],
+            "tips": [
+                "Don't let the knees splay outward.",
+                "Press into the heels."
+            ]
+        },
+        "description": "Strengthens the posterior chain and opens the chest and hips."
+    },
+    {
+        "id": "lateral-bounds",
+        "name": "Lateral Bounds",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Abductors",
+                "Glutes",
+                "Quads"
+            ],
+            "secondary": [
+                "Calves",
+                "Cardiovascular System"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand on one leg with a slight knee bend.",
+            "execution": [
+                "Jump laterally to the other leg as far as possible.",
+                "Land and stabilize immediately before jumping back.",
+                "Use the arms to assist the power."
+            ],
+            "tips": [
+                "Focus on 'sticking' the landing.",
+                "Maintain a neutral spine."
+            ]
+        },
+        "description": "Builds lateral power and joint stability in the ankles and knees."
+    },
+    {
+        "id": "deep-squat-hold",
+        "name": "Deep Squat Hold",
+        "aliases": [
+            "Malasana Hold"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Adductors",
+                "Calves",
+                "Glutes"
+            ],
+            "secondary": [
+                "Lower Back",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand with feet slightly wider than shoulder-width.",
+            "execution": [
+                "Squat down as deep as possible while keeping heels on the floor.",
+                "Use the elbows to push the knees outward.",
+                "Keep the chest upright and spine long."
+            ],
+            "tips": [
+                "If heels lift, use a wedge or hold onto a pole.",
+                "Spend 1-2 minutes here for best results."
+            ]
+        },
+        "description": "The ultimate hip and ankle mobility restorative position."
+    },
+    {
+        "id": "warrior-one",
+        "name": "Warrior I",
+        "aliases": [
+            "Virabhadrasana I"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Hip Flexors"
+            ],
+            "secondary": [
+                "Calves",
+                "Front Delts",
+                "Lower Back"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "From a lunge, turn the back heel down at a 45-degree angle.",
+            "execution": [
+                "Square the hips toward the front of the mat.",
+                "Bend the front knee to 90 degrees.",
+                "Reach arms toward the ceiling, palms facing."
+            ],
+            "tips": [
+                "Press through the outer edge of the back foot.",
+                "Pull the lower ribs in to engage the core."
+            ]
+        },
+        "description": "A powerful standing pose that stretches the hip flexors and strengthens the legs."
+    },
+    {
+        "id": "single-leg-hops",
+        "name": "Single-Leg Hops",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Isolation",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Calves",
+                "Quads"
+            ],
+            "secondary": [
+                "Glutes",
+                "Abs"
+            ]
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Stand on one leg.",
+            "execution": [
+                "Jump vertically using only one leg.",
+                "Land softly on the ball of the foot.",
+                "Repeat for reps before switching sides."
+            ],
+            "tips": [
+                "Keep ground contact time minimal.",
+                "Do not let the knee collapse inward."
+            ]
+        },
+        "description": "Develops unilateral explosive power and ankle stiffness."
+    },
+    {
+        "id": "wrist-circles",
+        "name": "Wrist Circles",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Forearms"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Extend arms in front or keep them by the side.",
+            "execution": [
+                "Rotate the wrists in a full circular motion.",
+                "Perform clockwise and counter-clockwise rotations.",
+                "Open and close the fingers occasionally."
+            ],
+            "tips": [
+                "Keep the rest of the arm still.",
+                "Move through the full range of motion."
+            ]
+        },
+        "description": "Essential warm-up for any exercise involving a grip or weight-bearing on hands."
+    },
+    {
+        "id": "eagle-pose",
+        "name": "Eagle Pose",
+        "aliases": [
+            "Garudasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Upper Back",
+                "Abductors"
+            ],
+            "secondary": [
+                "Calves",
+                "Rear Delts",
+                "Glutes"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand on one leg with a slight bend.",
+            "execution": [
+                "Wrap the other leg over and around the standing leg.",
+                "Cross arms at the elbows and wrists in front of the face.",
+                "Squeeze everything toward the midline and sit lower."
+            ],
+            "tips": [
+                "Gaze at one point through the hands.",
+                "Lift the elbows to shoulder height."
+            ]
+        },
+        "description": "A challenging balance pose that stretches the upper back and outer hips."
+    },
+    {
+        "id": "power-step-ups",
+        "name": "Power Step-Ups",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Calves",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [
+            "Box",
+            "Bench"
+        ],
+        "instructions": {
+            "setup": "Place one foot on a box.",
+            "execution": [
+                "Drive through the foot on the box to jump vertically.",
+                "Switch feet in the air or land with the same foot on the box.",
+                "Maintain control on the way down."
+            ],
+            "tips": [
+                "Do not push off the floor foot; use the box foot.",
+                "Keep the chest up."
+            ]
+        },
+        "description": "Unilateral explosive training for the quads and glutes."
+    },
+    {
+        "id": "iron-cross-stretch",
+        "name": "Iron Cross Stretch",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back",
+                "Glutes"
+            ],
+            "secondary": [
+                "Hamstrings",
+                "Obliques"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie on your back with arms out to the sides.",
+            "execution": [
+                "Lift one leg straight up and drop it across the body to the opposite hand.",
+                "Keep both shoulders on the floor.",
+                "Alternate sides in a controlled manner."
+            ],
+            "tips": [
+                "Keep the legs as straight as possible.",
+                "Exhale as the leg drops across the body."
+            ]
+        },
+        "description": "A dynamic stretch for the glutes and lower back rotation."
+    },
+    {
+        "id": "chair-pose",
+        "name": "Chair Pose",
+        "aliases": [
+            "Utkatasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Lower Back",
+                "Front Delts",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand with feet together.",
+            "execution": [
+                "Bend the knees and sit the hips back as if into a chair.",
+                "Reach the arms overhead, parallel to each other.",
+                "Keep the weight in the heels."
+            ],
+            "tips": [
+                "Keep the chest lifted.",
+                "Tuck the tailbone slightly to avoid excessive arching."
+            ]
+        },
+        "description": "Builds lower body heat and tests shoulder and core endurance."
+    },
+    {
+        "id": "reactive-box-drops",
+        "name": "Reactive Box Drops",
+        "aliases": [
+            "Landing Mechanics"
+        ],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Glutes"
+            ],
+            "secondary": [
+                "Calves",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Box"
+        ],
+        "instructions": {
+            "setup": "Stand on a low box.",
+            "execution": [
+                "Step off the box.",
+                "Land on both feet and 'freeze' in a perfect squat position.",
+                "Absorb all energy without any extra movement."
+            ],
+            "tips": [
+                "Ensure the heels hit the floor.",
+                "The landing should be quiet."
+            ]
+        },
+        "description": "Teaches proper landing mechanics and eccentric force absorption."
+    },
+    {
+        "id": "mountain-pose",
+        "name": "Mountain Pose",
+        "aliases": [
+            "Tadasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Quads",
+                "Abs"
+            ],
+            "secondary": [
+                "Calves",
+                "Upper Back"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand with feet together and arms at the sides.",
+            "execution": [
+                "Engage the quads and lift the kneecaps.",
+                "Tuck the tailbone and engage the core.",
+                "Draw the shoulder blades down the back."
+            ],
+            "tips": [
+                "Distribute weight evenly across the four corners of the feet.",
+                "Breathe deeply."
+            ]
+        },
+        "description": "The foundational standing pose for all yoga practice."
+    },
+    {
+        "id": "neck-circles",
+        "name": "Neck Circles",
+        "aliases": [],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Dynamic",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Traps"
+            ],
+            "secondary": []
+        },
+        "equipmentList": [],
+        "instructions": {
+            "setup": "Sit or stand with an upright posture.",
+            "execution": [
+                "Slowly drop the chin to the chest.",
+                "Roll the head in a circular motion, ear to shoulder.",
+                "Perform in both directions."
+            ],
+            "tips": [
+                "Move very slowly.",
+                "Stop if you feel any sharp pain or dizziness."
+            ]
+        },
+        "description": "Relieves tension in the upper traps and improves cervical mobility."
+    },
+    {
+        "id": "warrior-three",
+        "name": "Warrior III",
+        "aliases": [
+            "Virabhadrasana III"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Hamstrings",
+                "Glutes",
+                "Lower Back"
+            ],
+            "secondary": [
+                "Abs",
+                "Calves",
+                "Side Delts"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Stand on one leg.",
+            "execution": [
+                "Hinge forward at the hips, lifting the back leg until it's parallel to the floor.",
+                "Reach arms forward or out to the side.",
+                "Keep the hips squared to the ground."
+            ],
+            "tips": [
+                "Flex the back foot to engage the leg.",
+                "Imagine a straight line from fingertips to heel."
+            ]
+        },
+        "description": "A powerful balance pose that strengthens the entire posterior chain."
+    },
+    {
+        "id": "upward-facing-dog",
+        "name": "Upward-Facing Dog",
+        "aliases": [
+            "Urdhva Mukha Svanasana"
+        ],
+        "exerciseType": "Yoga",
+        "mechanics": "Compound",
+        "forceType": "Static",
+        "experienceLevel": "Intermediate",
+        "targetMuscles": {
+            "primary": [
+                "Lower Back",
+                "Front Delts"
+            ],
+            "secondary": [
+                "Chest",
+                "Triceps",
+                "Quads"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Lie face down with hands by the ribs.",
+            "execution": [
+                "Press into the hands to straighten the arms.",
+                "Lift the torso and the tops of the thighs off the floor.",
+                "Look slightly upward without crunching the neck."
+            ],
+            "tips": [
+                "Keep the shoulders away from the ears.",
+                "Engage the legs fully so knees don't touch the mat."
+            ]
+        },
+        "description": "A powerful backbend that strengthens the arms and stretches the entire front body."
+    },
+    {
+        "id": "hip-flexor-stretch-lunge",
+        "name": "Hip Flexor Stretch",
+        "aliases": [
+            "Low Lunge"
+        ],
+        "exerciseType": "Mobility",
+        "mechanics": "Isolation",
+        "forceType": "Static",
+        "experienceLevel": "Beginner",
+        "targetMuscles": {
+            "primary": [
+                "Hip Flexors"
+            ],
+            "secondary": [
+                "Quads",
+                "Abs"
+            ]
+        },
+        "equipmentList": [
+            "Mat"
+        ],
+        "instructions": {
+            "setup": "Start in a half-kneeling position.",
+            "execution": [
+                "Tuck the pelvis under (posterior tilt).",
+                "Lean forward slightly until a stretch is felt in the front of the hip.",
+                "Reach the same-side arm overhead for a deeper stretch."
+            ],
+            "tips": [
+                "Do not arch the lower back to get further forward.",
+                "Squeeze the glute of the back leg."
+            ]
+        },
+        "description": "Targets the psoas and rectus femoris, crucial for those who sit often."
+    },
+    {
+        "id": "broad-jump-to-med-ball-slam",
+        "name": "Broad Jump to Slam",
+        "aliases": [],
+        "exerciseType": "Plyometrics",
+        "mechanics": "Compound",
+        "forceType": "Push",
+        "experienceLevel": "Advanced",
+        "targetMuscles": {
+            "primary": [
+                "Cardiovascular System",
+                "Quads",
+                "Abs"
+            ],
+            "secondary": [
+                "Glutes",
+                "Lats",
+                "Hamstrings"
+            ]
+        },
+        "equipmentList": [
+            "Medicine Ball"
+        ],
+        "instructions": {
+            "setup": "Stand with a medicine ball.",
+            "execution": [
+                "Perform a broad jump while holding the ball.",
+                "Land softly and immediately slam the ball into the floor.",
+                "Repeat in a continuous flow."
+            ],
+            "tips": [
+                "Maintain balance during the landing before the slam.",
+                "Use a non-bouncing ball."
+            ]
+        },
+        "description": "A complex power movement combining horizontal explosion with vertical core power."
     }
 ]

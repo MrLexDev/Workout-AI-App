@@ -10,6 +10,7 @@ interface WheelPickerProps {
     height?: number;
     itemHeight?: number;
     width?: string;
+    formatter?: (value: number) => React.ReactNode;
 }
 
 export const WheelPicker: React.FC<WheelPickerProps> = ({
@@ -21,7 +22,8 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
     label,
     height = 200,
     itemHeight = 40,
-    width = '100px'
+    width = '100px',
+    formatter
 }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const isScrolling = useRef(false);
@@ -118,7 +120,7 @@ export const WheelPicker: React.FC<WheelPickerProps> = ({
                                 }`}
                             style={{ height: itemHeight }}
                         >
-                            {num}
+                            {formatter ? formatter(num) : num}
                         </div>
                     ))}
 
