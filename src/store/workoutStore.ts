@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 import { type Routine, type HydratedRoutine } from '../types/workout';
 import { workoutStorageService } from '../services/storage/WorkoutStorageService';
 import initialRoutinesData from '../data/initialRoutines.json';
@@ -11,9 +11,6 @@ interface WorkoutState {
     // Active Session State
     isSessionActive: boolean;
     activeRoutine: HydratedRoutine | null;
-    sessionState: 'IDLE' | 'WORK' | 'REST' | 'COMPLETED';
-    currentExerciseIndex: number;
-    setsRemaining: number;
 
     // Actions
     selectRoutine: (id: string) => void;
@@ -23,11 +20,6 @@ interface WorkoutState {
 
     startSession: () => void;
     endSession: () => void;
-
-    // Session Flow Actions
-    completeSet: () => void;
-    skipSet: () => void;
-    startWork: () => void;
 
     // Data Management
     updateRoutine: (routine: Routine) => void;
@@ -42,8 +34,6 @@ const loadInitialRoutines = (): Routine[] => {
         return stored;
     }
 
-    // If no stored data, use the initial JSON and save it
-    // Cast strict JSON import to Routine[]
     const defaults = initialRoutinesData as unknown as Routine[];
     workoutStorageService.saveRoutines(defaults);
     return defaults;
@@ -56,9 +46,6 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     // Active Session State
     isSessionActive: false,
     activeRoutine: null,
-    sessionState: 'IDLE',
-    currentExerciseIndex: 0,
-    setsRemaining: 0,
 
     selectRoutine: (id) => {
         const routine = get().routines.find(r => r.id === id);
@@ -77,115 +64,12 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
     startSession: () => {
         const state = get();
         if (!state.activeRoutine) return;
-
-        // Initialize session
-        // Note: activeRoutine is already hydrated, so exercises have full info
-        const firstExercise = state.activeRoutine.exercises[0];
-        set({
-            isSessionActive: true,
-            sessionState: 'WORK', // Start directly in Work mode
-            currentExerciseIndex: 0,
-            setsRemaining: firstExercise ? firstExercise.targetSets : 0
-        });
+        set({ isSessionActive: true });
     },
 
     endSession: () => set({
         isSessionActive: false,
-        sessionState: 'IDLE',
-        currentExerciseIndex: 0,
-        setsRemaining: 0
     }),
-
-    completeSet: () => {
-        const state = get();
-        if (!state.isSessionActive || !state.activeRoutine) return;
-
-        const currentSets = state.setsRemaining - 1;
-
-        if (currentSets > 0) {
-            // More sets in this exercise -> Go to REST
-            set({
-                setsRemaining: currentSets,
-                sessionState: 'REST'
-            });
-        } else {
-            // LAST SET of the current exercise Finished
-            // Check if there are more exercises
-            const nextIndex = state.currentExerciseIndex + 1;
-            const hasNextExercise = state.activeRoutine && nextIndex < state.activeRoutine.exercises.length;
-
-            if (hasNextExercise) {
-                set({
-                    setsRemaining: 0,
-                    sessionState: 'REST'
-                });
-            } else {
-                // No more exercises and last set finished -> Session COMPLETED
-                set({
-                    sessionState: 'COMPLETED'
-                });
-            }
-        }
-    },
-
-    skipSet: () => {
-        const state = get();
-        if (!state.isSessionActive || !state.activeRoutine) return;
-
-        const currentSets = state.setsRemaining - 1;
-
-        if (currentSets > 0) {
-            // More sets -> STAY in WORK mode (Skip rest)
-            set({
-                setsRemaining: currentSets,
-                sessionState: 'WORK'
-            });
-        } else {
-            // Last set skipped -> Move to next exercise immediately (Skip rest)
-            const nextIndex = state.currentExerciseIndex + 1;
-            const nextExercise = state.activeRoutine.exercises[nextIndex];
-
-            if (nextExercise) {
-                set({
-                    currentExerciseIndex: nextIndex,
-                    setsRemaining: nextExercise.targetSets,
-                    sessionState: 'WORK'
-                });
-            } else {
-                // No more exercises -> Session COMPLETED
-                set({
-                    sessionState: 'COMPLETED'
-                });
-            }
-        }
-    },
-
-    startWork: () => {
-        const state = get();
-        if (!state.isSessionActive || !state.activeRoutine) return;
-
-        // If we were resting AFTER the last set (setsRemaining === 0)
-        // we need to ADVANCE to the next exercise
-        if (state.setsRemaining === 0) {
-            const nextIndex = state.currentExerciseIndex + 1;
-            const nextExercise = state.activeRoutine.exercises[nextIndex];
-
-            if (nextExercise) {
-                set({
-                    currentExerciseIndex: nextIndex,
-                    setsRemaining: nextExercise.targetSets,
-                    sessionState: 'WORK'
-                });
-            } else {
-                set({
-                    sessionState: 'COMPLETED'
-                });
-            }
-        } else {
-            // Normal transition from rest to work within same exercise
-            set({ sessionState: 'WORK' });
-        }
-    },
 
     updateRoutine: (updatedRoutine: Routine) => {
         const state = get();

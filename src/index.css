@@ -7,12 +7,105 @@
 
     /* Force Dark Mode base styles */
     color-scheme: dark;
-    background-color: #0f172a; /* Slate 950 approx */
-    color: #f8fafc; /* Slate 50 */
+    background-color: #0a0e1a;
+    color: #f1f5f9;
+
+    /* ── Design Tokens ── */
+
+    /* Surfaces (dark mode depth via lightness) */
+    --color-surface-base: #0a0e1a;
+    --color-surface-card: #141824;
+    --color-surface-elevated: #1a2030;
+    --color-surface-input: #111520;
+
+    /* Borders */
+    --color-border-subtle: rgba(255, 255, 255, 0.06);
+    --color-border-active: rgba(59, 130, 246, 0.3);
+    --color-border-success: rgba(34, 197, 94, 0.3);
+
+    /* Semantic Colors */
+    --color-accent-primary: #3b82f6;
+    --color-accent-primary-hover: #60a5fa;
+    --color-success: #22c55e;
+    --color-success-muted: rgba(34, 197, 94, 0.12);
+    --color-danger: #ef4444;
+    --color-danger-muted: rgba(239, 68, 68, 0.12);
+    --color-warning: #eab308;
+    --color-info: #3b82f6;
+
+    /* Text */
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #475569;
+    --color-text-disabled: #334155;
 }
 
 body {
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
+}
+
+/* ── Tight Typography (headers) ── */
+.text-tight {
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+/* ── Keyframe Animations ── */
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+@keyframes slide-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-down {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes fade-in-scale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes progress-fill {
+    from { width: 0%; }
+}
+
+.animate-pulse-green {
+    animation: pulse-green 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-scale {
+    animation: fade-in-scale 0.2s ease-out forwards;
+}
+
+/* ── Scrollbar hide utility ── */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ── Number input: remove spinners ── */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }

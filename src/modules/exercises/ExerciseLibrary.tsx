@@ -12,9 +12,11 @@ import { RoutinePreviewModal } from './RoutinePreviewModal';
 interface ExerciseLibraryProps {
     onViewInstructions?: (exercise: ExerciseDefinition) => void;
     onGoToHistory?: () => void;
+    isSelectionMode?: boolean;
+    onSelectExercise?: (exercise: ExerciseDefinition) => void;
 }
 
-export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstructions, onGoToHistory }) => {
+export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstructions, onGoToHistory, isSelectionMode, onSelectExercise }) => {
     const { setPreSelectedExerciseId } = usePerformanceStore();
     const [activeTab, setActiveTab] = useState<'exercises' | 'routines'>('exercises');
 
@@ -282,7 +284,7 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
                             <Dumbbell className="text-blue-500" />
                             Library
                         </h2>
-                        {activeTab === 'exercises' && (
+                        {activeTab === 'exercises' && !isSelectionMode && (
                             <button
                                 onClick={() => setIsImportModalOpen(true)}
                                 className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-blue-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
@@ -294,26 +296,28 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
                     </div>
 
                     {/* Tabs */}
-                    <div className="flex p-1 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                        <button
-                            onClick={() => setActiveTab('exercises')}
-                            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'exercises'
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-                                }`}
-                        >
-                            Exercises
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('routines')}
-                            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'routines'
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
-                                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-                                }`}
-                        >
-                            Routines
-                        </button>
-                    </div>
+                    {!isSelectionMode && (
+                        <div className="flex p-1 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                            <button
+                                onClick={() => setActiveTab('exercises')}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'exercises'
+                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                    }`}
+                            >
+                                Exercises
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('routines')}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${activeTab === 'routines'
+                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                    }`}
+                            >
+                                Routines
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Search Bar & Filters - Only for Exercises currently */}
@@ -432,7 +436,13 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
                                     >
                                         <div
                                             className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-700/50"
-                                            onClick={() => toggleExpand(ex.id)}
+                                            onClick={() => {
+                                                if (isSelectionMode && onSelectExercise) {
+                                                    onSelectExercise(ex);
+                                                } else {
+                                                    toggleExpand(ex.id);
+                                                }
+                                            }}
                                         >
                                             <div className="flex-1 opacity-100">
                                                 <div className="flex items-center gap-2">
@@ -486,9 +496,18 @@ export const ExerciseLibrary: React.FC<ExerciseLibraryProps> = ({ onViewInstruct
                                                     </button>
                                                 )}
 
-                                                <button className="text-slate-500 p-1 ml-1" onClick={(e) => { e.stopPropagation(); toggleExpand(ex.id); }}>
-                                                    {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                                                </button>
+                                                {isSelectionMode ? (
+                                                    <button 
+                                                        className="ml-2 px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-lg transition-colors"
+                                                        onClick={(e) => { e.stopPropagation(); onSelectExercise?.(ex); }}
+                                                    >
+                                                        Add
+                                                    </button>
+                                                ) : (
+                                                    <button className="text-slate-500 p-1 ml-1" onClick={(e) => { e.stopPropagation(); toggleExpand(ex.id); }}>
+                                                        {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
 

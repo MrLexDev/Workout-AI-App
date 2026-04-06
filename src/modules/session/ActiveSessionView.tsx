@@ -1,107 +1,92 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useWorkoutStore } from '../../store/workoutStore';
 import { usePerformanceStore } from '../../store/performanceStore';
-import { useUserStore } from '../../store/userStore';
 import { useWorkoutHistoryStore } from '../../store/workoutHistoryStore';
-import type { SessionRestData, WorkoutSession } from '../../types/history';
-import type { HydratedRoutine } from '../../types/workout';
-import { usePrecisionTimer } from '../../hooks/usePrecisionTimer';
 import { useStopwatch } from '../../hooks/useStopwatch';
-import { CircularTimer } from '../../components/timer/CircularTimer';
-import { WheelPicker } from '../../components/inputs/WheelPicker';
-import { ArrowLeft, Check, Info, Target, Zap, Plus, Minus, Save, History, AlertTriangle } from 'lucide-react';
-import { Toggle } from '../../components/inputs/Toggle';
 import { useNativeBack } from '../../hooks/useNativeBack';
 import { useWeight } from '../../hooks/useWeight';
+import type { ExerciseSessionState, SetEntryData, ActiveRestTimer } from '../../types/session';
+import type { SessionRestData, WorkoutSession } from '../../types/history';
+import type { HydratedRoutine } from '../../types/workout';
+
+import { SessionHeader } from './SessionHeader';
+import { SessionProgressBar } from './SessionProgressBar';
+import { ExerciseCard } from './ExerciseCard';
+import { RestTimerBar } from './RestTimerBar';
+import { ExitConfirmationModal } from './ExitConfirmationModal';
+import { SessionCompletedView } from './SessionCompletedView';
+import { ExerciseLibrary } from '../exercises/ExerciseLibrary';
+import { Plus, X } from 'lucide-react';
+import type { ExerciseDefinition, HydratedExercise } from '../../types/workout';
 
 export const ActiveSessionView: React.FC = () => {
-    const {
-        activeRoutine,
-        endSession,
-        sessionState,
-        currentExerciseIndex,
-        setsRemaining,
-        completeSet,
-        skipSet,
-        startWork
-    } = useWorkoutStore();
-
+    const { activeRoutine, endSession } = useWorkoutStore();
     const { addLog, getLogsByExercise, deleteLogs, logs: allLogs } = usePerformanceStore();
     const { saveSession } = useWorkoutHistoryStore();
-
-    // Derived active exercise
-    const currentExercise = activeRoutine?.exercises[currentExerciseIndex];
-
-    // ----- STOPWATCH (WORK MODE) -----
-    const stopwatch = useStopwatch();
-
-    // ----- TIMER (REST MODE) -----
-    const [restTarget, setRestTarget] = useState(60);
-
-    // ----- LOGGING STATE -----
-    const [logWeight, setLogWeight] = useState(0);
-    const [logReps, setLogReps] = useState(0);
-    const [logRir, setLogRir] = useState(2); // Default RIR 2
-    const [isSetLogged, setIsSetLogged] = useState(false);
-
-    // ----- SCROLL / COMPACT STATE -----
-    const [isCompact, setIsCompact] = useState(false);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-    const { autoSavePreference, setAutoSavePreference } = useUserStore();
     const { displayWeight, toKg, unitLabel } = useWeight();
 
-    // Track previous session state to handle transitions only
-    const prevSessionState = useRef<string | null>(null);
-
-    // Track logs created in this session for potential discard
-    const sessionLogIds = useRef<string[]>([]);
+    // ── Session-level state ──
+    const stopwatch = useStopwatch();
     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+    const [showCompleted, setShowCompleted] = useState(false);
+    const [activeRestTimer, setActiveRestTimer] = useState<ActiveRestTimer | null>(null);
 
-    // ----- SESSION HISTORY TRACKING -----
+    // ── Session history tracking refs ──
     const startTimeRef = useRef<number>(Date.now());
-    const restDataRef = useRef<SessionRestData[]>([]);
     const routineSnapshotRef = useRef<HydratedRoutine | null>(null);
-    const lastSetDurationRef = useRef<number>(0);
+    const restDataRef = useRef<SessionRestData[]>([]);
+    const sessionLogIds = useRef<string[]>([]);
     const restStartTimeRef = useRef<number | null>(null);
 
-    // Capture routine snapshot on mount/start
+    const [sessionExercises, setSessionExercises] = useState<HydratedExercise[]>([]);
+    const [showAddExercise, setShowAddExercise] = useState(false);
+
+    // ── Exercise session state (the core list-based data) ──
+    const [exerciseStates, setExerciseStates] = useState<ExerciseSessionState[]>(() => {
+        if (!activeRoutine) return [];
+        return activeRoutine.exercises.map((exercise, exerciseIndex) => {
+            const logs = getLogsByExercise(exercise.exerciseId);
+            const lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
+            const prefillWeight = lastLog ? displayWeight(lastLog.weight) : 0;
+            const prefillRir = lastLog?.rir !== undefined ? lastLog.rir : 2;
+
+            return {
+                exerciseId: exercise.exerciseId,
+                exerciseIndex,
+                isExpanded: exerciseIndex === 0, // First exercise starts expanded
+                sets: Array.from({ length: exercise.targetSets }, (_, setIndex) => ({
+                    setIndex,
+                    weight: prefillWeight,
+                    reps: exercise.maximumRepetitions,
+                    rir: prefillRir,
+                    isCompleted: false,
+                })),
+            };
+        });
+    });
+
+    // Start stopwatch and capture snapshot on mount
     useEffect(() => {
+        stopwatch.start();
         if (activeRoutine && !routineSnapshotRef.current) {
-            // Create a deep copy of the routine to store as snapshot
-            routineSnapshotRef.current = JSON.parse(JSON.stringify(activeRoutine));
+            const snapshot = JSON.parse(JSON.stringify(activeRoutine));
+            routineSnapshotRef.current = snapshot;
+            setSessionExercises(snapshot.exercises);
         }
-    }, [activeRoutine]);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // Handle Scroll for Compact Mode
-    // We want the timer to shrink when the user scrolls down to see more exercises
-    const handleScroll = () => {
-        if (scrollContainerRef.current) {
-            const scrollTop = scrollContainerRef.current.scrollTop;
-
-            // Simpler thresholds since resizing external timer won't affect internal scrollTop
-            if (!isCompact && scrollTop > 10) {
-                setIsCompact(true);
-            } else if (isCompact && scrollTop < 5) {
-                setIsCompact(false);
-            }
-        }
-    };
-
-    // Disable scrolling when confirmation modal is open
+    // Disable body scroll when modal is open
     useEffect(() => {
-        if (showExitConfirmation) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
+        document.body.style.overflow = showExitConfirmation ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
     }, [showExitConfirmation]);
 
-    // Back Handler
+    // ── Back handler ──
     useNativeBack(() => {
+        if (showAddExercise) {
+            setShowAddExercise(false);
+            return true;
+        }
         if (showExitConfirmation) {
             setShowExitConfirmation(false);
             return true;
@@ -111,56 +96,152 @@ export const ActiveSessionView: React.FC = () => {
             return true;
         }
         return false;
-    }, [showExitConfirmation, activeRoutine], 30); // Highest Priority
+    }, [showExitConfirmation, showAddExercise, activeRoutine], 30);
 
-    const handleConfirmLog = useCallback(() => {
-        if (currentExercise) {
-            const newLogId = crypto.randomUUID();
-            sessionLogIds.current.push(newLogId);
+    // ── Derived totals ──
+    const { completedSets, totalSets } = useMemo(() => {
+        let completed = 0;
+        let total = 0;
+        for (const exerciseState of exerciseStates) {
+            for (const set of exerciseState.sets) {
+                total++;
+                if (set.isCompleted) completed++;
+            }
+        }
+        return { completedSets: completed, totalSets: total };
+    }, [exerciseStates]);
+
+    // ── Scroll container ref for auto-scroll ──
+    const exerciseRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+    const setExerciseRef = useCallback((exerciseId: string, element: HTMLDivElement | null) => {
+        if (element) {
+            exerciseRefs.current.set(exerciseId, element);
+        } else {
+            exerciseRefs.current.delete(exerciseId);
+        }
+    }, []);
+
+    // ── Handlers ──
+
+    const handleToggleExpand = useCallback((exerciseIndex: number) => {
+        setExerciseStates(prev =>
+            prev.map((state, i) =>
+                i === exerciseIndex
+                    ? { ...state, isExpanded: !state.isExpanded }
+                    : state
+            )
+        );
+    }, []);
+
+    const handleUpdateSet = useCallback((exerciseIndex: number, setIndex: number, updated: Partial<SetEntryData>) => {
+        setExerciseStates(prev =>
+            prev.map((state, i) => {
+                if (i !== exerciseIndex) return state;
+                return {
+                    ...state,
+                    sets: state.sets.map((set, si) =>
+                        si === setIndex ? { ...set, ...updated } : set
+                    ),
+                };
+            })
+        );
+    }, []);
+
+    const handleCompleteSet = useCallback((exerciseIndex: number, setIndex: number) => {
+        setExerciseStates(prev => {
+            const newStates = prev.map((state, i) => {
+                if (i !== exerciseIndex) return state;
+                return {
+                    ...state,
+                    sets: state.sets.map((set, si) => {
+                        if (si !== setIndex) return set;
+                        return { ...set, isCompleted: true, completedAt: Date.now() };
+                    }),
+                };
+            });
+            return newStates;
+        });
+
+        // Log the performance data
+        if (sessionExercises.length > 0) {
+            const exercise = sessionExercises[exerciseIndex];
+            const exerciseState = exerciseStates[exerciseIndex];
+            const setData = exerciseState.sets[setIndex];
+
+            const logId = crypto.randomUUID();
+            sessionLogIds.current.push(logId);
             addLog(
-                currentExercise.exerciseId,
-                toKg(logWeight), // Convert display weight (lb/kg) to store weight (kg)
-                logReps,
-                newLogId,
-                lastSetDurationRef.current, // Pass captured duration
-                logRir
+                exercise.exerciseId,
+                toKg(setData.weight),
+                setData.reps,
+                logId,
+                undefined,
+                setData.rir,
             );
-            setIsSetLogged(true);
         }
-    }, [currentExercise, logWeight, logReps, addLog, logRir]);
+    }, [sessionExercises, exerciseStates, addLog, toKg]);
 
-    // Timer logic with rest tracking
-    const onTimerComplete = useCallback(() => {
-        if (autoSavePreference && !isSetLogged) {
-            handleConfirmLog();
+    const handleStartRestTimer = useCallback((exerciseId: string, exerciseName: string, restSeconds: number) => {
+        const now = Date.now();
+        restStartTimeRef.current = now;
+        setActiveRestTimer({
+            id: now,
+            exerciseId,
+            exerciseName,
+            targetSeconds: restSeconds,
+        });
+    }, []);
+
+    const handleRestTimerComplete = useCallback(() => {
+        if (activeRestTimer && restStartTimeRef.current) {
+            const actualRestSeconds = (Date.now() - restStartTimeRef.current) / 1000;
+            restDataRef.current.push({
+                exerciseId: activeRestTimer.exerciseId,
+                targetSeconds: activeRestTimer.targetSeconds,
+                actualSeconds: actualRestSeconds,
+                timestamp: Date.now(),
+            });
+            restStartTimeRef.current = null;
         }
-        // Rest tracking is handled in useEffect now
-        startWork();
-    }, [autoSavePreference, isSetLogged, startWork, handleConfirmLog]);
 
-    const restTimer = usePrecisionTimer(restTarget, onTimerComplete);
+        // Auto-expand the exercise the timer was for and scroll to it
+        if (activeRestTimer) {
+            const targetId = activeRestTimer.exerciseId;
+            setExerciseStates(prev =>
+                prev.map(state =>
+                    state.exerciseId === targetId
+                        ? { ...state, isExpanded: true }
+                        : state
+                )
+            );
 
-    // Now handle MANUAL SKIP
-    const handleSkipRest = () => {
-        if (autoSavePreference && !isSetLogged) {
-            handleConfirmLog();
+            // Scroll to the exercise card after a brief delay for the expand animation
+            requestAnimationFrame(() => {
+                const element = exerciseRefs.current.get(targetId);
+                element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
         }
-        // Rest tracking is handled in useEffect now
-        startWork();
-    };
 
-    // Effect: Sync rest target ahead of time to prevent race condition in usePrecisionTimer
-    useEffect(() => {
-        if (currentExercise) {
-            setRestTarget(currentExercise.restTimeSeconds);
+        setActiveRestTimer(null);
+    }, [activeRestTimer]);
+
+    const handleDismissRestTimer = useCallback(() => {
+        if (activeRestTimer && restStartTimeRef.current) {
+            const actualRestSeconds = (Date.now() - restStartTimeRef.current) / 1000;
+            restDataRef.current.push({
+                exerciseId: activeRestTimer.exerciseId,
+                targetSeconds: activeRestTimer.targetSeconds,
+                actualSeconds: actualRestSeconds,
+                timestamp: Date.now(),
+            });
+            restStartTimeRef.current = null;
         }
-    }, [currentExercise?.exerciseId, currentExercise?.restTimeSeconds]);
+        setActiveRestTimer(null);
+    }, [activeRestTimer]);
 
-    // Helper to package and save the session
-    const handleEndAndSave = () => {
+    const handleEndAndSave = useCallback(() => {
         if (routineSnapshotRef.current && activeRoutine) {
             const endTime = Date.now();
-            // Filter logs to only include those created in this session
             const sessionLogs = allLogs.filter(log => sessionLogIds.current.includes(log.id));
 
             const workoutSession: WorkoutSession = {
@@ -168,452 +249,187 @@ export const ActiveSessionView: React.FC = () => {
                 routineId: activeRoutine.id,
                 routineSnapshot: routineSnapshotRef.current,
                 startTime: startTimeRef.current,
-                endTime: endTime,
+                endTime,
                 durationSeconds: Math.floor((endTime - startTimeRef.current) / 1000),
                 logs: sessionLogs,
-                restData: restDataRef.current
+                restData: restDataRef.current,
             };
 
             saveSession(workoutSession);
         }
-        endSession();
-    };
+        setShowExitConfirmation(false);
+        setShowCompleted(true);
+    }, [activeRoutine, allLogs, saveSession]);
 
-    // Effect: Sync state changes & Pre-fill logs
-    useEffect(() => {
-        if (!currentExercise) return;
-
-        // Only execute transition logic if sessionState has changed
-        if (prevSessionState.current !== sessionState) {
-            if (sessionState === 'WORK') {
-                // Leaving REST -> WORK (or Idle -> Work)
-                if (prevSessionState.current === 'REST') {
-                    // Calculate ACTUAL REST time based on timestamps
-                    if (restStartTimeRef.current) {
-                        const actualRestSeconds = (Date.now() - restStartTimeRef.current) / 1000;
-                        restDataRef.current.push({
-                            exerciseId: currentExercise.exerciseId,
-                            targetSeconds: restTarget,
-                            actualSeconds: actualRestSeconds,
-                            timestamp: Date.now()
-                        });
-                        restStartTimeRef.current = null;
-                    }
-                }
-
-                stopwatch.start();
-                restTimer.reset();
-            } else if (sessionState === 'REST') {
-                // Leaving WORK -> REST
-                // Capture work duration
-                lastSetDurationRef.current = stopwatch.elapsedTime;
-
-                // Start Rest Tracking
-                restStartTimeRef.current = Date.now();
-
-                // Use restTimeSeconds from v1.1.0 schema
-                setRestTarget(currentExercise.restTimeSeconds);
-                stopwatch.reset();
-                restTimer.start();
-
-                // Pre-fill logs from history
-                const logs = getLogsByExercise(currentExercise.exerciseId);
-                const lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
-
-                setLogWeight(lastLog ? displayWeight(lastLog.weight) : 0); // Pre-fill converted weight
-                setLogReps(currentExercise.maximumRepetitions); // Default to max reps target
-                setLogRir(lastLog && lastLog.rir !== undefined ? lastLog.rir : 2); // Pre-fill RIR or default to 2
-                setIsSetLogged(false);
-
-            } else if (sessionState === 'IDLE' || sessionState === 'COMPLETED') {
-                stopwatch.reset();
-                restTimer.reset();
-            }
-
-            prevSessionState.current = sessionState;
-        }
-    }, [sessionState, currentExercise, stopwatch, restTimer, getLogsByExercise, restTarget]);
-
-    const handleDiscardSession = () => {
+    const handleDiscard = useCallback(() => {
         if (sessionLogIds.current.length > 0) {
             deleteLogs(sessionLogIds.current);
         }
         endSession();
-    };
+    }, [deleteLogs, endSession]);
 
-    if (!activeRoutine || !currentExercise || sessionState === 'COMPLETED') {
+    const handleReturnToDashboard = useCallback(() => {
+        endSession();
+    }, [endSession]);
+
+    const handleAddExercise = useCallback((exerciseDef: ExerciseDefinition) => {
+        const newExercise: HydratedExercise = {
+            ...exerciseDef,
+            exerciseId: exerciseDef.id,
+            targetSets: 3,
+            minimumRepetitions: 8,
+            maximumRepetitions: 10,
+            restTimeSeconds: 90,
+            targetRir: 2,
+            notes: '',
+        };
+
+        const exerciseIndex = sessionExercises.length;
+        const prefillWeight = 0;
+        const prefillRir = 2;
+
+        const newState: ExerciseSessionState = {
+            exerciseId: newExercise.exerciseId,
+            exerciseIndex,
+            isExpanded: true,
+            sets: Array.from({ length: newExercise.targetSets }, (_, setIndex) => ({
+                setIndex,
+                weight: prefillWeight,
+                reps: newExercise.maximumRepetitions,
+                rir: prefillRir,
+                isCompleted: false,
+            })),
+        };
+
+        setSessionExercises(prev => [...prev, newExercise]);
+        setExerciseStates(prev => [...prev, newState]);
+        if (routineSnapshotRef.current) {
+            routineSnapshotRef.current.exercises.push(newExercise);
+        }
+        setShowAddExercise(false);
+        
+        // Auto-scroll to newly added exercise after a short delay
+        setTimeout(() => {
+            const element = exerciseRefs.current.get(newExercise.exerciseId);
+            element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+    }, [sessionExercises.length]);
+
+    // ── Render ──
+
+    if (!activeRoutine) return null;
+
+    if (showCompleted) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-slate-400 bg-slate-950">
-                <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 text-center animate-in fade-in zoom-in duration-300">
-                    <Check size={48} className="mx-auto mb-4 text-green-500" />
-                    <h2 className="text-xl font-bold text-white mb-2">Workout Finished!</h2>
-                    <p className="text-sm text-slate-400 mb-6">Great session! Your progress has been saved.</p>
-                    <button
-                        onClick={handleEndAndSave}
-                        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98]"
-                    >
-                        Return to Dashboard
-                    </button>
-                </div>
-            </div>
+            <SessionCompletedView
+                totalSets={totalSets}
+                completedSets={completedSets}
+                durationSeconds={Math.floor((Date.now() - startTimeRef.current) / 1000)}
+                onReturnToDashboard={handleReturnToDashboard}
+            />
         );
     }
 
-    const isResting = sessionState === 'REST';
-
-    // Format Logic helpers
-    const formatTime = (seconds: number) => {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-        return `${m}:${String(s).padStart(2, '0')}`;
-    };
-
     return (
-        <div className="flex flex-col h-full bg-slate-950">
-            {/* 1. Header (Always visible at top) */}
-            <div className="flex-none bg-slate-950/80 backdrop-blur-md border-b border-white/5 transition-all duration-300 z-50">
-                <header className="flex items-center gap-4 px-4 py-3">
-                    <button
-                        onClick={() => setShowExitConfirmation(true)}
-                        className="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
-                    >
-                        <ArrowLeft size={20} />
-                    </button>
-                    <div className="flex-1 overflow-hidden">
-                        <h1 className="text-lg font-bold text-white leading-tight truncate">
-                            {isResting ? "Resting" : currentExercise.name}
-                        </h1>
-                        <div className="flex items-center gap-2">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isResting ? 'text-blue-400' : 'text-green-400'}`}>
-                                {isResting
-                                    ? `Next: ${activeRoutine.exercises[currentExerciseIndex + 1]?.name || "Finish"}`
-                                    : `Set ${currentExercise.targetSets - setsRemaining + 1} / ${currentExercise.targetSets}`
-                                }
-                            </span>
-                        </div>
-                    </div>
-                </header>
-            </div>
+        <div
+            className="flex flex-col h-full"
+            style={{ background: 'var(--color-surface-base)' }}
+        >
+            {/* Header */}
+            <SessionHeader
+                routineName={activeRoutine.name}
+                stopwatch={stopwatch}
+                onRequestEnd={() => setShowExitConfirmation(true)}
+            />
 
-            {/* 
-                  Sticky Timer Section - Cross-Fade Transition
-            */}
+            {/* Progress */}
+            <SessionProgressBar
+                completedSets={completedSets}
+                totalSets={totalSets}
+            />
+
+            {/* Exercise List */}
             <div
-                className={`
-                    relative z-40 bg-slate-950 shadow-2xl border-b border-slate-800/50 overflow-hidden
-                    transition-[height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
-                    will-change-[height]
-                    ${isCompact ? 'h-[64px] py-0' : 'h-[360px] py-6'}
-                `}
+                className="flex-1 overflow-y-auto scroll-smooth scrollbar-hide"
+                style={{ paddingBottom: activeRestTimer ? '88px' : '16px' }}
             >
-                {/* --- LARGE VIEW (Default) --- */}
-                <div
-                    className={`
-                        absolute inset-0 w-full h-full flex flex-col items-center gap-6 
-                        transition-opacity duration-500 ease-in-out py-6
-                        ${isCompact ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-                    `}
-                >
-                    {/* Visual Timer */}
-                    {!isResting ? (
-                        // WORK TIMER
-                        <div className="relative transform scale-95 origin-top transition-transform duration-500">
-                            <CircularTimer
-                                progress={stopwatch.progress}
-                                offset={stopwatch.offset}
-                                timeLeft={stopwatch.elapsedTime}
-                                variant="green"
-                                size={230}
+                <div className="px-3 pt-2 flex flex-col gap-2">
+                    {sessionExercises.map((exercise, exerciseIndex) => {
+                        const exerciseState = exerciseStates[exerciseIndex];
+                        if (!exerciseState) return null;
+
+                        return (
+                            <div
+                                key={exercise.exerciseId + exerciseIndex}
+                                ref={(el) => setExerciseRef(exercise.exerciseId, el)}
                             >
-                                <span className="text-5xl font-black font-mono tracking-wider text-white z-10 w-[200px] text-center">
-                                    {formatTime(stopwatch.elapsedTime)}
-                                </span>
-                                <div className="mt-2 flex flex-col items-center gap-1 z-10">
-                                    <div className="flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase text-green-400">
-                                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                        Working
-                                    </div>
-                                </div>
-                            </CircularTimer>
-                        </div>
-                    ) : (
-                        // REST TIMER
-                        <div className="relative transform scale-95 origin-top transition-transform duration-500">
-                            <CircularTimer
-                                progress={1 - restTimer.progress}
-                                timeLeft={restTimer.timeLeft}
-                                size={230}
-                                variant="blue"
-                            >
-                                <span className="text-5xl font-black font-mono tracking-wider text-white z-10 w-[200px] text-center">
-                                    {formatTime(restTimer.timeLeft)}
-                                </span>
-                                <div className="mt-2 flex flex-col items-center gap-1 z-10">
-                                    <div className="flex items-center gap-2 font-bold tracking-widest text-[10px] uppercase text-blue-400">
-                                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                                        Resting
-                                    </div>
-                                </div>
-                            </CircularTimer>
-                        </div>
-                    )}
+                                <ExerciseCard
+                                    exercise={exercise}
+                                    sessionState={exerciseState}
+                                    unitLabel={unitLabel}
+                                    isTimerActiveForExercise={activeRestTimer?.exerciseId === exercise.exerciseId}
+                                    onToggleExpand={() => handleToggleExpand(exerciseIndex)}
+                                    onUpdateSet={(setIndex, updated) =>
+                                        handleUpdateSet(exerciseIndex, setIndex, updated)
+                                    }
+                                    onCompleteSet={(setIndex) =>
+                                        handleCompleteSet(exerciseIndex, setIndex)
+                                    }
+                                    onStartRestTimer={handleStartRestTimer}
+                                />
+                            </div>
+                        );
+                    })}
 
-                    {/* Large Controls */}
-                    {!isResting ? (
-                        // Work Controls
-                        <div className="w-full max-w-xs px-4 grid grid-cols-4 gap-3">
-                            <button
-                                onClick={skipSet}
-                                className="col-span-1 bg-slate-800 hover:bg-slate-700 text-slate-400/80 hover:text-white font-bold py-4 rounded-xl flex flex-col items-center justify-center transition-all active:scale-95"
-                            >
-                                <span className="text-[10px] uppercase tracking-wider">Skip</span>
-                            </button>
-                            <button
-                                onClick={() => completeSet()}
-                                className="col-span-3 bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
-                            >
-                                <Check size={20} strokeWidth={3} />
-                                <span className="uppercase tracking-widest font-black text-sm">Complete</span>
-                            </button>
-                        </div>
-                    ) : (
-                        // Rest Controls
-                        // Rest Controls
-                        <div className="w-full max-w-xs px-4 flex gap-3">
-                            <button onClick={() => restTimer.adjustTime(-10)} className="flex-1 p-3 bg-slate-900 border border-slate-800 rounded-xl active:scale-95 text-slate-400 hover:text-white">
-                                <Minus size={16} className="mx-auto" />
-                            </button>
-                            <button onClick={handleSkipRest} className="flex-[1.5] p-3 bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-xl active:scale-95 text-white hover:text-white flex items-center justify-center gap-2 group">
-                                <span className="text-[10px] font-bold uppercase tracking-wider">Skip Rest</span>
-                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 group-hover:scale-125 transition-transform" />
-                            </button>
-                            <button onClick={() => restTimer.adjustTime(10)} className="flex-1 p-3 bg-slate-900 border border-slate-800 rounded-xl active:scale-95 text-slate-400 hover:text-white">
-                                <Plus size={16} className="mx-auto" />
-                            </button>
-                        </div>
-                    )}
-
-
-                </div>
-
-                {/* --- COMPACT VIEW (Sticky) --- */}
-                <div
-                    className={`
-                        absolute inset-0 w-full h-full flex items-center justify-between gap-4 px-4 
-                        transition-opacity duration-500 ease-in-out
-                        ${isCompact ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-                    `}
-                >
-                    {/* Compact Timer Display */}
-                    <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${isResting ? 'border-blue-500 text-blue-400' : 'border-green-500 text-green-400'}`}>
-                            {isResting ? <Target size={18} /> : <Zap size={18} />}
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-2xl font-black font-mono text-white leading-none">
-                                {formatTime(isResting ? restTimer.timeLeft : stopwatch.elapsedTime)}
-                            </span>
-                            <span className={`text-[9px] font-bold uppercase tracking-wider ${isResting ? 'text-blue-500' : 'text-green-500'}`}>
-                                {isResting ? 'Resting' : 'Working'}
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Compact Controls */}
-                    <div className="flex items-center gap-2">
-                        {isResting ? (
-                            <>
-                                <button onClick={() => restTimer.adjustTime(10)} className="w-10 h-10 rounded-xl bg-slate-800 text-slate-300 flex items-center justify-center active:scale-95">
-                                    <Plus size={18} />
-                                </button>
-                                <button onClick={handleSkipRest} className="px-4 h-10 rounded-xl bg-blue-600 text-white font-bold text-xs uppercase tracking-wider flex items-center active:scale-95">
-                                    Skip
-                                </button>
-                            </>
-                        ) : (
-                            <button onClick={() => completeSet()} className="px-6 h-10 rounded-xl bg-blue-600 text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 active:scale-95 shadow-lg shadow-blue-500/20">
-                                <Check size={16} strokeWidth={3} />
-                                Complete
-                            </button>
-                        )}
+                    <div className="mt-4 mb-2 flex justify-center">
+                        <button
+                            onClick={() => setShowAddExercise(true)}
+                            className="flex items-center gap-2 px-6 py-3 bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-xl hover:bg-blue-600/30 transition-colors font-bold text-sm"
+                        >
+                            <Plus size={18} />
+                            Add Exercise
+                        </button>
                     </div>
                 </div>
             </div>
 
-            {/* 3. Main Content (Scrollable List) */}
-            <div
-                ref={scrollContainerRef}
-                onScroll={handleScroll}
-                className="flex-1 overflow-y-auto scroll-smooth"
-            >
-                {/* Content Section (Scrolls naturally under the sticky elements) */}
-                <div className="px-4 pt-2 flex flex-col gap-6 pb-24">
-
-                    {/* Log Set Card (Only in Rest Mode, otherwise hidden/collapsed) */}
-                    {isResting && (
-                        <div className="w-full bg-slate-900/50 border border-slate-800 rounded-2xl p-4 transition-all animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-                                    {isSetLogged ? <Check size={14} className="text-green-500" /> : <History size={14} />}
-                                    {isSetLogged ? "Set Logged" : "Log Set"}
-                                </h3>
-                                {isSetLogged ? (
-                                    <button onClick={() => setIsSetLogged(false)} className="text-[10px] text-blue-400 hover:text-blue-300 underline">
-                                        Edit
-                                    </button>
-                                ) : (
-                                    <Toggle label="Auto Save" checked={autoSavePreference} onChange={setAutoSavePreference} />
-                                )}
-                            </div>
-
-                            {!isSetLogged ? (
-                                <div className="flex justify-center gap-2 sm:gap-4 mb-4">
-                                    <WheelPicker label={unitLabel.toUpperCase()} value={logWeight} onChange={setLogWeight} min={0} max={displayWeight(300)} step={unitLabel === 'kg' ? 2.5 : 5} height={120} width="70px" />
-                                    <div className="w-px bg-slate-800" />
-                                    <WheelPicker label="RIR" value={logRir} onChange={setLogRir} min={0} max={4} step={0.5} height={120} width="70px" />
-                                    <div className="w-px bg-slate-800" />
-                                    <WheelPicker label="Rep" value={logReps} onChange={setLogReps} min={0} max={99} step={1} height={120} width="70px" />
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-center gap-8 py-4">
-                                    <div className="flex flex-col items-center"><span className="text-2xl font-black text-white">{logWeight}</span><span className="text-[10px] text-slate-500 uppercase font-bold">{unitLabel.toUpperCase()}</span></div>
-                                    <div className="flex flex-col items-center"><span className="text-2xl font-black text-white">{logRir}</span><span className="text-[10px] text-slate-500 uppercase font-bold">RIR</span></div>
-                                    <div className="flex flex-col items-center"><span className="text-2xl font-black text-white">{logReps}</span><span className="text-[10px] text-slate-500 uppercase font-bold">Reps</span></div>
-                                </div>
-                            )}
-
-                            {!isSetLogged && (
-                                <button onClick={handleConfirmLog} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
-                                    <Save size={18} />
-                                    <span>Save Log</span>
-                                </button>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Work Target Info (Only in Work Mode) */}
-                    {!isResting && (
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
-                                <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
-                                    <Target size={12} className="text-blue-400" />
-                                    RIR Target
-                                </div>
-                                <span className="text-xl font-black text-yellow-500">{currentExercise.targetRir}</span>
-                            </div>
-                            <div className="bg-slate-900 border border-slate-800 p-3 rounded-2xl flex flex-col items-center gap-1">
-                                <div className="flex items-center gap-1.5 text-slate-500 uppercase font-bold text-[9px] tracking-widest">
-                                    <Zap size={12} className="text-blue-400" />
-                                    Rep Range
-                                </div>
-                                <span className="text-xl font-black text-white">{currentExercise.minimumRepetitions}-{currentExercise.maximumRepetitions}</span>
-                            </div>
-                        </div>
-                    )}
-
-
-                    {/* Upcoming List Header */}
-                    <div className="flex items-center justify-between mt-4">
-                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Up Next</h3>
-                        {currentExercise.notes && (
-                            <div className="flex items-center gap-2 px-3 py-1 bg-slate-900/50 rounded-full border border-slate-800 max-w-[60%]">
-                                <Info size={12} className="text-blue-400 flex-none" />
-                                <span className="text-[9px] text-slate-400 font-medium italic truncate">
-                                    {currentExercise.notes}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Exercise List */}
-                    <div className="space-y-2">
-                        {activeRoutine.exercises.map((ex, idx) => {
-                            const isCurrent = idx === currentExerciseIndex;
-                            if (idx < currentExerciseIndex) return null;
-
-                            return (
-                                <div
-                                    key={ex.exerciseId + idx}
-                                    className={`
-                                        flex justify-between items-center p-4 rounded-2xl border transition-all duration-300
-                                        ${isCurrent
-                                            ? 'bg-blue-600/10 border-blue-500/30'
-                                            : 'bg-slate-900/30 border-slate-800 text-slate-500 grayscale opacity-60'
-                                        }
-                                    `}
-                                >
-                                    <div className="flex flex-col gap-0.5">
-                                        <div className="flex items-center gap-2">
-                                            <span className={`text-sm font-bold ${isCurrent ? 'text-white' : 'text-slate-400'}`}>
-                                                {ex.name}
-                                            </span>
-                                            {isCurrent && <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[9px] font-mono opacity-60">
-                                                {ex.targetSets} × {ex.minimumRepetitions}-{ex.maximumRepetitions}
-                                            </span>
-                                            <div className="w-0.5 h-0.5 rounded-full bg-slate-700" />
-                                            <span className="text-[9px] font-mono opacity-60">
-                                                RIR {ex.targetRir}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col items-end">
-                                        <span className={`text-[10px] font-black ${isCurrent ? 'text-blue-400' : 'text-slate-600'}`}>
-                                            {isCurrent ? `SET ${currentExercise.targetSets - setsRemaining + 1}` : 'QUEUED'}
-                                        </span>
-                                        <span className="text-[9px] opacity-40 uppercase tracking-tighter">
-                                            {ex.equipmentList[0]}
-                                        </span>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-
-                </div>
-
-            </div>
+            {/* Rest Timer Bar */}
+            {activeRestTimer && (
+                <RestTimerBar
+                    key={activeRestTimer.id}
+                    timer={activeRestTimer}
+                    onDismiss={handleDismissRestTimer}
+                    onComplete={handleRestTimerComplete}
+                />
+            )}
 
             {/* Exit Confirmation Modal */}
             {showExitConfirmation && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl animate-in zoom-in-95 duration-200">
-                        <div className="flex flex-col items-center gap-4 text-center">
-                            <div className="w-12 h-12 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-500 mb-2">
-                                <AlertTriangle size={24} />
-                            </div>
+                <ExitConfirmationModal
+                    onSaveAndEnd={handleEndAndSave}
+                    onDiscard={handleDiscard}
+                    onResume={() => setShowExitConfirmation(false)}
+                />
+            )}
 
-                            <div className="space-y-1">
-                                <h3 className="text-lg font-bold text-white">End Workout?</h3>
-                                <p className="text-sm text-slate-400">
-                                    Are you sure you want to end this workout?
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-3 w-full mt-4">
-                                <button
-                                    onClick={handleEndAndSave}
-                                    className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-all"
-                                >
-                                    End & Save
-                                </button>
-
-                                <button
-                                    onClick={handleDiscardSession}
-                                    className="w-full bg-slate-800 hover:bg-red-900/30 text-slate-300 hover:text-red-400 border border-slate-700 hover:border-red-500/30 font-bold py-3 px-4 rounded-xl transition-all"
-                                >
-                                    Discard Workout
-                                </button>
-
-                                <button
-                                    onClick={() => setShowExitConfirmation(false)}
-                                    className="w-full text-slate-500 hover:text-white font-medium py-2 text-sm transition-colors mt-2"
-                                >
-                                    Resume
-                                </button>
-                            </div>
+            {/* Add Exercise Modal */}
+            {showAddExercise && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col h-[90vh]">
+                        <div className="flex items-center justify-between p-4 border-b border-slate-800">
+                            <h3 className="text-lg font-bold text-white">Add Exercise</h3>
+                            <button
+                                onClick={() => setShowAddExercise(false)}
+                                className="p-2 bg-slate-800 text-slate-400 hover:text-white rounded-full transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="p-4 flex-1 overflow-y-auto">
+                            <ExerciseLibrary
+                                isSelectionMode={true}
+                                onSelectExercise={handleAddExercise}
+                            />
                         </div>
                     </div>
                 </div>
