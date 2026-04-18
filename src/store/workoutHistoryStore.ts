@@ -8,6 +8,7 @@ interface WorkoutHistoryState {
     // Actions
     saveSession: (session: WorkoutSession) => void;
     deleteSession: (id: string) => void;
+    updateSession: (id: string, patch: Partial<WorkoutSession>) => void;
     getSessionsByRoutine: (routineId: string) => WorkoutSession[];
 }
 
@@ -28,6 +29,16 @@ export const useWorkoutHistoryStore = create<WorkoutHistoryState>((set, get) => 
     deleteSession: (id: string) => {
         set((state) => {
             const newSessions = state.sessions.filter(s => s.id !== id);
+            workoutHistoryStorageService.saveSessions(newSessions);
+            return { sessions: newSessions };
+        });
+    },
+
+    updateSession: (id: string, patch: Partial<WorkoutSession>) => {
+        set((state) => {
+            const newSessions = state.sessions.map(s =>
+                s.id === id ? { ...s, ...patch } : s
+            );
             workoutHistoryStorageService.saveSessions(newSessions);
             return { sessions: newSessions };
         });

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /c/Users/MrLex/Documents/GitHub/Workout-AI-App/src -type f \\\\\\( -name \"*.ts\" -o -name \"*.tsx\" \\\\\\) -exec grep -l \"fetch\\\\|axios\\\\|http\\\\|api\" {} \\\\;)"
+    ]
+  }
+}

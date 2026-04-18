@@ -23,8 +23,12 @@ import {
     Check,
     AlertCircle,
     Search,
-    TrendingUp
+    TrendingUp,
+    Upload,
+    CheckCircle2,
+    Loader2
 } from 'lucide-react';
+import { syncSessionToLifeOs } from '../../services/LifeOsApiService';
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -64,7 +68,35 @@ export const HistoryView = () => {
     const [historyTab, setHistoryTab] = useState<'body' | 'exercises' | 'workouts'>('body');
 
     // ----- WORKOUT HISTORY STATE -----
-    const { sessions, deleteSession } = useWorkoutHistoryStore();
+    const { sessions, deleteSession, updateSession } = useWorkoutHistoryStore();
+
+    // ----- LIFE OS SYNC STATE -----
+    const [syncingIds, setSyncingIds] = useState<Set<string>>(new Set());
+    const [syncFeedback, setSyncFeedback] = useState<Record<string, { type: 'success' | 'error'; message: string }>>({});
+
+    const handleSyncSession = (sessionId: string) => {
+        const session = sessions.find(s => s.id === sessionId);
+        if (!session) return;
+
+        setSyncingIds(prev => new Set(prev).add(sessionId));
+
+        syncSessionToLifeOs(session).then(result => {
+            setSyncingIds(prev => {
+                const next = new Set(prev);
+                next.delete(sessionId);
+                return next;
+            });
+
+            if (result.ok) {
+                updateSession(sessionId, { lifeOsSyncId: result.lifeOsSessionId });
+                setSyncFeedback(prev => ({ ...prev, [sessionId]: { type: 'success', message: 'Synced to Life OS!' } }));
+                setTimeout(() => setSyncFeedback(prev => { const n = { ...prev }; delete n[sessionId]; return n; }), 3000);
+            } else {
+                setSyncFeedback(prev => ({ ...prev, [sessionId]: { type: 'error', message: result.error } }));
+                setTimeout(() => setSyncFeedback(prev => { const n = { ...prev }; delete n[sessionId]; return n; }), 6000);
+            }
+        });
+    };
 
     // ----- BODY STATS STATE -----
     const {
@@ -1185,6 +1217,33 @@ export const HistoryView = () => {
                                             </div>
                                         );
                                     })}
+                                </div>
+
+                                {/* Sync to Life OS */}
+                                <div className="pt-2 border-t border-slate-700/50">
+                                    {syncFeedback[session.id] && (
+                                        <p className={`text-[10px] text-center mb-1.5 ${syncFeedback[session.id].type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                            {syncFeedback[session.id].message}
+                                        </p>
+                                    )}
+                                    {session.lifeOsSyncId && !syncFeedback[session.id] ? (
+                                        <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-600/70 py-1">
+                                            <CheckCircle2 size={12} />
+                                            <span>Synced to Life OS</span>
+                                        </div>
+                                    ) : !session.lifeOsSyncId && (
+                                        <button
+                                            disabled={syncingIds.has(session.id)}
+                                            onClick={() => handleSyncSession(session.id)}
+                                            className="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed bg-violet-600/20 text-violet-300 hover:bg-violet-600/30 active:bg-violet-600/40"
+                                        >
+                                            {syncingIds.has(session.id) ? (
+                                                <><Loader2 size={13} className="animate-spin" />Syncing…</>
+                                            ) : (
+                                                <><Upload size={13} />Sync to Life OS</>
+                                            )}
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         ))}

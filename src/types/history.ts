@@ -17,4 +17,5 @@ export interface WorkoutSession {
     durationSeconds: number;
     logs: ExerciseLog[]; // The logs specific to this session
     restData: SessionRestData[];
+    lifeOsSyncId?: string; // Set after a successful sync to Life OS
 }
